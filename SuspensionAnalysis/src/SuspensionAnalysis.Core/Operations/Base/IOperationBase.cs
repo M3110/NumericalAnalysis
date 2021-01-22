@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using SuspensionAnalysis.DataContracts.OperationBase;
+using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.Base
 {

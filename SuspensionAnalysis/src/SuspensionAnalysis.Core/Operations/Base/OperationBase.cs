@@ -1,7 +1,7 @@
-﻿using System;
+﻿using SuspensionAnalysis.DataContracts.OperationBase;
+using System;
 using System.Net;
 using System.Threading.Tasks;
-using SuspensionAnalysis.DataContracts;
 
 namespace SuspensionAnalysis.Core.Operations.Base
 {
