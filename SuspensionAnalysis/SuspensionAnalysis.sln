@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30907.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3476D0AD-86B3-4B52-BD42-F9D19CE01E13}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "etc", "etc", "{1D42FD49-8A5C-4912-868D-664F1260FC20}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bibliography", "bibliography", "{A447E959-B1B0-481C-AD73-F245805B8936}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuspensionAnalysis.Application", "src\SuspensionAnalysis.Application\SuspensionAnalysis.Application.csproj", "{938A5500-92DA-4227-9F94-ECADAB4AC8A4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuspensionAnalysis.Core", "src\SuspensionAnalysis.Core\SuspensionAnalysis.Core.csproj", "{FD8A223D-212B-498D-A552-D51E3A0272CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuspensionAnalysis.DataContracts", "src\SuspensionAnalysis.DataContracts\SuspensionAnalysis.DataContracts.csproj", "{D1B29F66-E247-4EA1-AC4E-594F3FA5EC78}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{938A5500-92DA-4227-9F94-ECADAB4AC8A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{938A5500-92DA-4227-9F94-ECADAB4AC8A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{938A5500-92DA-4227-9F94-ECADAB4AC8A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{938A5500-92DA-4227-9F94-ECADAB4AC8A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD8A223D-212B-498D-A552-D51E3A0272CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD8A223D-212B-498D-A552-D51E3A0272CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD8A223D-212B-498D-A552-D51E3A0272CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD8A223D-212B-498D-A552-D51E3A0272CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1B29F66-E247-4EA1-AC4E-594F3FA5EC78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1B29F66-E247-4EA1-AC4E-594F3FA5EC78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1B29F66-E247-4EA1-AC4E-594F3FA5EC78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1B29F66-E247-4EA1-AC4E-594F3FA5EC78}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{938A5500-92DA-4227-9F94-ECADAB4AC8A4} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
+		{FD8A223D-212B-498D-A552-D51E3A0272CC} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
+		{D1B29F66-E247-4EA1-AC4E-594F3FA5EC78} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {801B0F5F-7AE3-43D0-90C9-02686F698605}
+	EndGlobalSection
+EndGlobal
