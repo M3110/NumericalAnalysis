@@ -9,7 +9,7 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
     public static class ArrayExtension
     {
         /// <summary>
-        /// This method normalizes tbe vector. 
+        /// This method normalizes the vector. 
         /// </summary>
         /// <param name="vector"></param>
         /// <returns></returns>
