@@ -50,6 +50,15 @@
     <Compile Include="CalculateReactions\CalculateReactionsRequest.cs" />
     <Compile Include="CalculateReactions\CalculateReactionsResponse.cs" />
     <Compile Include="CalculateReactions\CalculateReactionsResponseData.cs" />
+    <Compile Include="Models\Profiles\CircularProfile.cs" />
+    <Compile Include="Models\Profiles\Profile.cs" />
+    <Compile Include="Models\Profiles\RectangularProfile.cs" />
+    <Compile Include="Models\ShockAbsorberPoint.cs" />
+    <Compile Include="Models\ShockAbsorber.cs" />
+    <Compile Include="Models\SuspensionAArmPoint.cs" />
+    <Compile Include="Models\SuspensionAArm.cs" />
+    <Compile Include="Models\TieRodPoint.cs" />
+    <Compile Include="Models\TieRod.cs" />
     <Compile Include="OperationBase\OperationError.cs" />
     <Compile Include="OperationBase\OperationErrorCode.cs" />
     <Compile Include="OperationBase\OperationRequestBase.cs" />
