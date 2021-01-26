@@ -48,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtensionMethods\ArrayExtension.cs" />
+    <Compile Include="ExtensionMethods\Point3DExtension.cs" />
+    <Compile Include="ExtensionMethods\SuspensionAArmPointExtension.cs" />
+    <Compile Include="ExtensionMethods\Vector3DExtension.cs" />
     <Compile Include="Models\Point.cs" />
     <Compile Include="Operations\Base\IOperationBase.cs" />
     <Compile Include="Operations\Base\OperationBase.cs" />
