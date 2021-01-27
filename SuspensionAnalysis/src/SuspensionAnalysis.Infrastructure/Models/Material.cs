@@ -55,9 +55,8 @@ namespace SuspensionAnalysis.Infraestructure.Models
 
         /// <summary>
         /// This method creates an instance of class <seealso cref="Material"/>.
-        /// It can be <seealso cref="Steel1020"/>, <seealso cref="Steel1045"/> or <seealso cref="Aluminum"/>.
         /// </summary>
-        /// <param name="material"></param>
+        /// <param name="materialType"></param>
         /// <returns></returns>
         public static Material Create(MaterialType materialType)
         {
