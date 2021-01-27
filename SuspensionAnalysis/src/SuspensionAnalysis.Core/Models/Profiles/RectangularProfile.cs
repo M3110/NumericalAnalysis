@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SuspensionAnalysis.DataContracts.Models.Profiles
+namespace SuspensionAnalysis.Infraestructure.Models.Profiles
 {
     public class Rectangularthis : Profile
     {

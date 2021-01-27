@@ -35,24 +35,100 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         }
 
         /// <summary>
-        /// This method calculates the cross product. 
+        /// This method inverses a matrix using the Gauss-Jordan method.
         /// </summary>
-        /// <param name="vector1"></param>
-        /// <param name="vector2"></param>
-        /// <returns></returns>
-        public static double[] CalculateCrossProduct(this double[] vector1, double[] vector2)
+        /// <param name="matrix"></param>
+        /// <returns>The inversed matrix using the Gauss-Jordan method.</returns>
+        public static double[,] InverseMatrix(this double[,] matrix)
         {
-            if (vector1.Length != 3 || vector2.Length != 3)
+            double[,] matrixCopy = matrix.Clone() as double[,];
+
+            int n = matrixCopy.GetLength(0);
+            double[,] matrizInv = new double[n, n];
+            double pivot, p;
+
+            for (int i = 0; i < n; i++)
             {
-                throw new ArgumentOutOfRangeException(nameof(CalculateCrossProduct), "The vector should have lenght equals to 3");
+                for (int j = 0; j < n; j++)
+                {
+                    matrizInv[i, j] = (i == j) ? 1 : 0;
+                }
             }
 
-            return new double[3]
+            // Triangularization
+            for (int i = 0; i < n; i++)
             {
-                vector1[1] * vector2[2] - vector1[2] * vector2[1],
-                vector1[2] * vector2[0] - vector1[0] * vector2[2],
-                vector1[0] * vector2[1] - vector1[1] * vector2[0],
-            };
+                pivot = matrixCopy[i, i];
+                if (pivot == 0)
+                {
+                    throw new DivideByZeroException($"Pivot cannot be zero at line {i}.");
+                }
+
+                for (int l = 0; l < n; l++)
+                {
+                    matrixCopy[i, l] = matrixCopy[i, l] / pivot;
+                    matrizInv[i, l] = matrizInv[i, l] / pivot;
+                }
+
+                for (int k = i + 1; k < n; k++)
+                {
+                    p = matrixCopy[k, i];
+
+                    for (int j = 0; j < n; j++)
+                    {
+                        matrixCopy[k, j] = matrixCopy[k, j] - p * matrixCopy[i, j];
+                        matrizInv[k, j] = matrizInv[k, j] - p * matrizInv[i, j];
+                    }
+                }
+            }
+
+            // Retrosubstitution
+            for (int i = n - 1; i >= 0; i--)
+            {
+                for (int k = i - 1; k >= 0; k--)
+                {
+                    p = matrixCopy[k, i];
+
+                    for (int j = n - 1; j >= 0; j--)
+                    {
+                        matrixCopy[k, j] = matrixCopy[k, j] - p * matrixCopy[i, j];
+                        matrizInv[k, j] = matrizInv[k, j] - p * matrizInv[i, j];
+                    }
+                }
+            }
+
+            return matrizInv;
+        }
+
+        /// <summary>
+        /// This method multiplicates a matrix and a vector.
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <param name="vector"></param>
+        /// <returns>A new vector with the result of multiplication between a matrix and a vector.</returns>
+        public static double[] Multiply(this double[,] matrix, double[] vector)
+        {
+            if (matrix.GetLength(1) != vector.Length)
+                throw new ArgumentOutOfRangeException("Matrix and vector", "The matrix row size must be equals to vector size.");
+
+            int rows1 = matrix.GetLength(0);
+            int columns1 = matrix.GetLength(1);
+
+            double[] result = new double[rows1];
+
+            for (int i = 0; i < rows1; i++)
+            {
+                double sum = 0;
+
+                for (int j = 0; j < columns1; j++)
+                {
+                    sum += matrix[i, j] * vector[j];
+                }
+
+                result[i] = sum;
+            }
+
+            return result;
         }
     }
 }

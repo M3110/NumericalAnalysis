@@ -1,14 +1,14 @@
-﻿using SuspensionAnalysis.DataContracts.Models;
-using SuspensionAnalysis.DataContracts.OperationBase;
-using System.Windows.Media.Media3D;
+﻿using SuspensionAnalysis.DataContracts.OperationBase;
+using SuspensionAnalysis.Infraestructure.Models;
+using SuspensionAnalysis.Infraestructure.Models.SuspensionComponents;
 
 namespace SuspensionAnalysis.DataContracts.CalculateReactions
 {
     public class CalculateReactionsRequest : OperationRequestBase
     {
-        public Vector3D ForceApplied { get; set; }
-
         public Point3D Origin { get; set; }
+
+        public Point3D ForceApplied { get; set; }
 
         public ShockAbsorberPoint ShockAbsorber { get; set; }
 

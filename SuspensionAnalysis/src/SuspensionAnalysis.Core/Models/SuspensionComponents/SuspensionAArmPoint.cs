@@ -1,6 +1,4 @@
-﻿using System.Windows.Media.Media3D;
-
-namespace SuspensionAnalysis.DataContracts.Models
+﻿namespace SuspensionAnalysis.Infraestructure.Models.SuspensionComponents
 {
     public class SuspensionAArmPoint
     {

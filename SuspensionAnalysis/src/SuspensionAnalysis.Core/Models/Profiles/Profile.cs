@@ -1,4 +1,4 @@
-﻿namespace SuspensionAnalysis.DataContracts.Models.Profiles
+﻿namespace SuspensionAnalysis.Infraestructure.Models.Profiles
 {
     public abstract class Profile
     {

@@ -1,4 +1,4 @@
-﻿using System.Windows.Media.Media3D;
+﻿using SuspensionAnalysis.Infraestructure.Models;
 
 namespace SuspensionAnalysis.Core.ExtensionMethods
 {

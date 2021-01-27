@@ -1,4 +1,4 @@
-﻿using System.Windows.Media.Media3D;
+﻿using SuspensionAnalysis.Infraestructure.Models;
 
 namespace SuspensionAnalysis.Core.ExtensionMethods
 {
@@ -6,9 +6,29 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
     {
         public static Vector3D NormalizeVector(this Vector3D vector)
         {
-            vector.Normalize();
+            return new Vector3D
+            {
+                X = vector.X / vector.Length,
+                Y = vector.Y / vector.Length,
+                Z = vector.Z / vector.Length
+            };
+        }
 
-            return vector;
+        public static Vector3D CrossProduct(this Vector3D vector1, Vector3D vector2)
+        {
+            return new Vector3D
+            {
+                X = vector1.Y * vector2.Z - vector1.Z * vector2.Y,
+                Y = vector1.Z * vector2.X - vector1.X * vector2.Z,
+                Z = vector1.X * vector2.Y - vector1.Y * vector2.X
+            };
+        }
+
+        public static double DotProduct(this Vector3D vector1, Vector3D vector2)
+        {
+            double result = vector1.X * vector2.X + vector1.Y * vector2.Y + vector1.Z * vector2.Z;
+
+            return result;
         }
     }
 }

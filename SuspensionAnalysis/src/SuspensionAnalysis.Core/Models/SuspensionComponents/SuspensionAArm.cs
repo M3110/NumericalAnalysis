@@ -1,6 +1,6 @@
-﻿using SuspensionAnalysis.DataContracts.Models.Profiles;
+﻿using SuspensionAnalysis.Infraestructure.Models.Profiles;
 
-namespace SuspensionAnalysis.DataContracts.Models
+namespace SuspensionAnalysis.Infraestructure.Models.SuspensionComponents
 {
     public class SuspensionAArm<TProfile> : SuspensionAArmPoint
         where TProfile : Profile
