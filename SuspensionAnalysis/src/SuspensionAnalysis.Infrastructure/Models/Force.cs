@@ -1,4 +1,4 @@
-﻿namespace SuspensionAnalysis.Infraestructure.Models
+﻿namespace SuspensionAnalysis.Infrastructure.Models
 {
     public class Force
     {

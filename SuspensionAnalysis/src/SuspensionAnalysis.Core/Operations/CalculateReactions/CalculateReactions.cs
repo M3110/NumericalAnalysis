@@ -1,16 +1,21 @@
 ﻿using SuspensionAnalysis.Core.ExtensionMethods;
+using SuspensionAnalysis.Core.Models;
 using SuspensionAnalysis.Core.Operations.Base;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
-using SuspensionAnalysis.DataContracts.Models;
-using SuspensionAnalysis.Infraestructure.Models;
+using SuspensionAnalysis.Infrastructure.Models;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.CalculateReactions
 {
     public class CalculateReactions : OperationBase<CalculateReactionsRequest, CalculateReactionsResponse, CalculateReactionsResponseData>, ICalculateReactions
     {
-        private Vector3D _u1, _u2, _u3, _u4, _u5, _u6;
+        public SuspensionNormalizedVector SuspensionNormalizedVector { get; set; }
 
+        /// <summary>
+        /// This method calculates the reactions to suspension system.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected override Task<CalculateReactionsResponse> ProcessOperation(CalculateReactionsRequest request)
         {
             var response = new CalculateReactionsResponse { Data = new CalculateReactionsResponseData() };
@@ -43,13 +48,16 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             Vector3D u6 = request.TieRod.CalculateNormalizedVector();
             Vector3D r6 = request.TieRod.CalculateOriginReference(request.Origin);
 
-            // This is necessary to use the vectors 
-            this._u1 = u1;
-            this._u2 = u2;
-            this._u3 = u3;
-            this._u4 = u4;
-            this._u5 = u5;
-            this._u6 = u6;
+            // This is necessary to use the vectors in another method.
+            this.SuspensionNormalizedVector = new SuspensionNormalizedVector
+            {
+                SuspensionAArmLowerU1 = u1,
+                SuspensionAArmLowerU2 = u2,
+                SuspensionAArmUpperU3 = u3,
+                SuspensionAArmUpperU4 = u4,
+                ShockAbsorberU5 = u5,
+                TieRodU6 = u6
+            };
 
             return new double[6, 6]
             {
@@ -69,44 +77,44 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
                 AArmLowerReaction1 = new Force
                 {
                     AbsolutValue = result[0],
-                    X = result[0] * this._u1.X,
-                    Y = result[0] * this._u1.Y,
-                    Z = result[0] * this._u1.Z
+                    X = result[0] * this.SuspensionNormalizedVector.SuspensionAArmLowerU1.X,
+                    Y = result[0] * this.SuspensionNormalizedVector.SuspensionAArmLowerU1.Y,
+                    Z = result[0] * this.SuspensionNormalizedVector.SuspensionAArmLowerU1.Z
                 },
                 AArmLowerReaction2 = new Force
                 {
                     AbsolutValue = result[1],
-                    X = result[1] * this._u2.X,
-                    Y = result[1] * this._u2.Y,
-                    Z = result[1] * this._u2.Z
+                    X = result[1] * this.SuspensionNormalizedVector.SuspensionAArmLowerU2.X,
+                    Y = result[1] * this.SuspensionNormalizedVector.SuspensionAArmLowerU2.Y,
+                    Z = result[1] * this.SuspensionNormalizedVector.SuspensionAArmLowerU2.Z
                 },
                 AArmUpperReaction1 = new Force
                 {
                     AbsolutValue = result[2],
-                    X = result[2] * this._u3.X,
-                    Y = result[2] * this._u3.Y,
-                    Z = result[2] * this._u3.Z
+                    X = result[2] * this.SuspensionNormalizedVector.SuspensionAArmUpperU3.X,
+                    Y = result[2] * this.SuspensionNormalizedVector.SuspensionAArmUpperU3.Y,
+                    Z = result[2] * this.SuspensionNormalizedVector.SuspensionAArmUpperU3.Z
                 },
                 AArmUpperReaction2 = new Force
                 {
                     AbsolutValue = result[3],
-                    X = result[3] * this._u4.X,
-                    Y = result[3] * this._u4.Y,
-                    Z = result[3] * this._u4.Z
+                    X = result[3] * this.SuspensionNormalizedVector.SuspensionAArmUpperU4.X,
+                    Y = result[3] * this.SuspensionNormalizedVector.SuspensionAArmUpperU4.Y,
+                    Z = result[3] * this.SuspensionNormalizedVector.SuspensionAArmUpperU4.Z
                 },
                 ShockAbsorberReaction = new Force
                 {
                     AbsolutValue = result[4],
-                    X = result[4] * this._u5.X,
-                    Y = result[4] * this._u5.Y,
-                    Z = result[4] * this._u5.Z
+                    X = result[4] * this.SuspensionNormalizedVector.ShockAbsorberU5.X,
+                    Y = result[4] * this.SuspensionNormalizedVector.ShockAbsorberU5.Y,
+                    Z = result[4] * this.SuspensionNormalizedVector.ShockAbsorberU5.Z
                 },
                 TieRodReaction = new Force
                 {
                     AbsolutValue = result[5],
-                    X = result[5] * this._u6.X,
-                    Y = result[5] * this._u6.Y,
-                    Z = result[5] * this._u6.Z
+                    X = result[5] * this.SuspensionNormalizedVector.TieRodU6.X,
+                    Y = result[5] * this.SuspensionNormalizedVector.TieRodU6.Y,
+                    Z = result[5] * this.SuspensionNormalizedVector.TieRodU6.Z
                 },
             };
         }

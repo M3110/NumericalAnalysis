@@ -47,7 +47,18 @@ namespace SuspensionAnalysis.DataContracts.OperationBase
         public void AddError(string code, string message, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
         {
             this.Errors.Add(new OperationError(code, message));
-
+            this.HttpStatusCode = httpStatusCode;
+            this.Success = false;
+        }
+        
+        /// <summary>
+        /// This method adds errors on list of errors.
+        /// </summary>
+        /// <param name="errors"></param>
+        /// <param name="httpStatusCode"></param>
+        public void AddErrors(List<OperationError> errors, HttpStatusCode httpStatusCode = HttpStatusCode.BadRequest)
+        {
+            this.Errors.AddRange(errors);
             this.HttpStatusCode = httpStatusCode;
             this.Success = false;
         }

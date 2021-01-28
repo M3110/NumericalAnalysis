@@ -17,6 +17,10 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<ProjectReference Include="..\SuspensionAnalysis.DataContracts\SuspensionAnalysis.DataContracts.csproj" />
 		<ProjectReference Include="..\SuspensionAnalysis.Infrastructure\SuspensionAnalysis.Infrastructure.csproj" />
 	</ItemGroup>

@@ -25,10 +25,10 @@ namespace SuspensionAnalysis.Application.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
-        [HttpPost()]
+        [HttpPost("calculate")]
         public async Task<ActionResult<CalculateReactionsResponse>> CalculateReactions(
             [FromServices] ICalculateReactions operation,
-            [FromQuery] CalculateReactionsRequest request)
+            [FromBody] CalculateReactionsRequest request)
         {
             CalculateReactionsResponse response = await operation.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

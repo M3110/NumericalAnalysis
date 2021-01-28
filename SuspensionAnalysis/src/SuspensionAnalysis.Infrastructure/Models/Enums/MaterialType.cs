@@ -1,4 +1,4 @@
-﻿namespace SuspensionAnalysis.Infraestructure.Models.Enums
+﻿namespace SuspensionAnalysis.Infrastructure.Models.Enums
 {
     public enum MaterialType
     {

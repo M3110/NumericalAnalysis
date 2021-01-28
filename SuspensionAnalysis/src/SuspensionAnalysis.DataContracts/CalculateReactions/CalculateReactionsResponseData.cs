@@ -1,5 +1,5 @@
 ﻿using SuspensionAnalysis.DataContracts.OperationBase;
-using SuspensionAnalysis.Infraestructure.Models;
+using SuspensionAnalysis.Infrastructure.Models;
 
 namespace SuspensionAnalysis.DataContracts.CalculateReactions
 {

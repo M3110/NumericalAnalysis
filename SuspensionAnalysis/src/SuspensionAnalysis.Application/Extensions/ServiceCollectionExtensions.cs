@@ -35,6 +35,8 @@ namespace SuspensionAnalysis.Application.Extensions
                 //options.IncludeXmlComments(xmlDataContractPath);
             });
 
+            services.AddSwaggerGenNewtonsoftSupport();
+
             return services;
         }
     }

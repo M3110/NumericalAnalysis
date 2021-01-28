@@ -1,6 +1,6 @@
-﻿using SuspensionAnalysis.Infraestructure.Models.Profiles;
+﻿using SuspensionAnalysis.Infrastructure.Models.Profiles;
 
-namespace SuspensionAnalysis.Infraestructure.Models.SuspensionComponents
+namespace SuspensionAnalysis.Infrastructure.Models.SuspensionComponents
 {
     public class TieRod<TProfile> : TieRodPoint
         where TProfile : Profile

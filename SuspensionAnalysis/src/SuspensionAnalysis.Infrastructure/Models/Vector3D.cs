@@ -1,14 +1,9 @@
 ﻿using System;
 
-namespace SuspensionAnalysis.Infraestructure.Models
+namespace SuspensionAnalysis.Infrastructure.Models
 {
-    public class Vector3D
+    public struct Vector3D
     {
-        /// <summary>
-        /// Basic constructor.
-        /// </summary>
-        public Vector3D() { }
-
         /// <summary>
         /// Class constructor.
         /// </summary>
@@ -30,6 +25,7 @@ namespace SuspensionAnalysis.Infraestructure.Models
 
         public double Length => Math.Sqrt(this.LengthSquared);
 
-        public double LengthSquared => Math.Pow(this.X, 2) + Math.Pow(this.Y, 2) + Math.Pow(this.Z, 2);
+        public double LengthSquared
+            => Math.Pow(this.X, 2) + Math.Pow(this.Y, 2) + Math.Pow(this.Z, 2);
     }
 }

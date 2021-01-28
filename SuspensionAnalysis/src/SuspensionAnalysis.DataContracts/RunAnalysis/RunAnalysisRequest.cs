@@ -1,15 +1,18 @@
 ﻿using SuspensionAnalysis.DataContracts.OperationBase;
-using SuspensionAnalysis.Infraestructure.Models;
-using SuspensionAnalysis.Infraestructure.Models.Enums;
-using SuspensionAnalysis.Infraestructure.Models.Profiles;
-using SuspensionAnalysis.Infraestructure.Models.SuspensionComponents;
+using SuspensionAnalysis.Infrastructure.Models;
+using SuspensionAnalysis.Infrastructure.Models.Enums;
+using SuspensionAnalysis.Infrastructure.Models.SuspensionComponents;
+using SuspensionAnalysis.Infrastructure.Models.Profiles;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace SuspensionAnalysis.DataContracts.RunAnalysis
 {
     public class RunAnalysisRequest<TProfile> : OperationRequestBase
         where TProfile : Profile
     {
-        public Material Material { get; set; }
+        [JsonConverter(typeof(StringEnumConverter))]
+        public MaterialType Material { get; set; }
 
         public Point3D Origin { get; set; }
 

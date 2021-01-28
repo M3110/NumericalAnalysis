@@ -1,7 +1,7 @@
-﻿using SuspensionAnalysis.Infraestructure.Models.Enums;
+﻿using SuspensionAnalysis.Infrastructure.Models.Enums;
 using System;
 
-namespace SuspensionAnalysis.Infraestructure.Models
+namespace SuspensionAnalysis.Infrastructure.Models
 {
     /// <summary>
     /// It contains the necessary information about each material that could be used in project.
@@ -28,6 +28,7 @@ namespace SuspensionAnalysis.Infraestructure.Models
         /// </summary>
         /// <param name="youngModulus"></param>
         /// <param name="specificMass"></param>
+        /// <param name="yieldStrength"></param>
         private Material(double youngModulus, double yieldStrength, double specificMass)
         {
             this.YoungModulus = youngModulus;

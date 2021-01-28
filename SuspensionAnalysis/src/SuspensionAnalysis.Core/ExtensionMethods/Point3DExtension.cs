@@ -1,4 +1,4 @@
-﻿using SuspensionAnalysis.Infraestructure.Models;
+﻿using SuspensionAnalysis.Infrastructure.Models;
 
 namespace SuspensionAnalysis.Core.ExtensionMethods
 {
