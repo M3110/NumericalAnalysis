@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SuspensionAnalysis.Application.Extensions;
+using SuspensionAnalysis.Core.Models.Profiles;
 using SuspensionAnalysis.Core.Operations.RunAnalysis;
+using SuspensionAnalysis.DataContracts.Models.Profiles;
 using SuspensionAnalysis.DataContracts.RunAnalysis;
-using SuspensionAnalysis.Infrastructure.Models.Profiles;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Application.Controllers
@@ -28,8 +29,8 @@ namespace SuspensionAnalysis.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("circular-profile/run")]
         public async Task<ActionResult<RunAnalysisResponse>> RunAnalysis(
-            [FromServices] IRunAnalysis<CircularProfile> operation,
-            [FromQuery] RunAnalysisRequest<CircularProfile> request)
+            [FromServices] IRunAnalysis<Core.Models.Profiles.CircularProfile> operation,
+            [FromQuery] RunAnalysisRequest<Core.Models.Profiles.CircularProfile> request)
         {
             RunAnalysisResponse response = await operation.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
@@ -52,8 +53,8 @@ namespace SuspensionAnalysis.Application.Controllers
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("rectangular-profile/run")]
         public async Task<ActionResult<RunAnalysisResponse>> RunAnalysis(
-            [FromServices] IRunAnalysis<RectangularProfile> operation,
-            [FromQuery] RunAnalysisRequest<RectangularProfile> request)
+            [FromServices] IRunAnalysis<Core.Models.Profiles.RectangularProfile> operation,
+            [FromQuery] RunAnalysisRequest<Core.Models.Profiles.RectangularProfile> request)
         {
             RunAnalysisResponse response = await operation.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

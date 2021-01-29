@@ -17,9 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuspensionAnalysis.Applicat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuspensionAnalysis.Core", "src\SuspensionAnalysis.Core\SuspensionAnalysis.Core.csproj", "{E008F1F2-8540-459A-9AFD-352AB58377A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuspensionAnalysis.DataContracts", "src\SuspensionAnalysis.DataContracts\SuspensionAnalysis.DataContracts.csproj", "{C56E582C-EB06-463D-8782-9ED441A032E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuspensionAnalysis.Infrastructure", "src\SuspensionAnalysis.Infrastructure\SuspensionAnalysis.Infrastructure.csproj", "{F489CD82-3AF2-4754-A7A2-9F9C3D5BEEA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuspensionAnalysis.DataContracts", "src\SuspensionAnalysis.DataContracts\SuspensionAnalysis.DataContracts.csproj", "{C56E582C-EB06-463D-8782-9ED441A032E8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +37,6 @@ Global
 		{C56E582C-EB06-463D-8782-9ED441A032E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C56E582C-EB06-463D-8782-9ED441A032E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C56E582C-EB06-463D-8782-9ED441A032E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F489CD82-3AF2-4754-A7A2-9F9C3D5BEEA4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F489CD82-3AF2-4754-A7A2-9F9C3D5BEEA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F489CD82-3AF2-4754-A7A2-9F9C3D5BEEA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F489CD82-3AF2-4754-A7A2-9F9C3D5BEEA4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -51,7 +45,6 @@ Global
 		{938A5500-92DA-4227-9F94-ECADAB4AC8A4} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
 		{E008F1F2-8540-459A-9AFD-352AB58377A8} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
 		{C56E582C-EB06-463D-8782-9ED441A032E8} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
-		{F489CD82-3AF2-4754-A7A2-9F9C3D5BEEA4} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {801B0F5F-7AE3-43D0-90C9-02686F698605}

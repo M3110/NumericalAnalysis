@@ -1,4 +1,4 @@
-﻿using SuspensionAnalysis.Infrastructure.Models;
+﻿using SuspensionAnalysis.DataContracts.Models;
 
 namespace SuspensionAnalysis.Core.ExtensionMethods
 {

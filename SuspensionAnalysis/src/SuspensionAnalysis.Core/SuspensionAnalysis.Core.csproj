@@ -22,7 +22,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\SuspensionAnalysis.DataContracts\SuspensionAnalysis.DataContracts.csproj" />
-		<ProjectReference Include="..\SuspensionAnalysis.Infrastructure\SuspensionAnalysis.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,6 +1,6 @@
 ﻿using SuspensionAnalysis.Core.Operations.Base;
+using SuspensionAnalysis.DataContracts.Models.Profiles;
 using SuspensionAnalysis.DataContracts.RunAnalysis;
-using SuspensionAnalysis.Infrastructure.Models.Profiles;
 
 namespace SuspensionAnalysis.Core.Operations.RunAnalysis
 {
