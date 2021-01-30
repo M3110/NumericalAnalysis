@@ -1,5 +1,7 @@
 ﻿using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials;
+using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.Models;
+using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.Core.Operations.Base;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
@@ -18,15 +20,17 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
     {
         private readonly ICalculateReactions _calculateReactions;
         private readonly IMechanicsOfMaterials<TProfile> _mechanicsOfMaterials;
+        private readonly IMappingResolver _mappingResolver;
 
         /// <summary>
         /// Class constructor.
         /// </summary>
         /// <param name="calculateReactions"></param>
-        public RunAnalysis(ICalculateReactions calculateReactions, IMechanicsOfMaterials<TProfile> mechanicsOfMaterials)
+        public RunAnalysis(ICalculateReactions calculateReactions, IMechanicsOfMaterials<TProfile> mechanicsOfMaterials, IMappingResolver mappingResolver)
         {
             this._calculateReactions = calculateReactions;
             this._mechanicsOfMaterials = mechanicsOfMaterials;
+            this._mappingResolver = mappingResolver;
         }
 
         protected override async Task<RunAnalysisResponse> ProcessOperation(RunAnalysisRequest<TProfile> request)
@@ -42,7 +46,9 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
                 return response;
             }
 
-            SuspensionAnalysisInput<TProfile> input = this.BuildSuspensionInput(request);
+            SuspensionSystem<TProfile> suspensionSystem = this._mappingResolver.MapFrom(request, calculateReactionsResponse.Data);
+
+            SuspensionAnalysisInput<TProfile> input = new SuspensionAnalysisInput<TProfile>();
 
             response.Data = new RunAnalysisResponseData
             {
@@ -66,22 +72,6 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
                 SuspensionAArmUpper = SuspensionAArmPoint.Create(request.SuspensionAArmUpper),
                 TieRod = TieRodPoint.Create(request.TieRod)
             };
-        }
-
-        public SuspensionAnalysisInput<TProfile> BuildSuspensionInput(SuspensionSystem<TProfile> suspensionSystem)
-        {
-            var input = new SuspensionAnalysisInput<TProfile>
-            {
-                ShockAbsorberInput = new AnalysisInput<TProfile>
-                {
-                },
-                SuspensionAArmLowerInput = new AnalysisInput<TProfile>
-                {
-
-                }
-            };
-
-            return input;
         }
     }
 }

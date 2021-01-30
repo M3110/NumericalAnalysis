@@ -1,17 +1,36 @@
-﻿using SuspensionAnalysis.Core.Models;
+﻿using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.Core.Operations.Base;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
 using SuspensionAnalysis.DataContracts.Models;
-using SuspensionAnalysis.DataContracts.Models.Profiles;
 
 namespace SuspensionAnalysis.Core.Operations.CalculateReactions
 {
+    /// <summary>
+    /// It is responsible to calculate the reactions to suspension system.
+    /// </summary>
     public interface ICalculateReactions : IOperationBase<CalculateReactionsRequest, CalculateReactionsResponse, CalculateReactionsResponseData> 
     {
+        /// <summary>
+        /// This method builds the reactions vector.
+        /// </summary>
+        /// <param name="force"></param>
+        /// <returns></returns>
         double[] BuildReactionVector(Vector3D force);
 
-        double[,] BuildDisplacementMatrix(SuspensionSystem<Profile> suspensionSystem, Point3D origin);
+        /// <summary>
+        /// This method builds the matrix with normalized force directions and displacements.
+        /// </summary>
+        /// <param name="suspensionSystem"></param>
+        /// <param name="origin"></param>
+        /// <returns></returns>
+        double[,] BuildDisplacementMatrix(SuspensionSystem suspensionSystem, Point3D origin);
 
-        CalculateReactionsResponseData MapToResponse(double[] result);
+        /// <summary>
+        /// This method maps the analysis result to response data.
+        /// </summary>
+        /// <param name="suspensionSystem"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result);
     }
 }

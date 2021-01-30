@@ -1,19 +1,24 @@
 ﻿using SuspensionAnalysis.Core.ExtensionMethods;
 using SuspensionAnalysis.Core.Mapper;
-using SuspensionAnalysis.Core.Models;
+using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.Core.Operations.Base;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
 using SuspensionAnalysis.DataContracts.Models;
-using SuspensionAnalysis.DataContracts.Models.Profiles;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.CalculateReactions
 {
+    /// <summary>
+    /// It is responsible to calculate the reactions to suspension system.
+    /// </summary>
     public class CalculateReactions : OperationBase<CalculateReactionsRequest, CalculateReactionsResponse, CalculateReactionsResponseData>, ICalculateReactions
     {
-        private Vector3D _u1, _u2, _u3, _u4, _u5, _u6;
         private readonly IMappingResolver _mappingResolver;
 
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        /// <param name="mappingResolver"></param>
         public CalculateReactions(IMappingResolver mappingResolver)
         {
             this._mappingResolver = mappingResolver;
@@ -28,43 +33,55 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         {
             var response = new CalculateReactionsResponse { Data = new CalculateReactionsResponseData() };
 
-            SuspensionSystem<Profile> suspensionSystem = this._mappingResolver.MapFrom(request);
+            // Step 1 - Creates the necessary informations about the suspension system.
+            SuspensionSystem suspensionSystem = this._mappingResolver.MapFrom(request);
 
+            // Step 2 - Calculates the displacement matrix and applied efforts vector to calculate the reactions on suspension system.
             double[,] displacement = this.BuildDisplacementMatrix(suspensionSystem, Point3D.Create(request.Origin));
-            double[] reaction = this.BuildReactionVector(Vector3D.Create(request.ForceApplied));
+            double[] effort = this.BuildReactionVector(Vector3D.Create(request.ForceApplied));
 
+            // Step 3 - Calculates the reactions on suspension system.
+            // The equation used: 
+            // [Displacement] * [Reactions] = [Efforts]
+            // [Reactions] = inv([Displacement]) * [Efforts]
             double[] result = displacement
                 .InverseMatrix()
-                .Multiply(reaction);
+                .Multiply(effort);
 
-            response.Data = this.MapToResponse(result);
+            // Step 4 - Map the results to response.
+            response.Data = this.MapToResponse(suspensionSystem, result);
 
             return Task.FromResult(response);
         }
 
+        /// <summary>
+        /// This method builds the reactions vector.
+        /// </summary>
+        /// <param name="force"></param>
+        /// <returns></returns>
         public double[] BuildReactionVector(Vector3D force) => new double[] { force.X, force.Y, force.Z, 0, 0, 0 };
 
-        public double[,] BuildDisplacementMatrix(SuspensionSystem<Profile> suspensionSystem, Point3D origin)
+        /// <summary>
+        /// This method builds the matrix with normalized force directions and displacements.
+        /// </summary>
+        /// <param name="suspensionSystem"></param>
+        /// <param name="origin"></param>
+        /// <returns></returns>
+        public double[,] BuildDisplacementMatrix(SuspensionSystem suspensionSystem, Point3D origin)
         {
-            (Vector3D u1, Vector3D u2) = suspensionSystem.SuspensionAArmLower.CalculateNormalizedVectors();
-            (Vector3D r1, Vector3D r2) = suspensionSystem.SuspensionAArmLower.CalculateOriginReferences(origin);
+            Vector3D u1 = suspensionSystem.SuspensionAArmLower.NormalizedDirection1;
+            Vector3D u2 = suspensionSystem.SuspensionAArmLower.NormalizedDirection2;
+            Vector3D u3 = suspensionSystem.SuspensionAArmUpper.NormalizedDirection1;
+            Vector3D u4 = suspensionSystem.SuspensionAArmUpper.NormalizedDirection2;
+            Vector3D u5 = suspensionSystem.ShockAbsorber.NormalizedDirection;
+            Vector3D u6 = suspensionSystem.TieRod.NormalizedDirection;
 
-            (Vector3D u3, Vector3D u4) = suspensionSystem.SuspensionAArmUpper.CalculateNormalizedVectors();
-            (Vector3D r3, Vector3D r4) = suspensionSystem.SuspensionAArmUpper.CalculateOriginReferences(origin);
-
-            Vector3D u5 = suspensionSystem.ShockAbsorber.CalculateNormalizedVector();
-            Vector3D r5 = suspensionSystem.ShockAbsorber.CalculateOriginReference(origin);
-
-            Vector3D u6 = suspensionSystem.TieRod.CalculateNormalizedVector();
-            Vector3D r6 = suspensionSystem.TieRod.CalculateOriginReference(origin);
-
-            // This is necessary to use the vectors in another method.
-            this._u1 = u1;
-            this._u2 = u2;
-            this._u3 = u3;
-            this._u4 = u4;
-            this._u5 = u5;
-            this._u6 = u6;
+            Vector3D r1 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmLower.PivotPoint1);
+            Vector3D r2 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmLower.PivotPoint2);
+            Vector3D r3 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmUpper.PivotPoint1);
+            Vector3D r4 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmUpper.PivotPoint2);
+            Vector3D r5 = Vector3D.Create(origin, suspensionSystem.ShockAbsorber.PivotPoint);
+            Vector3D r6 = Vector3D.Create(origin, suspensionSystem.TieRod.PivotPoint);
 
             return new double[6, 6]
             {
@@ -77,52 +94,22 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             };
         }
 
-        public CalculateReactionsResponseData MapToResponse(double[] result)
+        /// <summary>
+        /// This method maps the analysis result to response data.
+        /// </summary>
+        /// <param name="suspensionSystem"></param>
+        /// <param name="result"></param>
+        /// <returns></returns>
+        public CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result)
         {
             return new CalculateReactionsResponseData
             {
-                AArmLowerReaction1 = new Force
-                {
-                    AbsolutValue = result[0],
-                    X = result[0] * this._u1.X,
-                    Y = result[0] * this._u1.Y,
-                    Z = result[0] * this._u1.Z
-                },
-                AArmLowerReaction2 = new Force
-                {
-                    AbsolutValue = result[1],
-                    X = result[1] * this._u2.X,
-                    Y = result[1] * this._u2.Y,
-                    Z = result[1] * this._u2.Z
-                },
-                AArmUpperReaction1 = new Force
-                {
-                    AbsolutValue = result[2],
-                    X = result[2] * this._u3.X,
-                    Y = result[2] * this._u3.Y,
-                    Z = result[2] * this._u3.Z
-                },
-                AArmUpperReaction2 = new Force
-                {
-                    AbsolutValue = result[3],
-                    X = result[3] * this._u4.X,
-                    Y = result[3] * this._u4.Y,
-                    Z = result[3] * this._u4.Z
-                },
-                ShockAbsorberReaction = new Force
-                {
-                    AbsolutValue = result[4],
-                    X = result[4] * this._u5.X,
-                    Y = result[4] * this._u5.Y,
-                    Z = result[4] * this._u5.Z
-                },
-                TieRodReaction = new Force
-                {
-                    AbsolutValue = result[5],
-                    X = result[5] * this._u6.X,
-                    Y = result[5] * this._u6.Y,
-                    Z = result[5] * this._u6.Z
-                },
+                AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
+                AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
+                AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
+                AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
+                ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
+                TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
             };
         }
     }

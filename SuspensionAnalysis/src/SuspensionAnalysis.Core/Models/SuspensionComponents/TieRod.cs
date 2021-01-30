@@ -7,20 +7,32 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
     /// <summary>
     /// It represents the tie rod.
     /// </summary>
-    /// <typeparam name="TProfile"></typeparam>
-    public class TieRod<TProfile> : SingleComponent
-        where TProfile : Profile
+    public class TieRod : SingleComponent
     {
         /// <summary>
-        /// The absolut applied force.
+        /// This method creates a <see cref="TieRod"/> based on <see cref="DataContract.TieRodPoint"/>.
         /// </summary>
-        public double AppliedForce { get; set; }
+        /// <param name="tieRod"></param>
+        /// <param name="appliedForce"></param>
+        /// <returns></returns>
+        public static TieRod Create(DataContract.TieRodPoint tieRod, double appliedForce = 0)
+        {
+            return new TieRod
+            {
+                FasteningPoint = Point3D.Create(tieRod.FasteningPoint),
+                PivotPoint = Point3D.Create(tieRod.PivotPoint),
+                AppliedForce = appliedForce
+            };
+        }
+    }
 
-        /// <summary>
-        /// The length.
-        /// </summary>
-        public double Length => Vector3D.Create(this.FasteningPoint, this.PivotPoint).Length;
-
+    /// <summary>
+    /// It represents the tie rod.
+    /// </summary>
+    /// <typeparam name="TProfile"></typeparam>
+    public class TieRod<TProfile> : TieRod
+        where TProfile : Profile
+    { 
         /// <summary>
         /// The profile.
         /// </summary>
@@ -40,22 +52,6 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
                 PivotPoint = Point3D.Create(tieRod.PivotPoint),
                 AppliedForce = appliedForce,
                 Profile = tieRod.Profile
-            };
-        }
-
-        /// <summary>
-        /// This method creates a <see cref="TieRod{Profile}"/> based on <see cref="DataContract.TieRodPoint"/>.
-        /// </summary>
-        /// <param name="tieRod"></param>
-        /// <param name="appliedForce"></param>
-        /// <returns></returns>
-        public static TieRod<Profile> Create(DataContract.TieRodPoint tieRod, double appliedForce = 0)
-        {
-            return new TieRod<Profile>
-            {
-                FasteningPoint = Point3D.Create(tieRod.FasteningPoint),
-                PivotPoint = Point3D.Create(tieRod.PivotPoint),
-                AppliedForce = appliedForce
             };
         }
     }

@@ -9,16 +9,6 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
     public class ShockAbsorber : SingleComponent 
     {
         /// <summary>
-        /// The absolut applied force.
-        /// </summary>
-        public double AppliedForce { get; set; }
-
-        /// <summary>
-        /// The length.
-        /// </summary>
-        public double Length => Vector3D.Create(this.FasteningPoint, this.PivotPoint).Length;
-
-        /// <summary>
         /// This method creates a <see cref="ShockAbsorber"/> based on <see cref="DataContract.ShockAbsorberPoint"/>.
         /// </summary>
         /// <param name="shockAbsorber"></param>

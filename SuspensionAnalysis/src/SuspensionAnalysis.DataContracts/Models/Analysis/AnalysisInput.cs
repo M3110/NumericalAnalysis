@@ -36,13 +36,5 @@ namespace SuspensionAnalysis.DataContracts.Models.Analysis
         /// Unity: N (Newton).
         /// </summary>
         public double AppliedForce { get; set; }
-
-        public static AnalysisInput<TProfile> Create()
-        {
-            return new AnalysisInput<TProfile>
-            {
-
-            };
-        }
     }
 }

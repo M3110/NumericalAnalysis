@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Converters;
 using SuspensionAnalysis.Application.Extensions;
-using SuspensionAnalysis.Core.Models.Profiles;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
 using SuspensionAnalysis.Core.Operations.RunAnalysis;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
@@ -26,8 +25,8 @@ namespace SuspensionAnalysis
         {
             // Register operations.
             services.AddScoped<ICalculateReactions, CalculateReactions>();
-            services.AddScoped<IRunAnalysis<Core.Models.Profiles.CircularProfile>, RunAnalysis<Core.Models.Profiles.CircularProfile>>();
-            services.AddScoped<IRunAnalysis<Core.Models.Profiles.RectangularProfile>, RunAnalysis<Core.Models.Profiles.RectangularProfile>>();
+            services.AddScoped<IRunAnalysis<CircularProfile>, RunAnalysis<CircularProfile>>();
+            services.AddScoped<IRunAnalysis<RectangularProfile>, RunAnalysis<RectangularProfile>>();
 
             services
                 .AddControllers()

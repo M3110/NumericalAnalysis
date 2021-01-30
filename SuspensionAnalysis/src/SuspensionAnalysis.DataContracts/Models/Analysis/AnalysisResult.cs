@@ -26,7 +26,7 @@ namespace SuspensionAnalysis.DataContracts.Models.Analysis
         public double EquivalentStress { get; set; }
 
         /// <summary>
-        /// The Von-Misses safety factor.
+        /// The Von-Misses equivalent stress safety factor.
         /// Unity: Pa (Pascal).
         /// </summary>
         public double StressSafetyFactor { get; set; }
