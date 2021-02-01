@@ -1,11 +1,9 @@
 ﻿using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials;
 using SuspensionAnalysis.Core.Mapper;
-using SuspensionAnalysis.Core.Models;
 using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.Core.Operations.Base;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
-using SuspensionAnalysis.DataContracts.Models.Analysis;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
 using SuspensionAnalysis.DataContracts.Models.SuspensionComponents;
 using SuspensionAnalysis.DataContracts.OperationBase;
@@ -15,6 +13,10 @@ using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.RunAnalysis
 {
+    /// <summary>
+    /// It is responsible to run the analysis to suspension system.
+    /// </summary>
+    /// <typeparam name="TProfile"></typeparam>
     public class RunAnalysis<TProfile> : OperationBase<RunAnalysisRequest<TProfile>, RunAnalysisResponse, RunAnalysisResponseData>, IRunAnalysis<TProfile>
         where TProfile : Profile
     {
@@ -26,6 +28,8 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
         /// Class constructor.
         /// </summary>
         /// <param name="calculateReactions"></param>
+        /// <param name="mechanicsOfMaterials"></param>
+        /// <param name="mappingResolver"></param>
         public RunAnalysis(ICalculateReactions calculateReactions, IMechanicsOfMaterials<TProfile> mechanicsOfMaterials, IMappingResolver mappingResolver)
         {
             this._calculateReactions = calculateReactions;
@@ -33,10 +37,16 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
             this._mappingResolver = mappingResolver;
         }
 
+        /// <summary>
+        /// This method runs the analysis to suspension system.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         protected override async Task<RunAnalysisResponse> ProcessOperation(RunAnalysisRequest<TProfile> request)
         {
             var response = new RunAnalysisResponse();
 
+            // Step 1 - Calculates the reactions at suspension system.
             CalculateReactionsResponse calculateReactionsResponse = await this._calculateReactions.Process(this.BuildCalculateReactionsRequest(request)).ConfigureAwait(false);
             if (calculateReactionsResponse.Success == false)
             {
@@ -46,21 +56,27 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
                 return response;
             }
 
+            // Step 2 - Builds the suspension system based on CalculateReaction operation response and request.
+            // Here is built the main information to be used at analysis.
             SuspensionSystem<TProfile> suspensionSystem = this._mappingResolver.MapFrom(request, calculateReactionsResponse.Data);
-
-            SuspensionAnalysisInput<TProfile> input = new SuspensionAnalysisInput<TProfile>();
-
+            
+            // Step 3 - Generate the result and maps the response.
             response.Data = new RunAnalysisResponseData
             {
-                ShockAbsorber = this._mechanicsOfMaterials.GenerateResult(input.ShockAbsorberInput),
-                SuspensionAArmLowerResult = this._mechanicsOfMaterials.GenerateResult(input.SuspensionAArmLowerInput),
-                SuspensionAArmUpperResult = this._mechanicsOfMaterials.GenerateResult(input.SuspensionAArmUpperInput),
-                TieRod = this._mechanicsOfMaterials.GenerateResult(input.TieRodInput)
+                ShockAbsorber = calculateReactionsResponse.Data.ShockAbsorberReaction,
+                SuspensionAArmLowerResult = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.SuspensionAArmLower),
+                SuspensionAArmUpperResult = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.SuspensionAArmUpper),
+                TieRod = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.TieRod)
             };
             
             return response;
         }
 
+        /// <summary>
+        /// This method builds <see cref="CalculateReactionsRequest"/> based on <see cref="RunAnalysisRequest{TProfile}"/>.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         public CalculateReactionsRequest BuildCalculateReactionsRequest(RunAnalysisRequest<TProfile> request)
         {
             return new CalculateReactionsRequest

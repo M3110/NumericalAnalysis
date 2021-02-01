@@ -1,4 +1,5 @@
-﻿using SuspensionAnalysis.DataContracts.Models.Analysis;
+﻿using SuspensionAnalysis.Core.Models.SuspensionComponents;
+using SuspensionAnalysis.DataContracts.Models.Analysis;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
 
@@ -11,11 +12,18 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         where TProfile : Profile
     {
         /// <summary>
-        /// This method generates the analysis result.
+        /// This method generates the analysis result to tie rod.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        AnalysisResult GenerateResult(AnalysisInput<TProfile> input);
+        TieRodAnalysisResult GenerateResult(TieRod<TProfile> component);
+
+        /// <summary>
+        /// This method generates the analysis result to suspension A-arm.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component);
 
         /// <summary>
         /// This method calcultes the equivalent stress using Von-Misses method.

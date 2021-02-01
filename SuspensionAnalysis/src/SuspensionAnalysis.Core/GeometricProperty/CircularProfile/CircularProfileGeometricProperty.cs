@@ -1,19 +1,19 @@
-﻿using SuspensionAnalysis.DataContracts.Models.Profiles;
-using System;
+﻿using System;
+using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
-namespace SuspensionAnalysis.Core.GeometricProperty
+namespace SuspensionAnalysis.Core.GeometricProperty.CircularProfile
 {
     /// <summary>
     /// It is responsible to calculate the geometric properties to circular profile.
     /// </summary>
-    public class CircularProfileGeometricProperty : GeometricProperty<CircularProfile>, ICircularProfileGeometricProperty
+    public class CircularProfileGeometricProperty : GeometricProperty<DataContract.CircularProfile>, ICircularProfileGeometricProperty
     {
         /// <summary>
         /// This method calculates the area.
         /// </summary>
         /// <param name="profile"></param>
         /// <returns></returns>
-        public override double CalculateArea(CircularProfile profile)
+        public override double CalculateArea(DataContract.CircularProfile profile)
         {
             return profile.Thickness.HasValue ?
                 Math.PI / 4 * (Math.Pow(profile.Diameter, 2) - Math.Pow(profile.Diameter - 2 * profile.Thickness.Value, 2))
@@ -25,7 +25,7 @@ namespace SuspensionAnalysis.Core.GeometricProperty
         /// </summary>
         /// <param name="profile"></param>
         /// <returns></returns>
-        public override double CalculateMomentOfInertia(CircularProfile profile)
+        public override double CalculateMomentOfInertia(DataContract.CircularProfile profile)
         {
             return profile.Thickness.HasValue ?
                 Math.PI / 64 * (Math.Pow(profile.Diameter, 4) - Math.Pow(profile.Diameter - 2 * profile.Thickness.Value, 4))

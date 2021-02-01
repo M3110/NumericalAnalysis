@@ -1,9 +1,9 @@
-﻿using SuspensionAnalysis.DataContracts.Models.Profiles;
+﻿using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
-namespace SuspensionAnalysis.Core.GeometricProperty
+namespace SuspensionAnalysis.Core.GeometricProperty.CircularProfile
 {
     /// <summary>
     /// It is responsible to calculate the geometric properties to circular profile.
     /// </summary>
-    public interface ICircularProfileGeometricProperty : IGeometricProperty<CircularProfile> { }
+    public interface ICircularProfileGeometricProperty : IGeometricProperty<DataContract.CircularProfile> { }
 }

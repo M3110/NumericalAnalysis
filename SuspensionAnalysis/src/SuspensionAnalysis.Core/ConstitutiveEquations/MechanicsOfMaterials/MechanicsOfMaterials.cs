@@ -1,4 +1,5 @@
 ﻿using SuspensionAnalysis.Core.GeometricProperty;
+using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.DataContracts.Models.Analysis;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
@@ -24,26 +25,54 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         }
 
         /// <summary>
-        /// This method generates the analysis result.
+        /// This method generates the analysis result to tie rod.
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public AnalysisResult GenerateResult(AnalysisInput<TProfile> input)
+        public virtual TieRodAnalysisResult GenerateResult(TieRod<TProfile> component)
         {
             // Step 1 - Calculates the geometric properties.
-            double area = this._geometricProperty.CalculateArea(input.Profile);
-            double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(input.Profile);
+            double area = this._geometricProperty.CalculateArea(component.Profile);
+            double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
 
             // Step 2 - Calculates the equivalent stress.
-            double equivalentStress = this.CalculateEquivalentStress(this.CalculateNormalStress(input.AppliedForce, area));
+            // For that case, just is considered the normal stress because the applied force is at same axis of geometry.
+            double equivalentStress = this.CalculateNormalStress(component.AppliedForce, area);
 
             // Step 3 - Builds the analysis result.
-            return new AnalysisResult()
+            return new TieRodAnalysisResult()
             {
-                AppliedForce = input.AppliedForce,
-                CriticalBucklingForce = this.CalculateCriticalBucklingForce(input.Material.YoungModulus, momentOfInertia, input.Length, input.FasteningType),
+                AppliedForce = component.AppliedForce,
+                CriticalBucklingForce = this.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length),
                 EquivalentStress = equivalentStress,
-                StressSafetyFactor = input.Material.YieldStrength / equivalentStress
+                StressSafetyFactor = component.Material.YieldStrength / equivalentStress
+            };
+        }
+
+        /// <summary>
+        /// This method generates the analysis result to suspension A-arm.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public virtual SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component)
+        {
+            // Step 1 - Calculates the geometric properties.
+            double area = this._geometricProperty.CalculateArea(component.Profile);
+            double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
+
+            // Step 2 - Calculates the equivalent stress.
+            // For that case, just is considered the normal stress because the applied force is at same axis of geometry.
+            double equivalentStress = Math.Max(this.CalculateNormalStress(component.AppliedForce1, area), this.CalculateNormalStress(component.AppliedForce2, area));
+
+            // Step 3 - Builds the analysis result.
+            return new SuspensionAArmAnalysisResult()
+            {
+                AppliedForce1 = component.AppliedForce1,
+                AppliedForce2 = component.AppliedForce2,
+                CriticalBucklingForce1 = this.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length1),
+                CriticalBucklingForce2 = this.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length2),
+                EquivalentStress = equivalentStress,
+                StressSafetyFactor = component.Material.YieldStrength / equivalentStress
             };
         }
 
@@ -79,7 +108,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="length"></param>
         /// <param name="fasteningType"></param>
         /// <returns>The critical buckling force. Unity: N (Newton).</returns>
-        public double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType)
+        public double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType = FasteningType.BothEndPinned)
         {
             return Math.Pow(Math.PI, 2) * youngModulus * momentOfInertia / Math.Pow(length * this.CalculateColumnEffectiveLengthFactor(fasteningType), 2);
         }

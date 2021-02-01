@@ -1,20 +1,20 @@
-﻿using SuspensionAnalysis.DataContracts.Models.Profiles;
+﻿using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 using System;
 
-namespace SuspensionAnalysis.Core.GeometricProperty
+namespace SuspensionAnalysis.Core.GeometricProperty.RectangularProfile
 {
     /// <summary>
     /// It is responsible to calculate the geometric properties to rectangular profile.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class RectangularProfileGeometricProperty : GeometricProperty<RectangularProfile>, IRectangularProfileGeometricProperty
+    public class RectangularProfileGeometricProperty : GeometricProperty<DataContract.RectangularProfile>, IRectangularProfileGeometricProperty
     {
         /// <summary>
         /// This method calculates the area.
         /// </summary>
         /// <param name="profile"></param>
         /// <returns></returns>
-        public override double CalculateArea(RectangularProfile profile)
+        public override double CalculateArea(DataContract.RectangularProfile profile)
         {
             return profile.Thickness.HasValue ?
                 profile.Width * profile.Height - (profile.Width - 2 * profile.Thickness.Value) * (profile.Height - 2 * profile.Thickness.Value)
@@ -26,7 +26,7 @@ namespace SuspensionAnalysis.Core.GeometricProperty
         /// </summary>
         /// <param name="profile"></param>
         /// <returns></returns>
-        public override double CalculateMomentOfInertia(RectangularProfile profile)
+        public override double CalculateMomentOfInertia(DataContract.RectangularProfile profile)
         {
             return profile.Thickness.HasValue ?
                 (Math.Pow(profile.Height, 3) * profile.Width - Math.Pow(profile.Height - 2 * profile.Thickness.Value, 3) * (profile.Width - 2 * profile.Thickness.Value)) / 12

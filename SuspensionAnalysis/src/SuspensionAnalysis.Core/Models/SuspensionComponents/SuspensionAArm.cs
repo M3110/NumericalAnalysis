@@ -1,5 +1,6 @@
 ﻿using SuspensionAnalysis.Core.ExtensionMethods;
 using SuspensionAnalysis.DataContracts.Models;
+using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
 using DataContract = SuspensionAnalysis.DataContracts.Models.SuspensionComponents;
 
@@ -94,6 +95,11 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         where TProfile : Profile
     {
         /// <summary>
+        /// The material.
+        /// </summary>
+        public Material Material { get; set; }
+        
+        /// <summary>
         /// The profile.
         /// </summary>
         public TProfile Profile { get; set; }
@@ -102,10 +108,11 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         /// This method creates a <see cref="SuspensionAArm{TProfile}"/> based on <see cref="DataContract.SuspensionAArm{TProfile}"/>.
         /// </summary>
         /// <param name="suspensionAArm"></param>
+        /// <param name="material"></param>
         /// <param name="appliedForce1"></param>
         /// <param name="appliedForce2"></param>
         /// <returns></returns>
-        public static SuspensionAArm<TProfile> Create(DataContract.SuspensionAArm<TProfile> suspensionAArm, double appliedForce1 = 0, double appliedForce2 = 0)
+        public static SuspensionAArm<TProfile> Create(DataContract.SuspensionAArm<TProfile> suspensionAArm, MaterialType material, double appliedForce1 = 0, double appliedForce2 = 0)
         {
             return new SuspensionAArm<TProfile>
             {
@@ -114,7 +121,8 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
                 PivotPoint2 = Point3D.Create(suspensionAArm.PivotPoint2),
                 Profile = suspensionAArm.Profile,
                 AppliedForce1 = appliedForce1,
-                AppliedForce2 = appliedForce2
+                AppliedForce2 = appliedForce2,
+                Material = Material.Create(material)
             };
         }
     }

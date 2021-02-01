@@ -17,7 +17,6 @@ namespace SuspensionAnalysis.Application.Controllers
         /// <param name="request"></param>
         /// <response code="200">Returns the reactions value.</response>
         /// <response code="400">If some validation do not passed.</response>
-        /// <response code="401">If the client does not have authorization.</response>
         /// <response code="500">If occurred some error in process.</response>
         /// <response code="501">If some resource is not implemented.</response>
         /// <returns></returns>

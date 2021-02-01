@@ -1,32 +1,47 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Converters;
 using SuspensionAnalysis.Application.Extensions;
+using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile;
+using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile;
+using SuspensionAnalysis.Core.GeometricProperty.CircularProfile;
+using SuspensionAnalysis.Core.GeometricProperty.RectangularProfile;
+using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
-using SuspensionAnalysis.Core.Operations.RunAnalysis;
-using SuspensionAnalysis.DataContracts.Models.Profiles;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.RectangularProfile;
 
 namespace SuspensionAnalysis
 {
+    /// <summary>
+    /// The application startup.
+    /// It configures the dependency injection and adds all necessary configuration.
+    /// </summary>
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to add services to the container.
+        /// </summary>
+        /// <param name="services"></param>
         public void ConfigureServices(IServiceCollection services)
         {
+            // Register Constitutive Equations
+            services.AddScoped<ICircularProfileMechanicsOfMaterials, CircularProfileMechanicsOfMaterials>();
+            services.AddScoped<IRectangularProfileMechanicsOfMaterials, RectangularProfileMechanicsOfMaterials>();
+
+            // Register Geometric Property calculators.
+            services.AddScoped<ICircularProfileGeometricProperty, CircularProfileGeometricProperty>();
+            services.AddScoped<IRectangularProfileGeometricProperty, RectangularProfileGeometricProperty>();
+
+            // Register Mapper
+            services.AddScoped<IMappingResolver, MappingResolver>();
+
             // Register operations.
             services.AddScoped<ICalculateReactions, CalculateReactions>();
-            services.AddScoped<IRunAnalysis<CircularProfile>, RunAnalysis<CircularProfile>>();
-            services.AddScoped<IRunAnalysis<RectangularProfile>, RunAnalysis<RectangularProfile>>();
+            services.AddScoped<IRunCircularProfileAnalysis, RunCircularProfileAnalysis>();
+            services.AddScoped<IRunRectangularProfileAnalysis, RunRectangularProfileAnalysis>();
 
             services
                 .AddControllers()
@@ -35,7 +50,11 @@ namespace SuspensionAnalysis
             services.AddSwaggerDocs();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// <summary>
+        /// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        /// </summary>
+        /// <param name="app"></param>
+        /// <param name="env"></param>
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

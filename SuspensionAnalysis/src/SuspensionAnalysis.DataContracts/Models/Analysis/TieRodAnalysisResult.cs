@@ -5,7 +5,7 @@ namespace SuspensionAnalysis.DataContracts.Models.Analysis
     /// <summary>
     /// It contains the essential result to analysis.
     /// </summary>
-    public class AnalysisResult
+    public class TieRodAnalysisResult
     {
         /// <summary>
         /// The critical buckling force.
