@@ -29,7 +29,7 @@ namespace SuspensionAnalysis.Application.Controllers
         [HttpPost("circular-profile/run")]
         public async Task<ActionResult<RunAnalysisResponse>> RunAnalysis(
             [FromServices] IRunCircularProfileAnalysis operation,
-            [FromQuery] RunAnalysisRequest<CircularProfile> request)
+            [FromBody] RunAnalysisRequest<CircularProfile> request)
         {
             RunAnalysisResponse response = await operation.Process(request).ConfigureAwait(false);
             return response.BuildHttpResponse();

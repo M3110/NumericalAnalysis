@@ -21,13 +21,13 @@ namespace SuspensionAnalysis.DataContracts.Models.Analysis
 
         /// <summary>
         /// The stress calculated using Von-Misses method.
-        /// Unity: Pa (Pascal).
+        /// Unity: MPa (Megapascal).
         /// </summary>
         public double EquivalentStress { get; set; }
 
         /// <summary>
         /// The Von-Misses equivalent stress safety factor.
-        /// Unity: Pa (Pascal).
+        /// Unity: Dimensionless.
         /// </summary>
         public double StressSafetyFactor { get; set; }
 
@@ -35,7 +35,7 @@ namespace SuspensionAnalysis.DataContracts.Models.Analysis
         /// The safety factor to buckling analysis.
         /// Unity: Dimensionless.
         /// </summary>
-        public double BucklingSafetyFactor => this.AppliedForce / this.CriticalBucklingForce;
+        public double BucklingSafetyFactor => Math.Round(Math.Abs(this.CriticalBucklingForce / this.AppliedForce), 2);
 
         /// <summary>
         /// The analysis safety factor.

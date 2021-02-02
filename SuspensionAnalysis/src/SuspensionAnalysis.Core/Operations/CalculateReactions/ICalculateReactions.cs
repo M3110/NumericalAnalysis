@@ -30,7 +30,9 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// </summary>
         /// <param name="suspensionSystem"></param>
         /// <param name="result"></param>
+        /// <param name="shouldRound"></param>
+        /// <param name="decimals"></param>
         /// <returns></returns>
-        CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result);
+        CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int decimals);
     }
 }

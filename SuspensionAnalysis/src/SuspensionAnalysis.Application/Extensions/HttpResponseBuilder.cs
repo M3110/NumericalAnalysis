@@ -62,10 +62,10 @@ namespace SuspensionAnalysis.Application.Extensions
                 };
             }
 
-            response.SetSuccessCreated();
+            response.SetSuccessOk();
             return new JsonResult(response)
             {
-                StatusCode = (int)HttpStatusCode.Created
+                StatusCode = (int)HttpStatusCode.OK
             };
         }
     }

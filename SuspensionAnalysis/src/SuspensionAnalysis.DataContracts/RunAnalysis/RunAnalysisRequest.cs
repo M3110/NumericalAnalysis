@@ -15,6 +15,16 @@ namespace SuspensionAnalysis.DataContracts.RunAnalysis
         where TProfile : Profile
     {
         /// <summary>
+        /// True, if result should be rounded. False, otherwise.
+        /// </summary>
+        public bool ShouldRoundResults { get; set; }
+
+        /// <summary>
+        /// The number of decimals that should be rounded in results.
+        /// </summary>
+        public int? NumberOfDecimalsToRound { get; set; }
+        
+        /// <summary>
         /// The material.
         /// </summary>
         [JsonConverter(typeof(StringEnumConverter))]

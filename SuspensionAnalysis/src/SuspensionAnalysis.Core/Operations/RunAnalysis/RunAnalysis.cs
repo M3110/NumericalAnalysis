@@ -1,4 +1,5 @@
 ﻿using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials;
+using SuspensionAnalysis.Core.ExtensionMethods;
 using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.Core.Operations.Base;
@@ -45,6 +46,7 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
         protected override async Task<RunAnalysisResponse> ProcessOperation(RunAnalysisRequest<TProfile> request)
         {
             var response = new RunAnalysisResponse();
+            response.SetSuccessOk();
 
             // Step 1 - Calculates the reactions at suspension system.
             CalculateReactionsResponse calculateReactionsResponse = await this._calculateReactions.Process(this.BuildCalculateReactionsRequest(request)).ConfigureAwait(false);
@@ -63,12 +65,12 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
             // Step 3 - Generate the result and maps the response.
             response.Data = new RunAnalysisResponseData
             {
-                ShockAbsorber = calculateReactionsResponse.Data.ShockAbsorberReaction,
-                SuspensionAArmLowerResult = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.SuspensionAArmLower),
-                SuspensionAArmUpperResult = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.SuspensionAArmUpper),
-                TieRod = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.TieRod)
+                ShockAbsorber = request.ShouldRoundResults == true ? calculateReactionsResponse.Data.ShockAbsorberReaction.Round(request.NumberOfDecimalsToRound.GetValueOrDefault()) : calculateReactionsResponse.Data.ShockAbsorberReaction,
+                SuspensionAArmLowerResult = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.SuspensionAArmLower, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()),
+                SuspensionAArmUpperResult = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.SuspensionAArmUpper, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()),
+                TieRod = this._mechanicsOfMaterials.GenerateResult(suspensionSystem.TieRod, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault())
             };
-            
+
             return response;
         }
 
@@ -81,6 +83,7 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
         {
             return new CalculateReactionsRequest
             {
+                ShouldRoundResults = false,
                 ForceApplied = request.ForceApplied,
                 Origin = request.Origin,
                 ShockAbsorber = ShockAbsorberPoint.Create(request.ShockAbsorber),

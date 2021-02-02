@@ -21,7 +21,7 @@ namespace SuspensionAnalysis.DataContracts.OperationBase
         /// <summary>
         /// The success status of operation.
         /// </summary>
-        public bool Success { get; protected set; }
+        public virtual bool Success { get; protected set; }
 
         /// <summary>
         /// The HTTP status code.
@@ -64,11 +64,11 @@ namespace SuspensionAnalysis.DataContracts.OperationBase
         }
 
         /// <summary>
-        /// Set success to true. The HttpStatusCode will be set to 201 (Created).
+        /// Set success to true. The HttpStatusCode will be set to 200 (OK).
         /// </summary>
-        public void SetSuccessCreated()
+        public void SetSuccessOk()
         {
-            this.HttpStatusCode = HttpStatusCode.Created;
+            this.HttpStatusCode = HttpStatusCode.OK;
             this.Success = true;
         }
 

@@ -14,16 +14,20 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <summary>
         /// This method generates the analysis result to tie rod.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="component"></param>
+        /// <param name="shouldRound"></param>
+        /// <param name="decimals"></param>
         /// <returns></returns>
-        TieRodAnalysisResult GenerateResult(TieRod<TProfile> component);
+        TieRodAnalysisResult GenerateResult(TieRod<TProfile> component, bool shouldRound, int decimals = 0);
 
         /// <summary>
         /// This method generates the analysis result to suspension A-arm.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="component"></param>
+        /// <param name="shouldRound"></param>
+        /// <param name="decimals"></param>
         /// <returns></returns>
-        SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component);
+        SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component, bool shouldRound, int decimals = 0);
 
         /// <summary>
         /// This method calcultes the equivalent stress using Von-Misses method.

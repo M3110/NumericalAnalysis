@@ -27,9 +27,11 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <summary>
         /// This method generates the analysis result to tie rod.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="component"></param>
+        /// <param name="shouldRound"></param>
+        /// <param name="decimals"></param>
         /// <returns></returns>
-        public virtual TieRodAnalysisResult GenerateResult(TieRod<TProfile> component)
+        public virtual TieRodAnalysisResult GenerateResult(TieRod<TProfile> component, bool shouldRound, int decimals = 0)
         {
             // Step 1 - Calculates the geometric properties.
             double area = this._geometricProperty.CalculateArea(component.Profile);
@@ -40,21 +42,34 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
             double equivalentStress = this.CalculateNormalStress(component.AppliedForce, area);
 
             // Step 3 - Builds the analysis result.
-            return new TieRodAnalysisResult()
+            var result = new TieRodAnalysisResult()
             {
                 AppliedForce = component.AppliedForce,
                 CriticalBucklingForce = this.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length),
-                EquivalentStress = equivalentStress,
-                StressSafetyFactor = component.Material.YieldStrength / equivalentStress
+                EquivalentStress = equivalentStress / 1e6, // It is necessary to convert Pa to MPa.
+                StressSafetyFactor = Math.Abs(component.Material.YieldStrength / equivalentStress)
+            };
+
+            if (shouldRound == false)
+                return result;
+
+            return new TieRodAnalysisResult
+            {
+                AppliedForce = Math.Round(result.AppliedForce, decimals),
+                CriticalBucklingForce = Math.Round(result.CriticalBucklingForce, decimals),
+                EquivalentStress = Math.Round(result.EquivalentStress, decimals),
+                StressSafetyFactor = Math.Round(result.StressSafetyFactor, decimals)
             };
         }
 
         /// <summary>
         /// This method generates the analysis result to suspension A-arm.
         /// </summary>
-        /// <param name="input"></param>
+        /// <param name="component"></param>
+        /// <param name="shouldRound"></param>
+        /// <param name="decimals"></param>
         /// <returns></returns>
-        public virtual SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component)
+        public virtual SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component, bool shouldRound, int decimals = 0)
         {
             // Step 1 - Calculates the geometric properties.
             double area = this._geometricProperty.CalculateArea(component.Profile);
@@ -65,14 +80,27 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
             double equivalentStress = Math.Max(this.CalculateNormalStress(component.AppliedForce1, area), this.CalculateNormalStress(component.AppliedForce2, area));
 
             // Step 3 - Builds the analysis result.
-            return new SuspensionAArmAnalysisResult()
+            var result = new SuspensionAArmAnalysisResult()
             {
                 AppliedForce1 = component.AppliedForce1,
                 AppliedForce2 = component.AppliedForce2,
                 CriticalBucklingForce1 = this.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length1),
                 CriticalBucklingForce2 = this.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length2),
-                EquivalentStress = equivalentStress,
-                StressSafetyFactor = component.Material.YieldStrength / equivalentStress
+                EquivalentStress = equivalentStress / 1e6, // It is necessary to convert Pa to MPa.
+                StressSafetyFactor = Math.Abs(component.Material.YieldStrength / equivalentStress)
+            };
+
+            if (shouldRound == false)
+                return result;
+
+            return new SuspensionAArmAnalysisResult
+            {
+                AppliedForce1 = Math.Round(result.AppliedForce1, decimals),
+                AppliedForce2 = Math.Round(result.AppliedForce2, decimals),
+                CriticalBucklingForce1 = Math.Round(result.CriticalBucklingForce1, decimals),
+                CriticalBucklingForce2 = Math.Round(result.CriticalBucklingForce2, decimals),
+                EquivalentStress = Math.Round(result.EquivalentStress, decimals),
+                StressSafetyFactor = Math.Round(result.StressSafetyFactor, decimals)
             };
         }
 

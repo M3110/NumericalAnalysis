@@ -31,7 +31,7 @@ namespace SuspensionAnalysis.Core.Operations.Base
         protected virtual Task<TResponse> ValidateOperation(TRequest request)
         {
             var response = new TResponse();
-            response.SetSuccessCreated();
+            response.SetSuccessOk();
 
             if (request == null)
             {

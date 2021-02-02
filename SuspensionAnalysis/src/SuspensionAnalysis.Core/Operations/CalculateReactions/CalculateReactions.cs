@@ -4,6 +4,9 @@ using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.Core.Operations.Base;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
 using SuspensionAnalysis.DataContracts.Models;
+using SuspensionAnalysis.DataContracts.OperationBase;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.CalculateReactions
@@ -13,6 +16,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
     /// </summary>
     public class CalculateReactions : OperationBase<CalculateReactionsRequest, CalculateReactionsResponse, CalculateReactionsResponseData>, ICalculateReactions
     {
+        private readonly double _precision = 1e-3;
         private readonly IMappingResolver _mappingResolver;
 
         /// <summary>
@@ -32,13 +36,16 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         protected override Task<CalculateReactionsResponse> ProcessOperation(CalculateReactionsRequest request)
         {
             var response = new CalculateReactionsResponse { Data = new CalculateReactionsResponseData() };
+            response.SetSuccessOk();
 
             // Step 1 - Creates the necessary informations about the suspension system.
             SuspensionSystem suspensionSystem = this._mappingResolver.MapFrom(request);
 
             // Step 2 - Calculates the displacement matrix and applied efforts vector to calculate the reactions on suspension system.
             double[,] displacement = this.BuildDisplacementMatrix(suspensionSystem, Point3D.Create(request.Origin));
-            double[] effort = this.BuildReactionVector(Vector3D.Create(request.ForceApplied));
+            
+            Vector3D forceApplied = Vector3D.Create(request.ForceApplied);
+            double[] effort = this.BuildReactionVector(forceApplied);
 
             // Step 3 - Calculates the reactions on suspension system.
             // The equation used: 
@@ -49,7 +56,11 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
                 .Multiply(effort);
 
             // Step 4 - Map the results to response.
-            response.Data = this.MapToResponse(suspensionSystem, result);
+            response.Data = this.MapToResponse(suspensionSystem, result, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
+
+            // Step 5 - Check if sum of forces is equals to zero, indicanting that the structure is static.
+            // This method was commented because some error ocurred and must be investigated.
+            //this.CheckForceAndMomentSum(response, forceApplied);
 
             return Task.FromResult(response);
         }
@@ -99,18 +110,52 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// </summary>
         /// <param name="suspensionSystem"></param>
         /// <param name="result"></param>
+        /// <param name="shouldRound"></param>
+        /// <param name="decimals"></param>
         /// <returns></returns>
-        public CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result)
+        public CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int decimals)
         {
-            return new CalculateReactionsResponseData
+            return shouldRound == true ?
+                new CalculateReactionsResponseData
+                {
+                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1).Round(decimals),
+                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2).Round(decimals),
+                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1).Round(decimals),
+                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2).Round(decimals),
+                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection).Round(decimals),
+                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection).Round(decimals)
+                }
+                : new CalculateReactionsResponseData
+                {
+                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
+                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
+                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
+                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
+                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
+                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
+                };
+        }
+
+        /// <summary>
+        /// This method checks if sum of forces and moment is equals to zero, indicanting that the structure is static.
+        /// </summary>
+        /// <param name="response"></param>
+        public void CheckForceAndMomentSum(CalculateReactionsResponse response, Vector3D appliedForce)
+        {
+            if (Math.Abs(response.Data.CalculateForceXSum(appliedForce.X)) > this._precision)
             {
-                AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
-                AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
-                AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
-                AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
-                ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
-                TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
-            };
+                response.AddError(OperationErrorCode.InternalServerError, "The sum of forces at axis X is not equals to zero.", HttpStatusCode.InternalServerError);
+            }
+
+            if (Math.Abs(response.Data.CalculateForceYSum(appliedForce.Y)) > this._precision)
+            {
+                response.AddError(OperationErrorCode.InternalServerError, "The sum of forces at axis Y is not equals to zero.", HttpStatusCode.InternalServerError);
+            }
+
+            if (Math.Abs(response.Data.CalculateForceZSum(appliedForce.Z)) > this._precision)
+            {
+                response.AddError(OperationErrorCode.InternalServerError, "The sum of forces at axis Z is not equals to zero.", HttpStatusCode.InternalServerError);
+            }
         }
     }
 }

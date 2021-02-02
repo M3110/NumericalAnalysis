@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace SuspensionAnalysis.DataContracts.Models
@@ -37,9 +38,9 @@ namespace SuspensionAnalysis.DataContracts.Models
 
             return new Point3D
             {
-                X = double.Parse(points[0]),
-                Y = double.Parse(points[1]),
-                Z = double.Parse(points[2]),
+                X = double.Parse(points[0], CultureInfo.InvariantCulture),
+                Y = double.Parse(points[1], CultureInfo.InvariantCulture),
+                Z = double.Parse(points[2], CultureInfo.InvariantCulture),
             };
         }
     }

@@ -9,6 +9,16 @@ namespace SuspensionAnalysis.DataContracts.CalculateReactions
     public class CalculateReactionsRequest : OperationRequestBase
     {
         /// <summary>
+        /// True, if result should be rounded. False, otherwise.
+        /// </summary>
+        public bool ShouldRoundResults { get; set; }
+
+        /// <summary>
+        /// The number of decimals that should be rounded in results.
+        /// </summary>
+        public int? NumberOfDecimalsToRound { get; set; }
+
+        /// <summary>
         /// The origin considered to analysis.
         /// </summary>
         /// <example>x,y,z</example>
