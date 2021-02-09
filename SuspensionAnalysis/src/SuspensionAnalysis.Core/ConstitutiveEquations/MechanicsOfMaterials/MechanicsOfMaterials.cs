@@ -4,15 +4,21 @@ using SuspensionAnalysis.DataContracts.Models.Analysis;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
 using System;
+using System.Collections.Generic;
 
 namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
 {
     /// <summary>
     /// It contains the Mechanics of Materials constitutive equations.
     /// </summary>
-    public class MechanicsOfMaterials<TProfile> : IMechanicsOfMaterials<TProfile>
+    public abstract class MechanicsOfMaterials<TProfile> : IMechanicsOfMaterials<TProfile>
         where TProfile : Profile
     {
+        /// <summary>
+        /// The invalid values to double type.
+        /// </summary>
+        protected readonly List<double> _invalidDoubleValues = new List<double> { double.NaN, double.PositiveInfinity, double.NegativeInfinity, double.MaxValue, double.MinValue };
+
         private readonly IGeometricProperty<TProfile> _geometricProperty;
 
         /// <summary>
@@ -125,6 +131,11 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <returns>The normal stress. Unity: Pa (Pascal).</returns>
         public double CalculateNormalStress(double normalForce, double area)
         {
+            if (area <= 0 || this._invalidDoubleValues.Contains(area))
+            {
+                throw new ArgumentOutOfRangeException(nameof(area), $"The area cannot be equals to {area}. The area must be grether than zero.");
+            }
+
             return normalForce / area;
         }
 

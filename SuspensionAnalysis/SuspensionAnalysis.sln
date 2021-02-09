@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SuspensionAnalysis.DataCont
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{BB746C43-59E4-4904-9865-17E88F220E46}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuspensionAnalysis.UnitTest", "test\SuspensionAnalysis.UnitTest\SuspensionAnalysis.UnitTest.csproj", "{150F3C8A-22E1-4B06-ABE8-A0E6AD6C35C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{C56E582C-EB06-463D-8782-9ED441A032E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C56E582C-EB06-463D-8782-9ED441A032E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C56E582C-EB06-463D-8782-9ED441A032E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{150F3C8A-22E1-4B06-ABE8-A0E6AD6C35C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{150F3C8A-22E1-4B06-ABE8-A0E6AD6C35C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{150F3C8A-22E1-4B06-ABE8-A0E6AD6C35C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{150F3C8A-22E1-4B06-ABE8-A0E6AD6C35C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 		{938A5500-92DA-4227-9F94-ECADAB4AC8A4} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
 		{E008F1F2-8540-459A-9AFD-352AB58377A8} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
 		{C56E582C-EB06-463D-8782-9ED441A032E8} = {3476D0AD-86B3-4B52-BD42-F9D19CE01E13}
+		{150F3C8A-22E1-4B06-ABE8-A0E6AD6C35C9} = {BB746C43-59E4-4904-9865-17E88F220E46}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {801B0F5F-7AE3-43D0-90C9-02686F698605}
