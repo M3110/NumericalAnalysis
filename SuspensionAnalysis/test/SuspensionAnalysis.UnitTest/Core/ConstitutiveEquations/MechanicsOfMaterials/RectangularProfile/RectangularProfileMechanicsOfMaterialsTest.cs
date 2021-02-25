@@ -1,6 +1,6 @@
 ﻿using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile;
-using SuspensionAnalysis.Core.GeometricProperty.RectangularProfile;
+using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
 
 namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile
 {

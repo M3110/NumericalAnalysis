@@ -1,4 +1,4 @@
-﻿using SuspensionAnalysis.Core.GeometricProperty.CircularProfile;
+﻿using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
 namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile

@@ -1,10 +1,9 @@
-﻿using SuspensionAnalysis.Core.GeometricProperty;
+﻿using SuspensionAnalysis.Core.GeometricProperties;
 using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.DataContracts.Models.Analysis;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
 using System;
-using System.Collections.Generic;
 
 namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
 {
@@ -14,12 +13,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
     public abstract class MechanicsOfMaterials<TProfile> : IMechanicsOfMaterials<TProfile>
         where TProfile : Profile
     {
-        /// <summary>
-        /// The invalid values to double type.
-        /// </summary>
-        protected readonly List<double> _invalidDoubleValues = new List<double> { double.NaN, double.PositiveInfinity, double.NegativeInfinity, double.MaxValue, double.MinValue };
-
-        private readonly IGeometricProperty<TProfile> _geometricProperty;
+        protected readonly IGeometricProperty<TProfile> _geometricProperty;
 
         /// <summary>
         /// Class constructor.
@@ -39,6 +33,9 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <returns></returns>
         public virtual TieRodAnalysisResult GenerateResult(TieRod<TProfile> component, bool shouldRound, int decimals = 0)
         {
+            if (component == null)
+                throw new ArgumentNullException(nameof(component), "The object tie rod cannot be null to calculate the results.");
+
             // Step 1 - Calculates the geometric properties.
             double area = this._geometricProperty.CalculateArea(component.Profile);
             double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
@@ -77,6 +74,9 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <returns></returns>
         public virtual SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component, bool shouldRound, int decimals = 0)
         {
+            if (component == null)
+                throw new ArgumentNullException(nameof(component), "The object suspension A-arm cannot be null to calculate the results.");
+
             // Step 1 - Calculates the geometric properties.
             double area = this._geometricProperty.CalculateArea(component.Profile);
             double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
@@ -131,10 +131,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <returns>The normal stress. Unity: Pa (Pascal).</returns>
         public double CalculateNormalStress(double normalForce, double area)
         {
-            if (area <= 0 || this._invalidDoubleValues.Contains(area))
-            {
-                throw new ArgumentOutOfRangeException(nameof(area), $"The area cannot be equals to {area}. The area must be grether than zero.");
-            }
+            GeometricProperty.Validate(area, nameof(area));
 
             return normalForce / area;
         }
@@ -149,6 +146,9 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <returns>The critical buckling force. Unity: N (Newton).</returns>
         public double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType = FasteningType.BothEndPinned)
         {
+            GeometricProperty.Validate(momentOfInertia, nameof(momentOfInertia));
+            GeometricProperty.Validate(length, nameof(length));
+
             return Math.Pow(Math.PI, 2) * youngModulus * momentOfInertia / Math.Pow(length * this.CalculateColumnEffectiveLengthFactor(fasteningType), 2);
         }
 

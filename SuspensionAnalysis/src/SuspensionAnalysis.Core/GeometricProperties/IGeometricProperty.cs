@@ -1,6 +1,6 @@
 ﻿using SuspensionAnalysis.DataContracts.Models.Profiles;
 
-namespace SuspensionAnalysis.Core.GeometricProperty
+namespace SuspensionAnalysis.Core.GeometricProperties
 {
     /// <summary>
     /// It is responsible to calculate the geometric properties to a profile.

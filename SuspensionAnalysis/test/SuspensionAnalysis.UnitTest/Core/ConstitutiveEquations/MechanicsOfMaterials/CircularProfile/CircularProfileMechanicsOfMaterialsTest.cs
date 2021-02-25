@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile;
-using SuspensionAnalysis.Core.GeometricProperty.CircularProfile;
+using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using System;
 using Xunit;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
@@ -26,11 +26,11 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             this._operation = new CircularProfileMechanicsOfMaterials(this._geometricPropertyMock.Object);
         }
 
-        [Theory(DisplayName = @"Feature: CalculateNormalStress | Given: Valid parameters. | When: Call method. | Should: Return a valid value to normal stress.")]
         [InlineData(0, 1, 0)]
         [InlineData(1, 1, 1)]
         [InlineData(1000, 0.5, 2000)]
         [InlineData(1000, 7.92e-4, 1262626.263)]
+        [Theory(DisplayName = @"Feature: CalculateNormalStress | Given: Valid parameters. | When: Call method. | Should: Return a valid value to normal stress.")]
         public void CalculateNormalStress_ValidParameters_Should_ReturnValidValue(double normalForce, double area, double expectedValue)
         {
             // Act
@@ -40,7 +40,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             result.Should().BeApproximately(expectedValue, precision: 1e-3);
         }
 
-        [Theory(DisplayName = @"Feature: CalculateNormalStress | Given: Invalid area. | When: Call method. | Should: Throw exception.")]
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(double.NaN)]
@@ -48,6 +47,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         [InlineData(double.NegativeInfinity)]
         [InlineData(double.MaxValue)]
         [InlineData(double.MinValue)]
+        [Theory(DisplayName = @"Feature: CalculateNormalStress | Given: Invalid area. | When: Call method. | Should: Throw exception.")]
         public void CalculateNormalStress_InvalidArea_Should_ThrowException(double area)
         {
             // Act

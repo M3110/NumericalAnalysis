@@ -1,4 +1,4 @@
-﻿using SuspensionAnalysis.Core.GeometricProperty.RectangularProfile;
+﻿using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
 namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile
