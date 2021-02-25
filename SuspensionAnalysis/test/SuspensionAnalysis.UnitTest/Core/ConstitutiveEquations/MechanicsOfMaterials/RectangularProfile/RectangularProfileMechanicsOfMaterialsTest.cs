@@ -13,7 +13,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         {
 
             this._geometrypropertyMock = new Mock<IRectangularProfileGeometricProperty>();
-            this._geometrypropertyMock.Setup()
+            //this._geometrypropertyMock.Setup()
 
 
 

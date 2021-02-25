@@ -49,7 +49,7 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.RunAnalysis.CircularProfil
 
             this._mappingResolverMock = new Mock<IMappingResolver>();
             this._mappingResolverMock
-                .Setup(mr => mr.MapFrom(this._requestStub, It.IsAny<CalculateReactionsResponseData>());
+                .Setup(mr => mr.MapFrom(this._requestStub, It.IsAny<CalculateReactionsResponseData>()));
 
             this._mechanicsOfMaterialsMock = new Mock<ICircularProfileMechanicsOfMaterials>();
 

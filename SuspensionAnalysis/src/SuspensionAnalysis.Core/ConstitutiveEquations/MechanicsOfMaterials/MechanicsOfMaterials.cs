@@ -21,7 +21,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="geometricProperty"></param>
         public MechanicsOfMaterials(IGeometricProperty<TProfile> geometricProperty)
         {
-            this._geometricProperty = geometricProperty;
+            this._geometricProperty = geometricProperty ?? throw new ArgumentNullException(nameof(geometricProperty), $"'{nameof(geometricProperty)}' cannot be null in '{this.GetType().Name}' operation.");
         }
 
         /// <summary>
