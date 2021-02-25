@@ -39,7 +39,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         }
 
         [ClassData(typeof(EquivalentStressParameters))]
-        [Theory(DisplayName = "")]
+        [Theory(DisplayName = "Feature: CalculateEquivalentStress | Given: Valid parameters. | When: Call method. | Should: Return a valid value to equivalent stress.")]
         public void CalculateEquivalentStress_ValidParameters_Should_ReturnValidValue(double normalStress, double flexuralStress, double shearStress, double torsionalStress, double expected)
         {
             // Act
