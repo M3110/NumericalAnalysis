@@ -83,7 +83,9 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
 
             // Step 2 - Calculates the equivalent stress.
             // For that case, just is considered the normal stress because the applied force is at same axis of geometry.
-            double equivalentStress = Math.Max(this.CalculateNormalStress(component.AppliedForce1, area), this.CalculateNormalStress(component.AppliedForce2, area));
+            double equivalentStress = Math.Max(
+                this.CalculateNormalStress(component.AppliedForce1, area), 
+                this.CalculateNormalStress(component.AppliedForce2, area));
 
             // Step 3 - Builds the analysis result.
             var result = new SuspensionAArmAnalysisResult()
@@ -165,7 +167,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
                 FasteningType.BothEndFixed => 0.5,
                 FasteningType.OneEndFixedOneEndPinned => Math.Sqrt(2) / 2,
                 FasteningType.OneEndFixed => 2,
-                _ => throw new Exception($"Invalid fastening type: {fasteningType}.")
+                _ => throw new ArgumentOutOfRangeException($"Invalid fastening type: {fasteningType}.")
             };
         }
     }
