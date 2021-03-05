@@ -11,40 +11,40 @@ namespace SuspensionAnalysis.DataContracts.CalculateReactions
         /// <summary>
         /// The reaction to suspension A-arm upper.
         /// This component has two reactions.
-        /// Unity: N (Newton).
+        /// Unit: N (Newton).
         /// </summary>
         public Force AArmUpperReaction1 { get; set; }
 
         /// <summary>
         /// The reaction to suspension A-arm upper.
         /// This component has two reactions.
-        /// Unity: N (Newton).
+        /// Unit: N (Newton).
         /// </summary>
         public Force AArmUpperReaction2 { get; set; }
 
         /// <summary>
         /// The reaction to suspension A-arm lower.
         /// This component has two reactions.
-        /// Unity: N (Newton).
+        /// Unit: N (Newton).
         /// </summary>
         public Force AArmLowerReaction1 { get; set; }
 
         /// <summary>
         /// The reaction to suspension A-arm lower.
         /// This component has two reactions.
-        /// Unity: N (Newton).
+        /// Unit: N (Newton).
         /// </summary>
         public Force AArmLowerReaction2 { get; set; }
 
         /// <summary>
         /// The reaction to shock absorber.
-        /// Unity: N (Newton).
+        /// Unit: N (Newton).
         /// </summary>
         public Force ShockAbsorberReaction { get; set; }
 
         /// <summary>
         /// The reaction to tie rod.
-        /// Unity: N (Newton).
+        /// Unit: N (Newton).
         /// </summary>
         public Force TieRodReaction { get; set; }
     }

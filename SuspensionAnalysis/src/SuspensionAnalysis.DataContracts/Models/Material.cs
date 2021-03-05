@@ -38,19 +38,19 @@ namespace SuspensionAnalysis.DataContracts.Models
 
         /// <summary>
         /// Young modulus. 
-        /// Unity: Pa (Pascal).
+        /// Unit: Pa (Pascal).
         /// </summary>
         public double YoungModulus { get; }
 
         /// <summary>
         /// Yield strength. 
-        /// Unity: Pa (Pascal).
+        /// Unit: Pa (Pascal).
         /// </summary>
         public double YieldStrength { get; }
 
         /// <summary>
         /// Specific mass. 
-        /// Unity: kg/m³ (kilogram per cubic meters).
+        /// Unit: kg/m³ (kilogram per cubic meters).
         /// </summary>
         public double SpecificMass { get; }
 

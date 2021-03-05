@@ -119,7 +119,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="flexuralStress"></param>
         /// <param name="shearStress"></param>
         /// <param name="torsionalStress"></param>
-        /// <returns>The equivalent stress. Unity: Pa (Pascal).</returns>
+        /// <returns>The equivalent stress. Unit: Pa (Pascal).</returns>
         public double CalculateEquivalentStress(double normalStress = 0, double flexuralStress = 0, double shearStress = 0, double torsionalStress = 0)
         {
             return Math.Sqrt(Math.Pow(normalStress + flexuralStress, 2) + 3 * Math.Pow(shearStress + torsionalStress, 2));
@@ -130,7 +130,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// </summary>
         /// <param name="normalForce"></param>
         /// <param name="area"></param>
-        /// <returns>The normal stress. Unity: Pa (Pascal).</returns>
+        /// <returns>The normal stress. Unit: Pa (Pascal).</returns>
         public double CalculateNormalStress(double normalForce, double area)
         {
             GeometricProperty.Validate(area, nameof(area));
@@ -145,7 +145,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="momentOfInertia"></param>
         /// <param name="length"></param>
         /// <param name="fasteningType"></param>
-        /// <returns>The critical buckling force. Unity: N (Newton).</returns>
+        /// <returns>The critical buckling force. Unit: N (Newton).</returns>
         public double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType = FasteningType.BothEndPinned)
         {
             GeometricProperty.Validate(momentOfInertia, nameof(momentOfInertia));

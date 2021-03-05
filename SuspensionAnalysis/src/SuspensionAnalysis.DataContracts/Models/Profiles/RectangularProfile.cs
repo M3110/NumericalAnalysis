@@ -7,13 +7,13 @@
     {
         /// <summary>
         /// The width.
-        /// Unity: m (meter).
+        /// Unit: m (meter).
         /// </summary>
         public double Width { get; set; }
 
         /// <summary>
         /// The height.
-        /// Unity: m (meter).
+        /// Unit: m (meter).
         /// </summary>
         public double Height { get; set; }
     }

@@ -2,8 +2,8 @@
 using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile;
 using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
-using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.Core.Models;
+using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 using System.Collections.Generic;
 using Xunit;
@@ -32,7 +32,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         }
 
         [Fact(DisplayName = "Feature: CircularProfileMechanicsOfMaterials | Given: Null GeometricProperty. | When: Instantiate class. | Should: Throw an ArgumentNullException.")]
-        public void AddChangeLog_NullLogger_ShouldThrowArgumentNullException()
+        public void CircularProfileMechanicsOfMaterials_NullGeometricProperty_ShouldThrowArgumentNullException()
         {
             // Act
             Action act = () => new CircularProfileMechanicsOfMaterials(null);

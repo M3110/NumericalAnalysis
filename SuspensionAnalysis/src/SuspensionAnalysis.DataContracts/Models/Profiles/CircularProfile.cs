@@ -7,7 +7,7 @@
     {
         /// <summary>
         /// The diameter.
-        /// Unity: m (meter).
+        /// Unit: m (meter).
         /// </summary>
         public double Diameter { get; set; }
     }
