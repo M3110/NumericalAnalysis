@@ -4,15 +4,16 @@ using Moq.Language;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile;
 using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
 using System;
+using System.Collections.Generic;
 using Xunit;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile
 
 /// O que precisamos fazer:
-/// Revisar como funciona a classe **RectangularProfileMechanicsOfMaterials**.
-/// Testar método CalculateEquivalentStress.
-/// Testar método CalculateNormalStress para caso de falha.
-/// Testar método Calculate Normal Stress para o caso de dados válidos.
+/// Revisar como funciona a classe **RectangularProfileMechanicsOfMaterials**. FEITO
+/// Testar método CalculateNormalStress para caso de falha. FEITO
+/// Testar método Calculate Normal Stress para o caso de dados válidos. FEITO
+/// Testar método CalculateEquivalentStress. FEITO
 /// Testar método CalculateCriticalBucklingForce para caso de falha.
 /// Testar método CalculateCriticalBucklingForce para o caso de dados válidos.
 /// Testar método CalculateColumnEffectiveLengthFactor para caso de falha.
@@ -21,7 +22,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
 /// **[OPCIONAL]** Testar método GenerateResult que recebe SuspensionAArm para o caso de dados válidos.
 ///**[OPCIONAL]** Testar método GenerateResult que recebe TieRod para caso de falha.
 ///**[OPCIONAL]** Testar método GenerateResult que recebe TieRod para o caso de dados válidos.
-
 {
     public class RectangularProfileMechanicsOfMaterialsTest
     {
@@ -61,21 +61,53 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         }
 
         [Theory(DisplayName = "Feature:  | When: Call Method | Given: Invalid Parameters | Should: Throw Excepction")]
-        [InlineData(NaN)]
-        [InlineData(PositiveInfinite)]
-        [InlineData(NegativeInfinite)]
-        [InlineData(MaxValue)]
-        [InlineData(MinValue)]
+        [InlineData(double.NaN)]
+        [InlineData(double.PositiveInfinity)]
+        [InlineData(double.NegativeInfinity)]
+        [InlineData(double.MaxValue)]
+        [InlineData(double.MinValue)]
         [InlineData(0)]
         [InlineData(-1)]
 
-        public void CalculateNormalStress_InalidParameters_Should_ThrowExepction(double area)
-        { 
+        public void CalculateNormalStress_InvalidParameters_Should_ThrowExepction(double area)
+        {
             //Act
-            Action.act = () => this._operation.CalculateNormalStress (normalForce = 1, area);
+            Action act = () => this._operation.CalculateNormalStress(normalForce: 1, area);
             //Assert
-
+            act.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
 
+        [MemberData(nameof(EquivalentStressParameters))]
+        [Theory(DisplayName = "Feature: CalculateEquivalentStress | When: Call Method |Given: Valid Parameters |Should: Return a valid value to normal stress ")]
+
+        public void CalculateEquivalentStress_ValidParameters_Should_ReturnValidValue(double normalStress, double flexuralStress, double shearStress, double torsionalStress, double expectedValue)
+        {
+            //Act  
+            double result = this._operation.CalculateEquivalentStress(normalStress, flexuralStress, torsionalStress, shearStress);
+
+
+            //Assert
+            result.Should().BeApproximately(expectedValue, _precision);
+
+        }
+        public static IEnumerable<object[]> EquivalentStressParameters()
+        {
+            yield return new object[] { 0, 0, 0, 0, 0 };
+            yield return new object[] { 1, 0, 0, 0, 1 };
+            yield return new object[] { 0, 1, 0, 0, 1 };
+            yield return new object[] { 0, 0, 1, 0, Math.Sqrt(3) };
+            yield return new object[] { 0, 0, 0, 1, Math.Sqrt(3) };
+            yield return new object[] { 1, 1, 0, 0, 2 };
+            yield return new object[] { 1, 0, 1, 0, 2 };
+            yield return new object[] { 1, 0, 0, 1, 2 };
+            yield return new object[] { 0, 1, 1, 0, 2 };
+            yield return new object[] { 0, 1, 0, 1, 2 };
+            yield return new object[] { 0, 0, 1, 1, Math.Sqrt(12) };
+            yield return new object[] { 1, 1, 1, 0, Math.Sqrt(7) };
+            yield return new object[] { 1, 1, 0, 1, Math.Sqrt(7) };
+            yield return new object[] { 1, 0, 1, 1, Math.Sqrt(13) };
+            yield return new object[] { 0, 1, 1, 1, Math.Sqrt(13) };
+            yield return new object[] { 1, 1, 1, 1, 4 };
+
+        }
     }
-}
