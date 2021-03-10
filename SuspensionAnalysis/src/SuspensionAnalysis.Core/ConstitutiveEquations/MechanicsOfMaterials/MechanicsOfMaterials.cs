@@ -84,7 +84,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
             // Step 2 - Calculates the equivalent stress.
             // For that case, just is considered the normal stress because the applied force is at same axis of geometry.
             double equivalentStress = Math.Max(
-                this.CalculateNormalStress(component.AppliedForce1, area), 
+                this.CalculateNormalStress(component.AppliedForce1, area),
                 this.CalculateNormalStress(component.AppliedForce2, area));
 
             // Step 3 - Builds the analysis result.
@@ -137,8 +137,8 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
 
             return normalForce / area;
         }
-        
-le         /// <summary>
+
+        /// <summary>
         /// This method calculates the critical buckling force.
         /// </summary>
         /// <param name="youngModulus"></param>

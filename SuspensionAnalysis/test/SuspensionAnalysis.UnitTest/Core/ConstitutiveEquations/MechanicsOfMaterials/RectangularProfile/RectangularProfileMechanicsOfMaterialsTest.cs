@@ -70,6 +70,17 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             result.Should().BeApproximately(expectedValue, _precision);
         }
 
+        [MemberData(nameof(CriticalBucklingForceParameters))]
+        [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce.  | Given: Valid parameters. |When: Call Method.|Should: Return a valid value to critical buckling force. ")]
+        public void CalculateCriticalBucklingForce_ValidParameters_Should_ReturnValidValue(double youngModulus, double momentOfInertia, double length, double expectedValue)
+        {
+            // Act  
+            double result = this._operation.CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length,);
+
+            // Assert
+            result.Should().BeApproximately(expectedValue, _precision);
+        }
+
         public static IEnumerable<object[]> EquivalentStressParameters()
         {
             yield return new object[] { 0, 0, 0, 0, 0 };
@@ -89,18 +100,9 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             yield return new object[] { 0, 1, 1, 1, Math.Sqrt(13) };
             yield return new object[] { 1, 1, 1, 1, 4 };
         }
-        [MemberData(nameof(CriticalBucklingForceParameters))]
-        [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce.  | Given: Valid parameters. |When: Call Method.|Should: Return a valid value to critical buckling force. ")]
-        public void CalculateCriticalBucklingForce_ValidParameters_Should_ReturnValidValue(double youngModulus, double momentOfInertia, double length, double expectedValue)
-        {
-            // Act  
-            double result = this._operation.CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length,);
+    }
+}   
 
-            // Assert
-            result.Should().BeApproximately(expectedValue, _precision);
-
-        }
-}
 /// O que precisamos fazer:
 /// Revisar como funciona a classe **RectangularProfileMechanicsOfMaterials**. FEITO
 /// Testar método CalculateNormalStress para caso de falha. FEITO
