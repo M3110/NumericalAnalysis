@@ -137,8 +137,8 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
 
             return normalForce / area;
         }
-
-        /// <summary>
+        
+le         /// <summary>
         /// This method calculates the critical buckling force.
         /// </summary>
         /// <param name="youngModulus"></param>
