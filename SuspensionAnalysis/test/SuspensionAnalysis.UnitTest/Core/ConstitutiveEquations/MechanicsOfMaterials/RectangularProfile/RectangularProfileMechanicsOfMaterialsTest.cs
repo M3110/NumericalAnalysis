@@ -2,10 +2,13 @@
 using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile;
 using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
+using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 using System.Collections.Generic;
 using Xunit;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
+using SuspensionAnalysis.Core.Models;
+
 
 namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile
 {
@@ -72,13 +75,45 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
 
         [MemberData(nameof(CriticalBucklingForceParameters))]
         [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce.  | Given: Valid parameters. |When: Call Method.|Should: Return a valid value to critical buckling force. ")]
-        public void CalculateCriticalBucklingForce_ValidParameters_Should_ReturnValidValue(double youngModulus, double momentOfInertia, double length, double expectedValue)
+        public void CalculateCriticalBucklingForce_ValidParameters_Should_ReturnValidValue(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType, double expectedValue)
         {
             // Act  
-            double result = this._operation.CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length,);
+            double result = this._operation.CalculateCriticalBucklingForce(youngModulus, momentOfInertia, length, fasteningType);
 
             // Assert
             result.Should().BeApproximately(expectedValue, _precision);
+        }
+
+        [MemberData(nameof(CalculateCriticalBucklingForceInvalidMomentOfInertiaAndLength))]
+        [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce | Given: Invalid parameters. | When: Call method. | Should: Throw new ArgumentOutOfRangeException.")]
+        public void CalculateCriticalBucklingForce_InvalidParameters_Should_ThrowArgumentOutOfRangeException(double momentOfInertia, double length)
+        {
+            // Act
+            Action act = () => this._operation.CalculateCriticalBucklingForce(youngModulus: 1, momentOfInertia, length);
+
+            // Assert
+            act.Should().ThrowExactly<ArgumentOutOfRangeException>();
+        }
+
+        [MemberData(nameof(ColumnEffectiveLengthFactorParameters))]
+        [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce | Given: Invalid parameters. | When: Call method. | Should: Throw new ArgumentOutOfRangeException.")]
+        public void CalculateColumnEffectiveLengthFactor_ValidFasteningType_Should_ReturnValidParameters(FasteningType fasteningType, double expectedValue)
+        {
+            // Act
+            double result = this._operation.CalculateColumnEffectiveLengthFactor(fasteningType);
+
+            // Assert
+            result.Should().BeApproximately(expectedValue, _precision);
+        }
+
+        [Fact(DisplayName = "Feature: CalculateColumnEffectiveLengthFactor | Given: Invalid parameters. | When: Call method. | Should: Throw new ArgumentOutOfRangeException.")]
+        public void CalculateColumnEffectiveLengthFactor_InvalidFasteningType_Should_ThrowArgumentOutOfRangeException()
+        {
+            // Act
+            Action act = () => this._operation.CalculateColumnEffectiveLengthFactor(default);
+            
+            // Assert
+            act.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
 
         public static IEnumerable<object[]> EquivalentStressParameters()
@@ -100,8 +135,34 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             yield return new object[] { 0, 1, 1, 1, Math.Sqrt(13) };
             yield return new object[] { 1, 1, 1, 1, 4 };
         }
+
+        public static IEnumerable<object[]> CriticalBucklingForceParameters()
+        {
+            yield return new object[] { 1, 1, 1, FasteningType.BothEndPinned, Math.Pow(Math.PI, 2) };
+            yield return new object[] { 0.5, 0.5, 0.5, FasteningType.BothEndFixed, 4 * Math.Pow(Math.PI, 2) };
+        }
+        public static IEnumerable<object[]> CalculateCriticalBucklingForceInvalidMomentOfInertiaAndLength()
+        {
+            List<double> invalidLenghtList = new List<double>(Constants.InvalidValues) { 0, -1 };
+            List<double> invalidMomentOfInerciaList = new List<double>(Constants.InvalidValues) { 0, -1 };
+
+            foreach (double lenght in invalidLenghtList)
+            {
+                foreach (double momentOfInercia in invalidMomentOfInerciaList)
+                {
+                    yield return new object[] { momentOfInercia, lenght };
+                }
+            }
+        }
+        public static IEnumerable<object[]> ColumnEffectiveLengthFactorParameters()
+        {
+            yield return new object[] { FasteningType.BothEndPinned, 1 };
+            yield return new object[] { FasteningType.BothEndFixed, 0.5 };
+            yield return new object[] { FasteningType.OneEndFixedOneEndPinned, Math.Sqrt(2) / 2 };
+            yield return new object[] { FasteningType.OneEndFixed, 2 };
+        }
     }
-}   
+}
 
 /// O que precisamos fazer:
 /// Revisar como funciona a classe **RectangularProfileMechanicsOfMaterials**. FEITO
@@ -109,7 +170,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
 /// Testar método Calculate Normal Stress para o caso de dados válidos. FEITO
 /// Testar método CalculateEquivalentStress. FEITO
 /// Testar método CalculateCriticalBucklingForce para caso de falha.
-/// Testar método CalculateCriticalBucklingForce para o caso de dados válidos. PROGRESSO :)
+/// Testar método CalculateCriticalBucklingForce para o caso de dados válidos. PROGRESSO :) linha 113 tu entedeu?
 /// Testar método CalculateColumnEffectiveLengthFactor para caso de falha.
 /// Testar método CalculateColumnEffectiveLengthFactor para o caso de dados válidos.
 /// **[OPCIONAL]** Testar método GenerateResult que recebe SuspensionAArm para o caso de dados válidos.

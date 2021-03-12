@@ -172,6 +172,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             yield return new object[] { FasteningType.BothEndFixed, 0.5 };
             yield return new object[] { FasteningType.OneEndFixedOneEndPinned, Math.Sqrt(2) / 2 };
             yield return new object[] { FasteningType.OneEndFixed, 2 };
-        }
+        } 
     }
 }
