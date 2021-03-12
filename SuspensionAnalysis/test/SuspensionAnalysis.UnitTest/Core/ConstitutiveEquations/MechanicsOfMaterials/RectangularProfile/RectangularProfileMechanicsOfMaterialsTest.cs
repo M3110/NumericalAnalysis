@@ -2,13 +2,12 @@
 using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile;
 using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
+using SuspensionAnalysis.Core.Models;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 using System.Collections.Generic;
 using Xunit;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
-using SuspensionAnalysis.Core.Models;
-
 
 namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile
 {
@@ -31,11 +30,11 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             this._operation = new RectangularProfileMechanicsOfMaterials(this._geometricPropertyMock.Object);
         }
 
-        [Theory(DisplayName = "Feature: CalculateNormalStress.| Given: Valid Parameters. | When: Call Method. | Should: Return a valid value to normal stress. ")]
         [InlineData(0, 1, 0)]
         [InlineData(1, 1, 1)]
         [InlineData(1000, 0.5, 2000)]
         [InlineData(1000, 7.92e-4, 1262626.263)]
+        [Theory(DisplayName = "Feature: CalculateNormalStress.| Given: Valid Parameters. | When: Call Method. | Should: Return a valid value to normal stress. ")]
         public void CalculateNormalStress_ValidParameters_Should_ReturnValidValue(double normalForce, double area, double expectedValue)
         {
             // Act
@@ -45,7 +44,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             result.Should().BeApproximately(expectedValue, _precision);
         }
 
-        [Theory(DisplayName = "Feature: CalculateNormalStress. | Given: Invalid Parameters. | When: Call Method. | Should: Throw Excepction. ")]
         [InlineData(double.NaN)]
         [InlineData(double.PositiveInfinity)]
         [InlineData(double.NegativeInfinity)]
@@ -53,6 +51,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         [InlineData(double.MinValue)]
         [InlineData(0)]
         [InlineData(-1)]
+        [Theory(DisplayName = "Feature: CalculateNormalStress | Given: Invalid Parameters. | When: Call Method. | Should: Throw Excepction. ")]
         public void CalculateNormalStress_InvalidParameters_Should_ThrowExepction(double area)
         {
             // Act
@@ -63,7 +62,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         }
 
         [MemberData(nameof(EquivalentStressParameters))]
-        [Theory(DisplayName = "Feature: CalculateEquivalentStress. | Given: Valid Parameters. | When: Call Method. | Should: Return a valid value to normal stress. ")]
+        [Theory(DisplayName = "Feature: CalculateEquivalentStress | Given: Valid Parameters. | When: Call Method. | Should: Return a valid value to normal stress. ")]
         public void CalculateEquivalentStress_ValidParameters_Should_ReturnValidValue(double normalStress, double flexuralStress, double shearStress, double torsionalStress, double expectedValue)
         {
             // Act  
@@ -74,7 +73,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         }
 
         [MemberData(nameof(CriticalBucklingForceParameters))]
-        [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce.  | Given: Valid parameters. |When: Call Method.|Should: Return a valid value to critical buckling force. ")]
+        [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce | Given: Valid parameters. |When: Call Method.|Should: Return a valid value to critical buckling force. ")]
         public void CalculateCriticalBucklingForce_ValidParameters_Should_ReturnValidValue(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType, double expectedValue)
         {
             // Act  
@@ -111,7 +110,7 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
         {
             // Act
             Action act = () => this._operation.CalculateColumnEffectiveLengthFactor(default);
-            
+
             // Assert
             act.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
@@ -141,19 +140,21 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             yield return new object[] { 1, 1, 1, FasteningType.BothEndPinned, Math.Pow(Math.PI, 2) };
             yield return new object[] { 0.5, 0.5, 0.5, FasteningType.BothEndFixed, 4 * Math.Pow(Math.PI, 2) };
         }
+
         public static IEnumerable<object[]> CalculateCriticalBucklingForceInvalidMomentOfInertiaAndLength()
         {
             List<double> invalidLenghtList = new List<double>(Constants.InvalidValues) { 0, -1 };
             List<double> invalidMomentOfInerciaList = new List<double>(Constants.InvalidValues) { 0, -1 };
 
-            foreach (double lenght in invalidLenghtList)
+            foreach (double invalidLenght in invalidLenghtList)
             {
-                foreach (double momentOfInercia in invalidMomentOfInerciaList)
+                foreach (double invalidMomentOfInercia in invalidMomentOfInerciaList)
                 {
-                    yield return new object[] { momentOfInercia, lenght };
+                    yield return new object[] { invalidMomentOfInercia, invalidLenght };
                 }
             }
         }
+
         public static IEnumerable<object[]> ColumnEffectiveLengthFactorParameters()
         {
             yield return new object[] { FasteningType.BothEndPinned, 1 };
