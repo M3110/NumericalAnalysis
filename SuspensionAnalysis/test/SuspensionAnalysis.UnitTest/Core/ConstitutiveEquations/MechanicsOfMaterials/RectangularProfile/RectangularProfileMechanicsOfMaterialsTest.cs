@@ -11,13 +11,11 @@ using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
 namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile
 {
-    /// <summary>
-    /// This class contains tests for the rectangular profile.
-    /// </summary>
     public class RectangularProfileMechanicsOfMaterialsTest
     {
         private readonly Mock<IRectangularProfileGeometricProperty> _geometricPropertyMock;
         private readonly RectangularProfileMechanicsOfMaterials _operation;
+
         private const double _precision = 1e-3;
 
         public RectangularProfileMechanicsOfMaterialsTest()
@@ -33,13 +31,27 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             this._operation = new RectangularProfileMechanicsOfMaterials(this._geometricPropertyMock.Object);
         }
 
-        /// <summary>
-        /// This method tests the method that calculates the normal stress for valid parameters.
-        /// </summary>
-        /// <param name="normalForce"></param>
-        /// <param name="area"></param>
-        /// <param name="expectedValue"></param>
-        
+        [Fact(DisplayName = "Feature: RectangularProfileMechanicsOfMaterials | Given: Null GeometricProperty. | When: Instantiate class. | Should: Throw an ArgumentNullException.")]
+        public void RectangularProfileMechanicsOfMaterials_NullGeometricProperty_ShouldThrowArgumentNullException()
+        {
+            // Act
+            Action act = () => new RectangularProfileMechanicsOfMaterials(null);
+
+            // Assert
+            act.Should().ThrowExactly<ArgumentNullException>();
+        }
+
+        [MemberData(nameof(EquivalentStressParameters))]
+        [Theory(DisplayName = "Feature: CalculateEquivalentStress | Given: Valid Parameters. | When: Call Method. | Should: Return a valid value to normal stress. ")]
+        public void CalculateEquivalentStress_ValidParameters_Should_ReturnValidValue(double normalStress, double flexuralStress, double shearStress, double torsionalStress, double expectedValue)
+        {
+            // Act  
+            double result = this._operation.CalculateEquivalentStress(normalStress, flexuralStress, torsionalStress, shearStress);
+
+            // Assert
+            result.Should().BeApproximately(expectedValue, _precision);
+        }
+
         [InlineData(0, 1, 0)]
         [InlineData(1, 1, 1)]
         [InlineData(1000, 0.5, 2000)]
@@ -54,18 +66,13 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             result.Should().BeApproximately(expectedValue, _precision);
         }
 
-        /// <summary>
-        /// This method tests the method that calculates the normal stress for invalid parameters. 
-        /// </summary>
-        /// <param name="area"></param>
-
+        [InlineData(0)]
+        [InlineData(-1)]
         [InlineData(double.NaN)]
         [InlineData(double.PositiveInfinity)]
         [InlineData(double.NegativeInfinity)]
         [InlineData(double.MaxValue)]
         [InlineData(double.MinValue)]
-        [InlineData(0)]
-        [InlineData(-1)]
         [Theory(DisplayName = "Feature: CalculateNormalStress | Given: Invalid Parameters. | When: Call Method. | Should: Throw Excepction. ")]
         public void CalculateNormalStress_InvalidParameters_Should_ThrowExepction(double area)
         {
@@ -75,35 +82,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             // Assert
             act.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
-
-        /// <summary>
-        /// This method tests the method that calculates equivalent stress.
-        /// </summary>
-        /// <param name="normalStress"></param>
-        /// <param name="flexuralStress"></param>
-        /// <param name="shearStress"></param>
-        /// <param name="torsionalStress"></param>
-        /// <param name="expectedValue"></param>
-
-        [MemberData(nameof(EquivalentStressParameters))]
-        [Theory(DisplayName = "Feature: CalculateEquivalentStress | Given: Valid Parameters. | When: Call Method. | Should: Return a valid value to normal stress. ")]
-        public void CalculateEquivalentStress_ValidParameters_Should_ReturnValidValue(double normalStress, double flexuralStress, double shearStress, double torsionalStress, double expectedValue)
-        {
-            // Act  
-            double result = this._operation.CalculateEquivalentStress(normalStress, flexuralStress, torsionalStress, shearStress);
-
-            // Assert
-            result.Should().BeApproximately(expectedValue, _precision);
-        }
-
-        /// <summary>
-        /// This method tests the method that calculates critical buckling force for valid parameters.
-        /// </summary>
-        /// <param name="youngModulus"></param>
-        /// <param name="momentOfInertia"></param>
-        /// <param name="length"></param>
-        /// <param name="fasteningType"></param>
-        /// <param name="expectedValue"></param>
 
         [MemberData(nameof(CriticalBucklingForceParameters))]
         [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce | Given: Valid parameters. |When: Call Method.|Should: Return a valid value to critical buckling force. ")]
@@ -116,12 +94,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             result.Should().BeApproximately(expectedValue, _precision);
         }
 
-        /// <summary>
-        /// This method tests the method that calculates critical buckling force for invalid parameters.
-        /// </summary>
-        /// <param name="momentOfInertia"></param>
-        /// <param name="length"></param>
-
         [MemberData(nameof(CalculateCriticalBucklingForceInvalidMomentOfInertiaAndLength))]
         [Theory(DisplayName = "Feature: CalculateCriticalBucklingForce | Given: Invalid parameters. | When: Call method. | Should: Throw new ArgumentOutOfRangeException.")]
         public void CalculateCriticalBucklingForce_InvalidParameters_Should_ThrowArgumentOutOfRangeException(double momentOfInertia, double length)
@@ -133,12 +105,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             act.Should().ThrowExactly<ArgumentOutOfRangeException>();
         }
 
-        /// <summary>
-        /// This method tests the method that calculates collumn effective length factor for valid parameters.
-        /// </summary>
-        /// <param name="fasteningType"></param>
-        /// <param name="expectedValue"></param>
-
         [MemberData(nameof(ColumnEffectiveLengthFactorParameters))]
         [Theory(DisplayName = "Feature: CalculateColumnEffectiveLengthFactor | Given: Valid parameters. | When: Call method. | Should: Throw new ArgumentOutOfRangeException.")]
         public void CalculateColumnEffectiveLengthFactor_ValidFasteningType_Should_ReturnValidParameters(FasteningType fasteningType, double expectedValue)
@@ -149,10 +115,6 @@ namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMate
             // Assert
             result.Should().BeApproximately(expectedValue, _precision);
         }
-
-        /// <summary>
-        /// This method tests the method that calculates collumn effective length factor for invalid parameters.
-        /// </summary>
 
         [Fact(DisplayName = "Feature: CalculateColumnEffectiveLengthFactor | Given: Invalid parameters. | When: Call method. | Should: Throw new ArgumentOutOfRangeException.")]
         public void CalculateColumnEffectiveLengthFactor_InvalidFasteningType_Should_ThrowArgumentOutOfRangeException()
