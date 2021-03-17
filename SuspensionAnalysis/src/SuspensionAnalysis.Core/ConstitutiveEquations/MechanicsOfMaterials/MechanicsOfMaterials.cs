@@ -1,4 +1,4 @@
-﻿using SuspensionAnalysis.Core.GeometricProperty;
+﻿using SuspensionAnalysis.Core.GeometricProperties;
 using SuspensionAnalysis.Core.Models.SuspensionComponents;
 using SuspensionAnalysis.DataContracts.Models.Analysis;
 using SuspensionAnalysis.DataContracts.Models.Enums;
@@ -10,10 +10,10 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
     /// <summary>
     /// It contains the Mechanics of Materials constitutive equations.
     /// </summary>
-    public class MechanicsOfMaterials<TProfile> : IMechanicsOfMaterials<TProfile>
+    public abstract class MechanicsOfMaterials<TProfile> : IMechanicsOfMaterials<TProfile>
         where TProfile : Profile
     {
-        private readonly IGeometricProperty<TProfile> _geometricProperty;
+        protected readonly IGeometricProperty<TProfile> _geometricProperty;
 
         /// <summary>
         /// Class constructor.
@@ -21,7 +21,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="geometricProperty"></param>
         public MechanicsOfMaterials(IGeometricProperty<TProfile> geometricProperty)
         {
-            this._geometricProperty = geometricProperty;
+            this._geometricProperty = geometricProperty ?? throw new ArgumentNullException(nameof(geometricProperty), $"'{nameof(geometricProperty)}' cannot be null in '{this.GetType().Name}' operation.");
         }
 
         /// <summary>
@@ -33,6 +33,9 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <returns></returns>
         public virtual TieRodAnalysisResult GenerateResult(TieRod<TProfile> component, bool shouldRound, int decimals = 0)
         {
+            if (component == null)
+                throw new ArgumentNullException(nameof(component), "The object tie rod cannot be null to calculate the results.");
+
             // Step 1 - Calculates the geometric properties.
             double area = this._geometricProperty.CalculateArea(component.Profile);
             double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
@@ -71,13 +74,18 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <returns></returns>
         public virtual SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component, bool shouldRound, int decimals = 0)
         {
+            if (component == null)
+                throw new ArgumentNullException(nameof(component), "The object suspension A-arm cannot be null to calculate the results.");
+
             // Step 1 - Calculates the geometric properties.
             double area = this._geometricProperty.CalculateArea(component.Profile);
             double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
 
             // Step 2 - Calculates the equivalent stress.
             // For that case, just is considered the normal stress because the applied force is at same axis of geometry.
-            double equivalentStress = Math.Max(this.CalculateNormalStress(component.AppliedForce1, area), this.CalculateNormalStress(component.AppliedForce2, area));
+            double equivalentStress = Math.Max(
+                this.CalculateNormalStress(component.AppliedForce1, area),
+                this.CalculateNormalStress(component.AppliedForce2, area));
 
             // Step 3 - Builds the analysis result.
             var result = new SuspensionAArmAnalysisResult()
@@ -111,7 +119,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="flexuralStress"></param>
         /// <param name="shearStress"></param>
         /// <param name="torsionalStress"></param>
-        /// <returns>The equivalent stress. Unity: Pa (Pascal).</returns>
+        /// <returns>The equivalent stress. Unit: Pa (Pascal).</returns>
         public double CalculateEquivalentStress(double normalStress = 0, double flexuralStress = 0, double shearStress = 0, double torsionalStress = 0)
         {
             return Math.Sqrt(Math.Pow(normalStress + flexuralStress, 2) + 3 * Math.Pow(shearStress + torsionalStress, 2));
@@ -122,9 +130,11 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// </summary>
         /// <param name="normalForce"></param>
         /// <param name="area"></param>
-        /// <returns>The normal stress. Unity: Pa (Pascal).</returns>
+        /// <returns>The normal stress. Unit: Pa (Pascal).</returns>
         public double CalculateNormalStress(double normalForce, double area)
         {
+            GeometricProperty.Validate(area, nameof(area));
+
             return normalForce / area;
         }
 
@@ -135,9 +145,12 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="momentOfInertia"></param>
         /// <param name="length"></param>
         /// <param name="fasteningType"></param>
-        /// <returns>The critical buckling force. Unity: N (Newton).</returns>
+        /// <returns>The critical buckling force. Unit: N (Newton).</returns>
         public double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType = FasteningType.BothEndPinned)
         {
+            GeometricProperty.Validate(momentOfInertia, nameof(momentOfInertia));
+            GeometricProperty.Validate(length, nameof(length));
+
             return Math.Pow(Math.PI, 2) * youngModulus * momentOfInertia / Math.Pow(length * this.CalculateColumnEffectiveLengthFactor(fasteningType), 2);
         }
 
@@ -154,7 +167,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
                 FasteningType.BothEndFixed => 0.5,
                 FasteningType.OneEndFixedOneEndPinned => Math.Sqrt(2) / 2,
                 FasteningType.OneEndFixed => 2,
-                _ => throw new Exception($"Invalid fastening type: {fasteningType}.")
+                _ => throw new ArgumentOutOfRangeException($"Invalid fastening type: {fasteningType}.")
             };
         }
     }

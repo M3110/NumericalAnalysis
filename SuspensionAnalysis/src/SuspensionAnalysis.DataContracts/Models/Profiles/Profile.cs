@@ -7,7 +7,7 @@
     {
         /// <summary>
         /// The thickness.
-        /// Unity: m (meter).
+        /// Unit: m (meter).
         /// </summary>
         public double? Thickness { get; set; }
     }

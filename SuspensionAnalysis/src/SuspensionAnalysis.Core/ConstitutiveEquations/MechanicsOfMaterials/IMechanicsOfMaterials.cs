@@ -36,7 +36,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="flexuralStress"></param>
         /// <param name="shearStress"></param>
         /// <param name="torsionalStress"></param>
-        /// <returns>The equivalent stress. Unity: Pa (Pascal).</returns>
+        /// <returns>The equivalent stress. Unit: Pa (Pascal).</returns>
         double CalculateEquivalentStress(double normalStress = 0, double flexuralStress = 0, double shearStress = 0, double torsionalStress = 0);
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// </summary>
         /// <param name="normalForce"></param>
         /// <param name="area"></param>
-        /// <returns>The normal stress. Unity: Pa (Pascal).</returns>
+        /// <returns>The normal stress. Unit: Pa (Pascal).</returns>
         double CalculateNormalStress(double normalForce, double area);
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="momentOfInertia"></param>
         /// <param name="length"></param>
         /// <param name="fasteningType"></param>
-        /// <returns>The critical buckling force. Unity: N (Newton).</returns>
+        /// <returns>The critical buckling force. Unit: N (Newton).</returns>
         double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType);
 
         /// <summary>

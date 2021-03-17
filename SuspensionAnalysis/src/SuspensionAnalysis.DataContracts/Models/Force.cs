@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace SuspensionAnalysis.DataContracts.Models
+﻿namespace SuspensionAnalysis.DataContracts.Models
 {
     /// <summary>
     /// It represents the force.

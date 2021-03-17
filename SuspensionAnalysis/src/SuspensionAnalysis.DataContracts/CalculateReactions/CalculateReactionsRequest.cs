@@ -26,7 +26,7 @@ namespace SuspensionAnalysis.DataContracts.CalculateReactions
 
         /// <summary>
         /// The applied force.
-        /// Unity: N (Newton).
+        /// Unit: N (Newton).
         /// </summary>
         /// <example>x,y,z</example>
         public string ForceApplied { get; set; }
