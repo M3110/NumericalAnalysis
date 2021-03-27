@@ -38,7 +38,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             var response = new CalculateReactionsResponse { Data = new CalculateReactionsResponseData() };
             response.SetSuccessOk();
 
-            // Step 1 - Creates the necessary informations about the suspension system.
+            // Step 1 - Creates the necessary informations about the coordinates of the suspension system components.
             SuspensionSystem suspensionSystem = this._mappingResolver.MapFrom(request);
 
             // Step 2 - Calculates the displacement matrix and applied efforts vector to calculate the reactions on suspension system.
