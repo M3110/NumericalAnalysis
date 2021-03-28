@@ -1,6 +1,4 @@
-﻿using SuspensionAnalysis.Core.Models.SuspensionComponents;
-using SuspensionAnalysis.DataContracts.Models.Analysis;
-using SuspensionAnalysis.DataContracts.Models.Enums;
+﻿using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
 
 namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
@@ -11,24 +9,6 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
     public interface IMechanicsOfMaterials<TProfile>
         where TProfile : Profile
     {
-        /// <summary>
-        /// This method generates the analysis result to tie rod.
-        /// </summary>
-        /// <param name="component"></param>
-        /// <param name="shouldRound"></param>
-        /// <param name="decimals"></param>
-        /// <returns></returns>
-        TieRodAnalysisResult GenerateResult(TieRod<TProfile> component, bool shouldRound, int decimals = 0);
-
-        /// <summary>
-        /// This method generates the analysis result to suspension A-arm.
-        /// </summary>
-        /// <param name="component"></param>
-        /// <param name="shouldRound"></param>
-        /// <param name="decimals"></param>
-        /// <returns></returns>
-        SuspensionAArmAnalysisResult GenerateResult(SuspensionAArm<TProfile> component, bool shouldRound, int decimals = 0);
-
         /// <summary>
         /// This method calcultes the equivalent stress using Von-Misses method.
         /// </summary>
@@ -55,7 +35,7 @@ namespace SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials
         /// <param name="length"></param>
         /// <param name="fasteningType"></param>
         /// <returns>The critical buckling force. Unit: N (Newton).</returns>
-        double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType);
+        double CalculateCriticalBucklingForce(double youngModulus, double momentOfInertia, double length, FasteningType fasteningType = FasteningType.BothEndPinned);
 
         /// <summary>
         /// This method calculates the effective length factor to buckling analysis based on fastening type.

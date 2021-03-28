@@ -1,4 +1,5 @@
 ﻿using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile;
+using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
@@ -15,12 +16,14 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile
         /// </summary>
         /// <param name="calculateReactions"></param>
         /// <param name="mechanicsOfMaterials"></param>
+        /// <param name="geometricProperty"></param>
         /// <param name="mappingResolver"></param>
         public RunCircularProfileAnalysis(
             ICalculateReactions calculateReactions,
             ICircularProfileMechanicsOfMaterials mechanicsOfMaterials,
+            ICircularProfileGeometricProperty geometricProperty,
             IMappingResolver mappingResolver)
-            : base(calculateReactions, mechanicsOfMaterials, mappingResolver)
+            : base(calculateReactions, mechanicsOfMaterials, geometricProperty, mappingResolver)
         { }
     }
 }

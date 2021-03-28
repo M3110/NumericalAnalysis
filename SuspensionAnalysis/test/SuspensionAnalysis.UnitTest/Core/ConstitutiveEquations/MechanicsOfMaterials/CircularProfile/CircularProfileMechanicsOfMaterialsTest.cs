@@ -1,44 +1,22 @@
 ﻿using FluentAssertions;
-using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile;
-using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using SuspensionAnalysis.Core.Models;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 using System.Collections.Generic;
 using Xunit;
-using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
 namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile
 {
     public class CircularProfileMechanicsOfMaterialsTest
     {
         private readonly CircularProfileMechanicsOfMaterials _operation;
-        private readonly Mock<ICircularProfileGeometricProperty> _geometricPropertyMock;
 
         private const double _precision = 1e-3;
 
         public CircularProfileMechanicsOfMaterialsTest()
         {
-            this._geometricPropertyMock = new Mock<ICircularProfileGeometricProperty>();
-            this._geometricPropertyMock
-                .Setup(gp => gp.CalculateArea(It.IsAny<DataContract.CircularProfile>()))
-                .Returns(1);
-            this._geometricPropertyMock
-                .Setup(gp => gp.CalculateMomentOfInertia(It.IsAny<DataContract.CircularProfile>()))
-                .Returns(1);
-
-            this._operation = new CircularProfileMechanicsOfMaterials(this._geometricPropertyMock.Object);
-        }
-
-        [Fact(DisplayName = "Feature: CircularProfileMechanicsOfMaterials | Given: Null GeometricProperty. | When: Instantiate class. | Should: Throw an ArgumentNullException.")]
-        public void CircularProfileMechanicsOfMaterials_NullGeometricProperty_ShouldThrowArgumentNullException()
-        {
-            // Act
-            Action act = () => new CircularProfileMechanicsOfMaterials(null);
-
-            // Assert
-            act.Should().ThrowExactly<ArgumentNullException>();
+            this._operation = new CircularProfileMechanicsOfMaterials();
         }
 
         [MemberData(nameof(EquivalentStressParameters))]

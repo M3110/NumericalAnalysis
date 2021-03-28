@@ -48,7 +48,7 @@ namespace SuspensionAnalysis.Core.Mapper
 
             return new SuspensionSystem<TProfile>
             {
-                ShockAbsorber = ShockAbsorber.Create(runAnalysisRequest.ShockAbsorber, runAnalysisRequest.Material, calculateReactionsResponseData.ShockAbsorberReaction.AbsolutValue),
+                ShockAbsorber = ShockAbsorber.Create(runAnalysisRequest.ShockAbsorber, calculateReactionsResponseData.ShockAbsorberReaction.AbsolutValue),
                 SuspensionAArmLower = SuspensionAArm<TProfile>.Create(runAnalysisRequest.SuspensionAArmLower, runAnalysisRequest.Material, calculateReactionsResponseData.AArmLowerReaction1.AbsolutValue, calculateReactionsResponseData.AArmLowerReaction2.AbsolutValue),
                 SuspensionAArmUpper = SuspensionAArm<TProfile>.Create(runAnalysisRequest.SuspensionAArmUpper, runAnalysisRequest.Material, calculateReactionsResponseData.AArmUpperReaction1.AbsolutValue, calculateReactionsResponseData.AArmUpperReaction2.AbsolutValue),
                 TieRod = TieRod<TProfile>.Create(runAnalysisRequest.TieRod, runAnalysisRequest.Material, calculateReactionsResponseData.TieRodReaction.AbsolutValue)

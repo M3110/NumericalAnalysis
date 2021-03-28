@@ -16,10 +16,10 @@ namespace SuspensionAnalysis.Core.Operations.Base
     {
         /// <summary>
         /// The main method of all operations.
-        /// This method orchestrates the operations.
+        /// Asynchronously, this method orchestrates the operations.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        Task<TResponse> Process(TRequest request);
+        Task<TResponse> ProcessAsync(TRequest request);
     }
 }

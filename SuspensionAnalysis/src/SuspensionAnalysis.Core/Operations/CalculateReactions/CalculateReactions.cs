@@ -29,11 +29,11 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         }
 
         /// <summary>
-        /// This method calculates the reactions to suspension system.
+        /// Asynchronously, this method calculates the reactions to suspension system.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override Task<CalculateReactionsResponse> ProcessOperation(CalculateReactionsRequest request)
+        protected override Task<CalculateReactionsResponse> ProcessOperationAsync(CalculateReactionsRequest request)
         {
             var response = new CalculateReactionsResponse { Data = new CalculateReactionsResponseData() };
             response.SetSuccessOk();
@@ -144,17 +144,17 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         {
             if (Math.Abs(response.Data.CalculateForceXSum(appliedForce.X)) > this._precision)
             {
-                response.AddError(OperationErrorCode.InternalServerError, "The sum of forces at axis X is not equals to zero.", HttpStatusCode.InternalServerError);
+                response.SetInternalServerError(OperationErrorCode.InternalServerError, "The sum of forces at axis X is not equals to zero.");
             }
 
             if (Math.Abs(response.Data.CalculateForceYSum(appliedForce.Y)) > this._precision)
             {
-                response.AddError(OperationErrorCode.InternalServerError, "The sum of forces at axis Y is not equals to zero.", HttpStatusCode.InternalServerError);
+                response.SetInternalServerError(OperationErrorCode.InternalServerError, "The sum of forces at axis Y is not equals to zero.");
             }
 
             if (Math.Abs(response.Data.CalculateForceZSum(appliedForce.Z)) > this._precision)
             {
-                response.AddError(OperationErrorCode.InternalServerError, "The sum of forces at axis Z is not equals to zero.", HttpStatusCode.InternalServerError);
+                response.SetInternalServerError(OperationErrorCode.InternalServerError, "The sum of forces at axis Z is not equals to zero.");
             }
         }
     }
