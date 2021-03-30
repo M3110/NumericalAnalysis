@@ -29,7 +29,7 @@ namespace SuspensionAnalysis.Application.Controllers
             [FromServices] ICalculateReactions operation,
             [FromBody] CalculateReactionsRequest request)
         {
-            CalculateReactionsResponse response = await operation.Process(request).ConfigureAwait(false);
+            CalculateReactionsResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

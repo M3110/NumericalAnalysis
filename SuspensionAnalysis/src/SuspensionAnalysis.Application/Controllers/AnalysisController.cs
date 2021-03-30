@@ -31,7 +31,7 @@ namespace SuspensionAnalysis.Application.Controllers
             [FromServices] IRunCircularProfileAnalysis operation,
             [FromBody] RunAnalysisRequest<CircularProfile> request)
         {
-            RunAnalysisResponse response = await operation.Process(request).ConfigureAwait(false);
+            RunAnalysisResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -54,7 +54,7 @@ namespace SuspensionAnalysis.Application.Controllers
             [FromServices] IRunRectangularProfileAnalysis operation,
             [FromQuery] RunAnalysisRequest<RectangularProfile> request)
         {
-            RunAnalysisResponse response = await operation.Process(request).ConfigureAwait(false);
+            RunAnalysisResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }

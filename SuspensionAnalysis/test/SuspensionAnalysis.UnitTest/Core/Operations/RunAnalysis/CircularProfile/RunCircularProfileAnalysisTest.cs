@@ -1,5 +1,6 @@
 ﻿using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.CircularProfile;
+using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
 using SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile;
@@ -19,6 +20,7 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.RunAnalysis.CircularProfil
 
         private readonly Mock<ICalculateReactions> _calculateReactionsMock;
         private readonly Mock<ICircularProfileMechanicsOfMaterials> _mechanicsOfMaterialsMock;
+        private readonly Mock<ICircularProfileGeometricProperty> _geometricPropertyMock;
         private readonly Mock<IMappingResolver> _mappingResolverMock;
 
         public RunCircularProfileAnalysisTest()
@@ -27,7 +29,7 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.RunAnalysis.CircularProfil
 
             this._calculateReactionsMock = new Mock<ICalculateReactions>();
             this._calculateReactionsMock
-                .Setup(cr => cr.Process(It.IsAny<CalculateReactionsRequest>()))
+                .Setup(cr => cr.ProcessAsync(It.IsAny<CalculateReactionsRequest>()))
                 .ReturnsAsync(() =>
                 {
                     var response = new CalculateReactionsResponse
@@ -53,9 +55,12 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.RunAnalysis.CircularProfil
 
             this._mechanicsOfMaterialsMock = new Mock<ICircularProfileMechanicsOfMaterials>();
 
+            this._geometricPropertyMock = new Mock<ICircularProfileGeometricProperty>();
+
             this._operation = new RunCircularProfileAnalysis(
                 this._calculateReactionsMock.Object, 
                 this._mechanicsOfMaterialsMock.Object, 
+                this._geometricPropertyMock.Object,
                 this._mappingResolverMock.Object);
         }
     }

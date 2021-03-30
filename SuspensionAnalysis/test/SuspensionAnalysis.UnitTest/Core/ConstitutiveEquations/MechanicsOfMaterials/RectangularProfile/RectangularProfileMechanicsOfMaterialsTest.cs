@@ -1,44 +1,22 @@
 ﻿using FluentAssertions;
-using Moq;
 using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile;
-using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
 using SuspensionAnalysis.Core.Models;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 using System.Collections.Generic;
 using Xunit;
-using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
 namespace SuspensionAnalysis.UnitTest.Core.ConstitutiveEquations.MechanicsOfMaterials.RectangularProfile
 {
     public class RectangularProfileMechanicsOfMaterialsTest
     {
-        private readonly Mock<IRectangularProfileGeometricProperty> _geometricPropertyMock;
         private readonly RectangularProfileMechanicsOfMaterials _operation;
 
         private const double _precision = 1e-3;
 
         public RectangularProfileMechanicsOfMaterialsTest()
         {
-            this._geometricPropertyMock = new Mock<IRectangularProfileGeometricProperty>();
-            this._geometricPropertyMock
-                .Setup(gp => gp.CalculateArea(It.IsAny<DataContract.RectangularProfile>()))
-                .Returns(1);
-            this._geometricPropertyMock
-                .Setup(gp => gp.CalculateMomentOfInertia(It.IsAny<DataContract.RectangularProfile>()))
-                .Returns(1);
-
-            this._operation = new RectangularProfileMechanicsOfMaterials(this._geometricPropertyMock.Object);
-        }
-
-        [Fact(DisplayName = "Feature: RectangularProfileMechanicsOfMaterials | Given: Null GeometricProperty. | When: Instantiate class. | Should: Throw an ArgumentNullException.")]
-        public void RectangularProfileMechanicsOfMaterials_NullGeometricProperty_ShouldThrowArgumentNullException()
-        {
-            // Act
-            Action act = () => new RectangularProfileMechanicsOfMaterials(null);
-
-            // Assert
-            act.Should().ThrowExactly<ArgumentNullException>();
+            this._operation = new RectangularProfileMechanicsOfMaterials();
         }
 
         [MemberData(nameof(EquivalentStressParameters))]

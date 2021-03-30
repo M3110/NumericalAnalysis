@@ -16,7 +16,7 @@ namespace SuspensionAnalysis.Application.Extensions
         /// <param name="response"></param>
         /// <returns></returns>
         public static JsonResult BuildHttpResponse<TResponseData>(this OperationResponseBase<TResponseData> response)
-            where TResponseData : OperationResponseData
+            where TResponseData : OperationResponseData, new()
         {
             // BadRequest Status Code.
             if (response.HttpStatusCode == HttpStatusCode.BadRequest)
