@@ -6,7 +6,6 @@ using SuspensionAnalysis.DataContracts.CalculateReactions;
 using SuspensionAnalysis.DataContracts.Models;
 using SuspensionAnalysis.DataContracts.OperationBase;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.CalculateReactions
