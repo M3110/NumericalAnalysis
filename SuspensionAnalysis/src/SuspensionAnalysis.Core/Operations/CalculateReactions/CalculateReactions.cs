@@ -41,24 +41,27 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             // Step 1 - Creates the necessary informations about the coordinates of the suspension system components.
             SuspensionSystem suspensionSystem = this._mappingResolver.MapFrom(request);
 
-            // Step 2 - Calculates the displacement matrix and applied efforts vector to calculate the reactions on suspension system.
+            // Step 2 - Calculates the matrix with:
+            //    The normalized direction of reactions at suspension system.
+            //    The displacements between origin and suspension system points.
             double[,] displacement = this.BuildDisplacementMatrix(suspensionSystem, Point3D.Create(request.Origin));
-            
+
+            // Step 3 - Calculates the applied efforts.
             Vector3D forceApplied = Vector3D.Create(request.ForceApplied);
             double[] effort = this.BuildReactionVector(forceApplied);
 
-            // Step 3 - Calculates the reactions on suspension system.
+            // Step 4 - Calculates the reactions on suspension system.
             // The equation used: 
-            // [Displacement] * [Reactions] = [Efforts]
-            // [Reactions] = inv([Displacement]) * [Efforts]
+            //    [Displacement] * [Reactions] = [Efforts]
+            //    [Reactions] = inv([Displacement]) * [Efforts]
             double[] result = displacement
                 .InverseMatrix()
                 .Multiply(effort);
 
-            // Step 4 - Map the results to response.
+            // Step 5 - Map the results to response.
             response.Data = this.MapToResponse(suspensionSystem, result, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
 
-            // Step 5 - Check if sum of forces is equals to zero, indicanting that the structure is static.
+            // Step 6 - Check if sum of forces is equals to zero, indicanting that the structure is static.
             // This method was commented because some error ocurred and must be investigated.
             //this.CheckForceAndMomentSum(response, forceApplied);
 
