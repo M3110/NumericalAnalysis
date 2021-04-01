@@ -7,7 +7,7 @@ using SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
 using SuspensionAnalysis.DataContracts.Models;
 using SuspensionAnalysis.DataContracts.RunAnalysis;
-using SuspensionAnalysis.UnitTest.Helper.DataContracts.RunAnalysis;
+using SuspensionAnalysis.UnitTest.Helper.DataContracts;
 using System;
 using DataContract = SuspensionAnalysis.DataContracts.Models.Profiles;
 
@@ -25,7 +25,7 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.RunAnalysis.CircularProfil
 
         public RunCircularProfileAnalysisTest()
         {
-            this._requestStub = RunAnalysisRequestHelper.CircularProfile;
+            this._requestStub = RunAnalysisHelper.CreateCircularProfileRequest();
 
             this._calculateReactionsMock = new Mock<ICalculateReactions>();
             this._calculateReactionsMock
