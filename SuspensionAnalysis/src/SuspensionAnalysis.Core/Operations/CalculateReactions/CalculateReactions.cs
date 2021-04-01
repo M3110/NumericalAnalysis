@@ -49,13 +49,31 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             Vector3D forceApplied = Vector3D.Create(request.ForceApplied);
             double[] effort = this.BuildReactionVector(forceApplied);
 
-            // Step 4 - Calculates the reactions on suspension system.
-            // The equation used: 
-            //    [Displacement] * [Reactions] = [Efforts]
-            //    [Reactions] = inv([Displacement]) * [Efforts]
-            double[] result = displacement
-                .InverseMatrix()
-                .Multiply(effort);
+            double[] result;
+            try
+            {
+                // Step 4 - Calculates the reactions on suspension system.
+                // The equation used: 
+                //    [Displacement] * [Reactions] = [Efforts]
+                //    [Reactions] = inv([Displacement]) * [Efforts]
+                result = displacement
+                    .InverseMatrix()
+                    .Multiply(effort);
+            }
+            catch (DivideByZeroException ex) 
+            {
+                response.SetInternalServerError(OperationErrorCode.InternalServerError,
+                    $"Occurred error while inversing displacement matrix. It happens because exists some error in suspension geometry. '{ex.Message}'.");
+
+                return Task.FromResult(response);
+            }
+            catch (Exception ex)
+            {
+                response.SetInternalServerError(OperationErrorCode.InternalServerError,
+                    $"Ocurred error while calculating result. '{ex.Message}'.");
+
+                return Task.FromResult(response);
+            }
 
             // Step 5 - Map the results to response.
             response.Data = this.MapToResponse(suspensionSystem, result, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());

@@ -31,7 +31,6 @@
     <Folder Include="Core\GeometricProperties\CircularProfile\" />
     <Folder Include="Core\GeometricProperties\RectangularProfile\" />
     <Folder Include="Core\Mapper\" />
-    <Folder Include="Core\Operations\CalculateReactions\" />
   </ItemGroup>
 
 </Project>
