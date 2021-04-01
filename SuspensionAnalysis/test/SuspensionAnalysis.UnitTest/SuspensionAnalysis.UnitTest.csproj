@@ -28,8 +28,8 @@
 
   <ItemGroup>
     <Folder Include="Core\ExtensionMethods\" />
-    <Folder Include="Core\GeometricProperty\CircularProfile\" />
-    <Folder Include="Core\GeometricProperty\RectangularProfile\" />
+    <Folder Include="Core\GeometricProperties\CircularProfile\" />
+    <Folder Include="Core\GeometricProperties\RectangularProfile\" />
     <Folder Include="Core\Mapper\" />
   </ItemGroup>
 
