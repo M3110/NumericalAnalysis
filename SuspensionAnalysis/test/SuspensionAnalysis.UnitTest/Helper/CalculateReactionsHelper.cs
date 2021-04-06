@@ -1,6 +1,8 @@
-﻿using SuspensionAnalysis.DataContracts.CalculateReactions;
+﻿using SuspensionAnalysis.Core.Models.SuspensionComponents;
+using SuspensionAnalysis.DataContracts.CalculateReactions;
 using SuspensionAnalysis.DataContracts.Models;
 using SuspensionAnalysis.DataContracts.Models.SuspensionComponents;
+using ShockAbsorber = SuspensionAnalysis.Core.Models.SuspensionComponents.ShockAbsorber;
 
 namespace SuspensionAnalysis.UnitTest.Helper
 {
@@ -9,6 +11,46 @@ namespace SuspensionAnalysis.UnitTest.Helper
     /// </summary>
     public static class CalculateReactionsHelper
     {
+        public static Point3D CreateOrigin()
+        {
+            return new Point3D
+            {
+                X = 0,
+                Y = 0.75,
+                Z = 0
+            };
+        }
+
+        public static SuspensionSystem CreateSuspensionSystem()
+        {
+            return new SuspensionSystem
+            {
+                ShockAbsorber = new ShockAbsorber
+                {
+                    FasteningPoint = new Point3D { X = -0.005, Y = 0.645, Z = 0.180 },
+                    PivotPoint = new Point3D { X = -0.005, Y = 0.485, Z = 0.430 }
+                },
+                SuspensionAArmLower = new SuspensionAArm
+                {
+                    KnucklePoint = new Point3D { X = -0.012, Y = 0.685, Z = 0.150 },
+                    PivotPoint1 = new Point3D { X = 0.250, Y = 0.350, Z = 0.150 },
+                    PivotPoint2 = new Point3D { X = -0.100, Y = 0.350, Z = 0.130 }
+                },
+                SuspensionAArmUpper = new SuspensionAArm
+                {
+                    KnucklePoint = new Point3D { X = 0.012, Y = 0.660, Z = 0.410 },
+                    PivotPoint1 = new Point3D { X = 0.200, Y = 0.450, Z = 0.362 },
+                    PivotPoint2 = new Point3D { X = -0.080, Y = 0.450, Z = 0.362 }
+                },
+                TieRod = new TieRod
+                {
+                    FasteningPoint = new Point3D { X = -0.120, Y = 0.668, Z = 0.200 },
+                    PivotPoint = new Point3D { X = -0.125, Y = 0.370, Z = 0.176 }
+                }
+            };
+        }
+
+
         public static CalculateReactionsRequest CreateRequest()
         {
             return new CalculateReactionsRequest
@@ -36,10 +78,22 @@ namespace SuspensionAnalysis.UnitTest.Helper
                 },
                 TieRod = new TieRodPoint
                 {
-                    PivotPoint = "-0.125,0.370,0.176",
-                    FasteningPoint = "-0.120,0.668,0.200"
+                    FasteningPoint = "-0.120,0.668,0.200",
+                    PivotPoint = "-0.125,0.370,0.176"
                 }
             };
+        }
+
+        public static CalculateReactionsResponse CreateResponse()
+        {
+            var response = new CalculateReactionsResponse
+            {
+                Data = CreateResponseData()
+            };
+
+            response.SetSuccessOk();
+
+            return response;
         }
 
         public static CalculateReactionsResponseData CreateResponseData()
