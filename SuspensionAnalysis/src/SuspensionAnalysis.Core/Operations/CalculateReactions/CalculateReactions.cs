@@ -86,7 +86,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         }
 
         /// <summary>
-        /// This method builds the reactions vector.
+        /// This method builds the efforts vector.
         /// </summary>
         /// <param name="force"></param>
         /// <returns></returns>

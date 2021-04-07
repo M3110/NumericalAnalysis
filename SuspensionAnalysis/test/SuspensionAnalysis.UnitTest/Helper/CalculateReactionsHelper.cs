@@ -7,7 +7,7 @@ using ShockAbsorber = SuspensionAnalysis.Core.Models.SuspensionComponents.ShockA
 namespace SuspensionAnalysis.UnitTest.Helper
 {
     /// <summary>
-    /// It contains method and properties to help the testing the CalculateReactions operation.
+    /// It contains method and properties to help testing the CalculateReactions operation.
     /// </summary>
     public static class CalculateReactionsHelper
     {
