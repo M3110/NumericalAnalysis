@@ -60,7 +60,7 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
             return new CalculateReactionsRequest
             {
                 ShouldRoundResults = false,
-                ForceApplied = request.ForceApplied,
+                AppliedForce = request.ForceApplied,
                 Origin = request.Origin,
                 ShockAbsorber = ShockAbsorberPoint.Create(request.ShockAbsorber),
                 SuspensionAArmLower = SuspensionAArmPoint.Create(request.SuspensionAArmLower),

@@ -1,6 +1,5 @@
 ﻿using SuspensionAnalysis.DataContracts.OperationBase;
 using System;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.Base
@@ -28,7 +27,7 @@ namespace SuspensionAnalysis.Core.Operations.Base
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected virtual Task<TResponse> ValidateOperationAsync(TRequest request)
+        public virtual Task<TResponse> ValidateOperationAsync(TRequest request)
         {
             var response = new TResponse();
             response.SetSuccessOk();

@@ -46,8 +46,8 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             double[,] displacement = this.BuildDisplacementMatrix(suspensionSystem, Point3D.Create(request.Origin));
 
             // Step 3 - Calculates the applied efforts.
-            Vector3D forceApplied = Vector3D.Create(request.ForceApplied);
-            double[] effort = this.BuildReactionVector(forceApplied);
+            Vector3D forceApplied = Vector3D.Create(request.AppliedForce);
+            double[] effort = this.BuildEffortVector(forceApplied);
 
             double[] result;
             try
@@ -60,7 +60,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
                     .InverseMatrix()
                     .Multiply(effort);
             }
-            catch (DivideByZeroException ex) 
+            catch (DivideByZeroException ex)
             {
                 response.SetInternalServerError(OperationErrorCode.InternalServerError,
                     $"Occurred error while inversing displacement matrix. It happens because exists some error in suspension geometry. '{ex.Message}'.");
@@ -86,11 +86,29 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         }
 
         /// <summary>
+        /// Asynchronously, this method validates the request sent to operation.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public override async Task<CalculateReactionsResponse> ValidateOperationAsync(CalculateReactionsRequest request)
+        {
+            var response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
+
+            Vector3D appliedForce = Vector3D.Create(request.AppliedForce);
+            if (appliedForce.X == 0 && appliedForce.Y == 0 && appliedForce.Z == 0)
+            {
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "The applied force must have at least one coordinate different than zero.");
+            }
+
+            return response;
+        }
+
+        /// <summary>
         /// This method builds the efforts vector.
         /// </summary>
         /// <param name="force"></param>
         /// <returns></returns>
-        public double[] BuildReactionVector(Vector3D force) => new double[] { force.X, force.Y, force.Z, 0, 0, 0 };
+        public double[] BuildEffortVector(Vector3D force) => new double[] { force.X, force.Y, force.Z, 0, 0, 0 };
 
         /// <summary>
         /// This method builds the matrix with normalized force directions and displacements.

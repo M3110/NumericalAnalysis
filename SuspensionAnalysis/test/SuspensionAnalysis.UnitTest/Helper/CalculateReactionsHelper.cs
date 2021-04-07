@@ -58,7 +58,7 @@ namespace SuspensionAnalysis.UnitTest.Helper
                 Origin = "0,0.75,0",
                 NumberOfDecimalsToRound = 2,
                 ShouldRoundResults = true,
-                ForceApplied = "0,0,1000",
+                AppliedForce = "0,0,1000",
                 ShockAbsorber = new ShockAbsorberPoint
                 {
                     FasteningPoint = "-0.005,0.645,0.180",

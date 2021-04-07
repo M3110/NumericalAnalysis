@@ -15,7 +15,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// </summary>
         /// <param name="force"></param>
         /// <returns></returns>
-        double[] BuildReactionVector(Vector3D force);
+        double[] BuildEffortVector(Vector3D force);
 
         /// <summary>
         /// This method builds the matrix with normalized force directions and displacements.
