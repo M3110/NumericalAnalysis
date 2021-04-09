@@ -18,20 +18,15 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
 
         private readonly CalculateReactionsRequest _requestStub;
         private readonly SuspensionSystem _suspensionSystem;
-        private readonly CalculateReactionsResponse _expectedResponse;
         private readonly Operation.CalculateReactions _operation;
-        private readonly Vector3D _forceApplied;
+    
 
         public CalculateReactionsTest()
         {
             this._requestStub = CalculateReactionsHelper.CreateRequest();
 
-            this._expectedResponse = CalculateReactionsHelper.CreateResponse();
-
             this._suspensionSystem = CalculateReactionsHelper.CreateSuspensionSystem();
-
-            this._forceApplied = Vector3D.Create(this._requestStub.AppliedForce);
-
+            
             this._mappingResolverMock = new Mock<IMappingResolver>();
             this._mappingResolverMock
                 .Setup(mr => mr.MapFrom(this._requestStub))
@@ -76,8 +71,11 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         [Fact]
         public void BuildDisplacementMatrix_ValidParameters_Should_Return_ValidMatrix()
         {
+            // Arrange
+            Point3D origin = CalculateReactionsHelper.CreateOrigin();
+
             // Act
-            double[,] result = this._operation.BuildDisplacementMatrix(this._suspensionSystem, CalculateReactionsHelper.CreateOrigin());
+            double[,] result = this._operation.BuildDisplacementMatrix(this._suspensionSystem, origin);
 
             // Assert
             result.Should().NotBeNullOrEmpty();
@@ -85,25 +83,46 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         }
 
         [Fact]
-        public void BuildReactionVector_ValidParameters_Should_Return_ValidVector()
+        public void BuildEffortsVector_ValidParameters_Should_Return_ValidVector()
         {
             // Arrange
-            var effortExpected = new double[] { this._forceApplied.X, this._forceApplied.Y, this._forceApplied.Z, 0, 0, 0 };
+            Vector3D appliedForce = Vector3D.Create(this._requestStub.AppliedForce);
+
+            var effortExpected = new double[] { appliedForce.X, appliedForce.Y, appliedForce.Z, 0, 0, 0 };
 
             // Act
-            double[] result = this._operation.BuildEffortVector(this._forceApplied);
+            double[] result = this._operation.BuildEffortsVector(appliedForce);
 
             // Assert
             result.Should().NotBeNullOrEmpty();
         }
 
+        //[Fact]
+        //public void MapToResponse_ShouldRound_ValidParameters_Should_Return_ValidReactions()
+        //{
+        //    // Act
+        //    double[] result =  bool shouldRound, int decimals;
+           
+        //    // Assert
+
+        //}
+        
         [Fact]
-        public void MapToResponse_ShouldRound_ValidParameters_Should_Return_ValidReactions()
+        public async Task ProcessAsync_ValidParameters_Should_ReturnExpectedResponse()
         {
+            // Arrange
+            CalculateReactionsResponse expectedResponse = CalculateReactionsHelper.CreateResponse();
+
             // Act
+            CalculateReactionsResponse response = await this._operation.ProcessAsync(this._requestStub).ConfigureAwait(false);
 
-
-            // Assert
+            //Assert
+            response.Should().BeEquivalentTo(expectedResponse);
+            response.Should().NotBeNull();
+            response.Success.Should().BeTrue();
+            response.HttpStatusCode.Should().Be(HttpStatusCode.OK);
         }
+
+
     }
 }

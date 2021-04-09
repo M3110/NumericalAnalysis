@@ -47,7 +47,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
 
             // Step 3 - Calculates the applied efforts.
             Vector3D forceApplied = Vector3D.Create(request.AppliedForce);
-            double[] effort = this.BuildEffortVector(forceApplied);
+            double[] effort = this.BuildEffortsVector(forceApplied);
 
             double[] result;
             try
@@ -93,6 +93,10 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         public override async Task<CalculateReactionsResponse> ValidateOperationAsync(CalculateReactionsRequest request)
         {
             var response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
+            if(response.Success == false)
+            {
+                return response;
+            }
 
             Vector3D appliedForce = Vector3D.Create(request.AppliedForce);
             if (appliedForce.X == 0 && appliedForce.Y == 0 && appliedForce.Z == 0)
@@ -108,7 +112,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// </summary>
         /// <param name="force"></param>
         /// <returns></returns>
-        public double[] BuildEffortVector(Vector3D force) => new double[] { force.X, force.Y, force.Z, 0, 0, 0 };
+        public double[] BuildEffortsVector(Vector3D force) => new double[] { force.X, force.Y, force.Z, 0, 0, 0 };
 
         /// <summary>
         /// This method builds the matrix with normalized force directions and displacements.
