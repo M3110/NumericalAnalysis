@@ -9,6 +9,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 using Operation = SuspensionAnalysis.Core.Operations.CalculateReactions;
+using SuspensionAnalysis.Core.ExtensionMethods;
 
 namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
 {
@@ -19,14 +20,15 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         private readonly CalculateReactionsRequest _requestStub;
         private readonly SuspensionSystem _suspensionSystem;
         private readonly Operation.CalculateReactions _operation;
-    
+        private readonly bool shouldRound;
+        private readonly int decimals;
 
         public CalculateReactionsTest()
         {
             this._requestStub = CalculateReactionsHelper.CreateRequest();
 
             this._suspensionSystem = CalculateReactionsHelper.CreateSuspensionSystem();
-            
+
             this._mappingResolverMock = new Mock<IMappingResolver>();
             this._mappingResolverMock
                 .Setup(mr => mr.MapFrom(this._requestStub))
@@ -102,11 +104,37 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         //{
         //    // Act
         //    double[] result =  bool shouldRound, int decimals;
-           
+
         //    // Assert
 
         //}
-        
+
+        [Fact]
+        public void MapToResponse_ShouldntRound_ValidParameters_Should_Return_ValidReactions()
+        {
+            // Arrange
+            CalculateReactionsResponseData expectedResponse = CalculateReactionsHelper.CreateResponseData();
+
+            Vector3D appliedForce = Vector3D.Create(this._requestStub.AppliedForce);
+
+            var effortExpected = new double[] { appliedForce.X, appliedForce.Y, appliedForce.Z, 0, 0, 0 };
+
+            Point3D origin = CalculateReactionsHelper.CreateOrigin();
+
+            double[,] displacement = this._operation.BuildDisplacementMatrix(this._suspensionSystem, origin);
+
+            double[] result = displacement
+                    .InverseMatrix()
+                    .Multiply(effortExpected);
+
+            // Act
+            CalculateReactionsResponseData response = this._operation.MapToResponse(_suspensionSystem, result, shouldRound, decimals);
+
+            // Assert
+            response.Should().NotBeNull();
+            response.Should().BeEquivalentTo(expectedResponse);
+        }
+
         [Fact]
         public async Task ProcessAsync_ValidParameters_Should_ReturnExpectedResponse()
         {

@@ -13,12 +13,7 @@ namespace SuspensionAnalysis.UnitTest.Helper
     {
         public static Point3D CreateOrigin()
         {
-            return new Point3D
-            {
-                X = 0,
-                Y = 0.75,
-                Z = 0
-            };
+            return new Point3D { X = 0, Y = 0.75, Z = 0 };
         }
 
         public static SuspensionSystem CreateSuspensionSystem()
