@@ -81,11 +81,7 @@ namespace SuspensionAnalysis.UnitTest.Helper
 
         public static CalculateReactionsResponse CreateResponse()
         {
-            var response = new CalculateReactionsResponse
-            {
-                Data = CreateResponseData()
-            };
-
+            var response = new CalculateReactionsResponse { Data = CreateResponseData() };
             response.SetSuccessOk();
 
             return response;
