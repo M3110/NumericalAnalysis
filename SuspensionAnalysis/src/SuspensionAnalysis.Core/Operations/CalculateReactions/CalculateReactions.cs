@@ -93,7 +93,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         public override async Task<CalculateReactionsResponse> ValidateOperationAsync(CalculateReactionsRequest request)
         {
             var response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
-            if(response.Success == false)
+            if (response.Success == false)
             {
                 return response;
             }
@@ -112,7 +112,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// </summary>
         /// <param name="force"></param>
         /// <returns></returns>
-        public double[] BuildEffortsVector(Vector3D force) => new double[] { force.X, force.Y, force.Z, 0, 0, 0 };
+        public double[] BuildEffortsVector(Vector3D force) => new double[6] { force.X, force.Y, force.Z, 0, 0, 0 };
 
         /// <summary>
         /// This method builds the matrix with normalized force directions and displacements.
@@ -155,26 +155,33 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// <param name="shouldRound"></param>
         /// <param name="decimals"></param>
         /// <returns></returns>
-        public CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int decimals)
+        public CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int? decimals)
         {
-            return shouldRound == true ?
+            var responseData = new CalculateReactionsResponseData
+            {
+                AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
+                AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
+                AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
+                AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
+                ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
+                TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
+            };
+
+            if (shouldRound == true)
+            {
+                
+            }
+
+
+            return shouldRound == false ? responseData :
                 new CalculateReactionsResponseData
                 {
-                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1).Round(decimals),
-                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2).Round(decimals),
-                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1).Round(decimals),
-                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2).Round(decimals),
-                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection).Round(decimals),
-                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection).Round(decimals)
-                }
-                : new CalculateReactionsResponseData
-                {
-                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
-                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
-                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
-                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
-                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
-                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
+                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1).Round(decimals.Value),
+                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2).Round(decimals.Value),
+                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1).Round(decimals.Value),
+                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2).Round(decimals.Value),
+                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection).Round(decimals.Value),
+                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection).Round(decimals.Value)
                 };
         }
 

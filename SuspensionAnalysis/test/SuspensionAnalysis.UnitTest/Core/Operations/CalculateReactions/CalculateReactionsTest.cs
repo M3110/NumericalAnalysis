@@ -20,22 +20,11 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         private readonly CalculateReactionsRequest _requestStub;
         private readonly SuspensionSystem _suspensionSystem;
         private readonly Operation.CalculateReactions _operation;
-        private readonly Vector3D _appliedForce;
-        private readonly Point3D _origin;
         private readonly CalculateReactionsResponse _expectedResponse;
-        private readonly double[] _effortExpected;
-        private readonly bool shouldRound;
-        private readonly int decimals;
 
         public CalculateReactionsTest()
         {
             this._requestStub = CalculateReactionsHelper.CreateRequest();
-
-            this._appliedForce = Vector3D.Create(this._requestStub.AppliedForce);
-           
-            this._origin = CalculateReactionsHelper.CreateOrigin();
-
-            this._effortExpected = new double[] { _appliedForce.X, _appliedForce.Y, _appliedForce.Z, 0, 0, 0 };
 
             this._suspensionSystem = CalculateReactionsHelper.CreateSuspensionSystem();
             
@@ -85,8 +74,11 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         [Fact(DisplayName = "Feature: BuildDisplacementMatrix | Given: Valid parameters. | When: Call method. | Should: Return a valid displacement matrix.")]
         public void BuildDisplacementMatrix_ValidParameters_Should_Return_ValidMatrix()
         {
+            // Arrange 
+            Point3D origin = CalculateReactionsHelper.CreateOrigin();
+
             // Act
-            double[,] result = this._operation.BuildDisplacementMatrix(this._suspensionSystem, this._origin);
+            double[,] result = this._operation.BuildDisplacementMatrix(this._suspensionSystem, origin);
 
             // Assert
             result.Should().NotBeNullOrEmpty();
@@ -96,15 +88,18 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         [Fact(DisplayName = "Feature: BuildEffortsVector | Given: Valid parameters. | When: Call method. | Should: Return valid vector for the efforts.")]
         public void BuildEffortsVector_ValidParameters_Should_Return_ValidVector()
         {
+            // Arrange
+            Vector3D appliedForce = Vector3D.Create(this._requestStub.AppliedForce);
+            var effortExpected = new double[] { appliedForce.X, appliedForce.Y, appliedForce.Z, 0, 0, 0 };
+
             // Act
-            double[] result = this._operation.BuildEffortsVector(this._appliedForce);
+            double[] result = this._operation.BuildEffortsVector(appliedForce);
 
             // Assert
-            result.Should().BeEquivalentTo(this._effortExpected);
-            result.Should().NotBeNullOrEmpty();
+            result.Should().BeEquivalentTo(effortExpected);
         }
-        
-        //[Fact(DisplayName = "Feature: MapToResponse | Given: Valid parameters. | When: Call method. | Should: Return valid reactions for components of suspension system.")]
+
+        //[Fact(DisplayName = "Feature: MapToResponse | Given: Valid parameters. | When: ShouldRound is true. | Should: Return valid reactions for components of suspension system.")]
         //public void MapToResponse_ShouldRound_ValidParameters_Should_Return_ValidReactions()
         //{
         //    // Arrange
@@ -123,23 +118,20 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         //    response.Should().NotBe(0);
         //}
 
-        [Fact(DisplayName = "Feature: MapToResponse | Given: Valid parameters. | When: Call method. | Should: Return valid reactions for components of suspension system.")]
-        public void MapToResponse_ShouldntRound_ValidParameters_Should_Return_ValidReactions()
+        [Fact(DisplayName = "Feature: MapToResponse | Given: Valid parameters. | When: ShouldRound is false. | Should: Return valid reactions for components of suspension system.")]
+        public void MapToResponse_ValidParameters_When_ShouldRound_Is_False_Should_Return_ValidReactions()
         {
             // Arrange
-            double[,] displacement = this._operation.BuildDisplacementMatrix(this._suspensionSystem, this._origin);
-
-            double[] result = displacement
-                    .InverseMatrix()
-                    .Multiply(this._effortExpected);
+            double[] reactions = new double[6] {-706.844136886457, 2318.54871728814, 410.390832183452, -693.435739188224, 1046.35331054682, -568.377481091224 };
+            double precision = 1e-6;
 
             // Act
-            CalculateReactionsResponseData response = this._operation.MapToResponse(this._suspensionSystem, result, shouldRound, decimals);
+            CalculateReactionsResponseData respondeData = this._operation.MapToResponse(this._suspensionSystem, reactions, false, null);
 
             // Assert
-            response.Should().BeEquivalentTo(this._expectedResponse.Data);
-            response.Should().NotBeNull();
-            response.Should().NotBe(0);
+            respondeData.Should().NotBeNull();
+            respondeData.AArmLowerReaction1.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue, precision);
+            respondeData.AArmLowerReaction2
         }
 
         [Fact(DisplayName = "Feature: ProcessAsync | Given: Valid parameters. | When: Call method. | Should: Return expected response.")]

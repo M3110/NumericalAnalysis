@@ -47,5 +47,12 @@ namespace SuspensionAnalysis.DataContracts.CalculateReactions
         /// Unit: N (Newton).
         /// </summary>
         public Force TieRodReaction { get; set; }
+
+        public void Round(int decimals)
+        {
+            this.AArmLowerReaction1 = this.AArmLowerReaction1.Round()
+        }
+    
+    
     }
 }
