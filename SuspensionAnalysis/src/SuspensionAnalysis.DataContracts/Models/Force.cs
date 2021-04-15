@@ -26,6 +26,7 @@ namespace SuspensionAnalysis.DataContracts.Models
         /// The force at axis Z.
         /// </summary>
         public double Z { get; set; }
+
         /// <summary>
         /// This method rounds each value at <see cref="Force"/> to a specified number of fractional
         /// digits, and rounds midpoint values to the nearest even number.
