@@ -86,7 +86,7 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         public void BuildDisplacementMatrix_ValidParameters_Should_Return_ValidMatrix()
         {
             // Act
-            double[,] result = this._operation.BuildDisplacementMatrix(this._suspensionSystem, _origin);
+            double[,] result = this._operation.BuildDisplacementMatrix(this._suspensionSystem, this._origin);
 
             // Assert
             result.Should().NotBeNullOrEmpty();
@@ -97,10 +97,10 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         public void BuildEffortsVector_ValidParameters_Should_Return_ValidVector()
         {
             // Act
-            double[] result = this._operation.BuildEffortsVector(_appliedForce);
+            double[] result = this._operation.BuildEffortsVector(this._appliedForce);
 
             // Assert
-            result.Should().BeEquivalentTo(_effortExpected);
+            result.Should().BeEquivalentTo(this._effortExpected);
             result.Should().NotBeNullOrEmpty();
         }
         
@@ -127,17 +127,17 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         public void MapToResponse_ShouldntRound_ValidParameters_Should_Return_ValidReactions()
         {
             // Arrange
-            double[,] displacement = this._operation.BuildDisplacementMatrix(this._suspensionSystem, _origin);
+            double[,] displacement = this._operation.BuildDisplacementMatrix(this._suspensionSystem, this._origin);
 
             double[] result = displacement
                     .InverseMatrix()
-                    .Multiply(_effortExpected);
+                    .Multiply(this._effortExpected);
 
             // Act
-            CalculateReactionsResponseData response = this._operation.MapToResponse(_suspensionSystem, result, shouldRound, decimals);
+            CalculateReactionsResponseData response = this._operation.MapToResponse(this._suspensionSystem, result, shouldRound, decimals);
 
             // Assert
-            response.Should().BeEquivalentTo(_expectedResponse.Data);
+            response.Should().BeEquivalentTo(this._expectedResponse.Data);
             response.Should().NotBeNull();
             response.Should().NotBe(0);
         }
@@ -149,7 +149,7 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
             CalculateReactionsResponse response = await this._operation.ProcessAsync(this._requestStub).ConfigureAwait(false);
 
             //Assert
-            response.Should().BeEquivalentTo(_expectedResponse);
+            response.Should().BeEquivalentTo(this._expectedResponse);
             response.Should().NotBeNull();
             response.Success.Should().BeTrue();
             response.HttpStatusCode.Should().Be(HttpStatusCode.OK);
