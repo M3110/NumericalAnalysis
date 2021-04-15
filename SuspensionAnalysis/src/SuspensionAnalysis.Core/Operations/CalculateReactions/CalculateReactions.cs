@@ -167,22 +167,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
                 TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
             };
 
-            if (shouldRound == true)
-            {
-                
-            }
-
-
-            return shouldRound == false ? responseData :
-                new CalculateReactionsResponseData
-                {
-                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1).Round(decimals.Value),
-                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2).Round(decimals.Value),
-                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1).Round(decimals.Value),
-                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2).Round(decimals.Value),
-                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection).Round(decimals.Value),
-                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection).Round(decimals.Value)
-                };
+            return shouldRound == false ? responseData : responseData.Round(decimals.Value);
         }
 
         /// <summary>
