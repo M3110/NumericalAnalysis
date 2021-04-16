@@ -51,8 +51,7 @@ namespace SuspensionAnalysis.UnitTest.Helper
             return new CalculateReactionsRequest
             {
                 Origin = "0,0.75,0",
-                NumberOfDecimalsToRound = 2,
-                ShouldRoundResults = true,
+                ShouldRoundResults = false,
                 AppliedForce = "0,0,1000",
                 ShockAbsorber = new ShockAbsorberPoint
                 {

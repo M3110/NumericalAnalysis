@@ -76,7 +76,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             }
 
             // Step 5 - Map the results to response.
-            response.Data = this.MapToResponse(suspensionSystem, result, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
+            response.Data = this.MapToResponseData(suspensionSystem, result, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
 
             // Step 6 - Check if sum of forces is equals to zero, indicanting that the structure is static.
             // This method was commented because some error ocurred and must be investigated.
@@ -155,7 +155,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// <param name="shouldRound"></param>
         /// <param name="decimals"></param>
         /// <returns></returns>
-        public CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int? decimals)
+        public CalculateReactionsResponseData MapToResponseData(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int? decimals)
         {
             var responseData = new CalculateReactionsResponseData
             {
