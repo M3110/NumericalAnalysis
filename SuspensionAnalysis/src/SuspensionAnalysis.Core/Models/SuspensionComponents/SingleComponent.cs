@@ -14,9 +14,19 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         public double AppliedForce { get; set; }
 
         /// <summary>
+        /// The pivot point at chassis.
+        /// </summary>
+        public Point3D PivotPoint { get; set; }
+
+        /// <summary>
+        /// The fastening point.
+        /// </summary>
+        public Point3D FasteningPoint { get; set; }
+
+        /// <summary>
         /// The vector that represents the direction of single component.
         /// </summary>
-        public Vector3D VectorDirection => Vector3D.Create(this.FasteningPoint, this.PivotPoint);
+        public Vector3D VectorDirection => Vector3D.Create(this.PivotPoint, this.FasteningPoint);
 
         /// <summary>
         /// The normalized vector that represents the direction of single component.
@@ -27,15 +37,5 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         /// The length.
         /// </summary>
         public double Length => this.VectorDirection.Length;
-
-        /// <summary>
-        /// The pivot point at chassis.
-        /// </summary>
-        public Point3D PivotPoint { get; set; }
-
-        /// <summary>
-        /// The fastening point.
-        /// </summary>
-        public Point3D FasteningPoint { get; set; }
     }
 }

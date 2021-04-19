@@ -22,36 +22,6 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         public double AppliedForce2 { get; set; }
 
         /// <summary>
-        /// The length to one segment of suspension A-arm.
-        /// </summary>
-        public double Length1 => Vector3D.Create(this.KnucklePoint, this.PivotPoint1).Length;
-
-        /// <summary>
-        /// The length to another segment of suspension A-arm.
-        /// </summary>
-        public double Length2 => Vector3D.Create(this.KnucklePoint, this.PivotPoint2).Length;
-
-        /// <summary>
-        /// The vector that represents the direction of suspension A-arm to one segment of suspension A-arm.
-        /// </summary>
-        public Vector3D VectorDirection1 => Vector3D.Create(this.KnucklePoint, this.PivotPoint1);
-        
-        /// <summary>
-        /// The vector that represents the direction of suspension A-arm to another segment of suspension A-arm.
-        /// </summary>
-        public Vector3D VectorDirection2 => Vector3D.Create(this.KnucklePoint, this.PivotPoint2);
-
-        /// <summary>
-        /// The normalized vector that represents the direction of suspension A-arm to one segment of suspension A-arm.
-        /// </summary>
-        public Vector3D NormalizedDirection1 => this.VectorDirection1.Normalize();
-        
-        /// <summary>
-        /// The normalized vector that represents the direction of suspension A-arm to anoher segment of suspension A-arm.
-        /// </summary>
-        public Vector3D NormalizedDirection2 => this.VectorDirection2.Normalize();
-
-        /// <summary>
         /// The poitn of fastening with steering knuckle.
         /// </summary>
         public Point3D KnucklePoint { get; set; }
@@ -67,6 +37,36 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         /// This geometry has two pivot point.
         /// </summary>
         public Point3D PivotPoint2 { get; set; }
+
+        /// <summary>
+        /// The vector that represents the direction of suspension A-arm to one segment of suspension A-arm.
+        /// </summary>
+        public Vector3D VectorDirection1 => Vector3D.Create(this.PivotPoint1, this.KnucklePoint);
+        
+        /// <summary>
+        /// The vector that represents the direction of suspension A-arm to another segment of suspension A-arm.
+        /// </summary>
+        public Vector3D VectorDirection2 => Vector3D.Create(this.PivotPoint2, this.KnucklePoint);
+
+        /// <summary>
+        /// The normalized vector that represents the direction of suspension A-arm to one segment of suspension A-arm.
+        /// </summary>
+        public Vector3D NormalizedDirection1 => this.VectorDirection1.Normalize();
+        
+        /// <summary>
+        /// The normalized vector that represents the direction of suspension A-arm to anoher segment of suspension A-arm.
+        /// </summary>
+        public Vector3D NormalizedDirection2 => this.VectorDirection2.Normalize();
+
+        /// <summary>
+        /// The length to one segment of suspension A-arm.
+        /// </summary>
+        public double Length1 => this.VectorDirection1.Length;
+
+        /// <summary>
+        /// The length to another segment of suspension A-arm.
+        /// </summary>
+        public double Length2 => this.VectorDirection2.Length;
 
         /// <summary>
         /// This method creates a <see cref="SuspensionAArm"/> based on <see cref="DataContract.SuspensionAArmPoint"/>.

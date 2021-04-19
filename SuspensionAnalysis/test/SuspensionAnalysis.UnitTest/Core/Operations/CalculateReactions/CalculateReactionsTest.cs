@@ -10,7 +10,6 @@ using System.Net;
 using System.Threading.Tasks;
 using Xunit;
 using Operation = SuspensionAnalysis.Core.Operations.CalculateReactions;
-using SuspensionAnalysis.Core.ExtensionMethods;
 
 namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
 {
@@ -19,17 +18,20 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         private readonly Mock<IMappingResolver> _mappingResolverMock;
 
         private readonly CalculateReactionsRequest _requestStub;
-        private readonly SuspensionSystem _suspensionSystem;
-        private readonly Operation.CalculateReactions _operation;
         private readonly CalculateReactionsResponse _expectedResponse;
+        private readonly SuspensionSystem _suspensionSystem;
+        private readonly double[] _reactions;
+        private readonly Operation.CalculateReactions _operation;
 
         public CalculateReactionsTest()
         {
             this._requestStub = CalculateReactionsHelper.CreateRequest();
 
+            this._expectedResponse = CalculateReactionsHelper.CreateResponse();
+
             this._suspensionSystem = CalculateReactionsHelper.CreateSuspensionSystem();
 
-            this._expectedResponse = CalculateReactionsHelper.CreateResponse();
+            this._reactions = new double[6] { 706.844136886457, -2318.54871728814, -410.390832183452, 693.435739188224, -1046.35331054682, 568.377481091224 };
 
             this._mappingResolverMock = new Mock<IMappingResolver>();
             this._mappingResolverMock
@@ -106,19 +108,17 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         public void MapToResponseData_ValidParameters_When_ShouldRound_Is_True_Should_Return_ValidReactions(int decimals)
         {
             // Arrange
-            double[] reactions = new double[6] { -706.844136886457, 2318.54871728814, 410.390832183452, -693.435739188224, 1046.35331054682, -568.377481091224 };
-            this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue = Math.Round(reactions[0], decimals);
-            this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue = Math.Round(reactions[1], decimals);
-            this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue = Math.Round(reactions[2], decimals);
-            this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue = Math.Round(reactions[3], decimals);
-            this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue = Math.Round(reactions[4], decimals);
-            this._expectedResponse.Data.TieRodReaction.AbsolutValue = Math.Round(reactions[5], decimals);
+            this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue = Math.Round(-this._reactions[0], decimals);
+            this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue = Math.Round(-this._reactions[1], decimals);
+            this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue = Math.Round(-this._reactions[2], decimals);
+            this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue = Math.Round(-this._reactions[3], decimals);
+            this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue = Math.Round(-this._reactions[4], decimals);
+            this._expectedResponse.Data.TieRodReaction.AbsolutValue = Math.Round(-this._reactions[5], decimals);
 
             // Act
-            CalculateReactionsResponseData responseData = this._operation.MapToResponseData(this._suspensionSystem, reactions, true, decimals);
+            CalculateReactionsResponseData responseData = this._operation.MapToResponseData(this._suspensionSystem, this._reactions, true, decimals);
 
             // Assert
-
             responseData.Should().NotBeNull();
             responseData.AArmLowerReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue);
             responseData.AArmLowerReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue);
@@ -126,17 +126,13 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
             responseData.AArmUpperReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue);
             responseData.ShockAbsorberReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue);
             responseData.TieRodReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.TieRodReaction.AbsolutValue);
-
         }
 
         [Fact(DisplayName = "Feature: MapToResponseData| Given: Valid parameters. | When: ShouldRound is false. | Should: Return valid reactions for components of suspension system.")]
         public void MapToResponseData_ValidParameters_When_ShouldRound_Is_False_Should_Return_ValidReactions()
         {
-            // Arrange
-            double[] reactions = new double[6] { -706.844136886457, 2318.54871728814, 410.390832183452, -693.435739188224, 1046.35331054682, -568.377481091224 };
-
             // Act
-            CalculateReactionsResponseData responseData = this._operation.MapToResponseData(this._suspensionSystem, reactions, false, null);
+            CalculateReactionsResponseData responseData = this._operation.MapToResponseData(this._suspensionSystem, this._reactions, false, null);
 
             // Assert
             responseData.Should().NotBeNull();
@@ -151,6 +147,9 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         [Fact(DisplayName = "Feature: ProcessAsync | Given: Valid parameters. | When: Call method. | Should: Return expected response.")]
         public async Task ProcessAsync_ValidParameters_Should_ReturnExpectedResponse()
         {
+            // Arrange
+            double precision = 1e-6;
+
             // Act
             CalculateReactionsResponse response = await this._operation.ProcessAsync(this._requestStub).ConfigureAwait(false);
 
@@ -160,12 +159,12 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
             response.Success.Should().Be(this._expectedResponse.Success);
             response.Errors.Should().BeEquivalentTo(this._expectedResponse.Errors);
             response.Data.Should().NotBeNull();
-            response.Data.AArmLowerReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue);
-            response.Data.AArmLowerReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue);
-            response.Data.AArmUpperReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue);
-            response.Data.AArmUpperReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue);
-            response.Data.ShockAbsorberReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue);
-            response.Data.TieRodReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.TieRodReaction.AbsolutValue);
+            response.Data.AArmLowerReaction1.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue, precision);
+            response.Data.AArmLowerReaction2.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue, precision);
+            response.Data.AArmUpperReaction1.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue, precision);
+            response.Data.AArmUpperReaction2.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue, precision);
+            response.Data.ShockAbsorberReaction.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue, precision);
+            response.Data.TieRodReaction.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.TieRodReaction.AbsolutValue, precision);
         }
     }
 }

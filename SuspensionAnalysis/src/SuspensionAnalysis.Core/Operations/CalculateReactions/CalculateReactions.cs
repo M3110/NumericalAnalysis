@@ -157,14 +157,15 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// <returns></returns>
         public CalculateReactionsResponseData MapToResponseData(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int? decimals)
         {
+            // The code below changes the sinal of result (-result) to attest that is passed the component force and not the reactions at chassis.
             var responseData = new CalculateReactionsResponseData
             {
-                AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
-                AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
-                AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
-                AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
-                ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
-                TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
+                AArmLowerReaction1 = Force.Create(-result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
+                AArmLowerReaction2 = Force.Create(-result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
+                AArmUpperReaction1 = Force.Create(-result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
+                AArmUpperReaction2 = Force.Create(-result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
+                ShockAbsorberReaction = Force.Create(-result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
+                TieRodReaction = Force.Create(-result[5], suspensionSystem.TieRod.NormalizedDirection)
             };
 
             return shouldRound == false ? responseData : responseData.Round(decimals.Value);
