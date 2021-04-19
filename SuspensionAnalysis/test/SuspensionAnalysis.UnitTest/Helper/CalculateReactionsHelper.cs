@@ -28,14 +28,14 @@ namespace SuspensionAnalysis.UnitTest.Helper
                 SuspensionAArmLower = new SuspensionAArm
                 {
                     KnucklePoint = new Point3D { X = -0.012, Y = 0.685, Z = 0.150 },
-                    PivotPoint1 = new Point3D { X = 0.250, Y = 0.350, Z = 0.150 },
-                    PivotPoint2 = new Point3D { X = -0.100, Y = 0.350, Z = 0.130 }
+                    PivotPoint1 = new Point3D { X = -0.100, Y = 0.350, Z = 0.130 },
+                    PivotPoint2 = new Point3D { X = 0.250, Y = 0.350, Z = 0.150 }
                 },
                 SuspensionAArmUpper = new SuspensionAArm
                 {
                     KnucklePoint = new Point3D { X = 0.012, Y = 0.660, Z = 0.410 },
-                    PivotPoint1 = new Point3D { X = 0.200, Y = 0.450, Z = 0.362 },
-                    PivotPoint2 = new Point3D { X = -0.080, Y = 0.450, Z = 0.362 }
+                    PivotPoint1 = new Point3D { X = -0.080, Y = 0.450, Z = 0.362 },
+                    PivotPoint2 = new Point3D { X = 0.200, Y = 0.450, Z = 0.362 }
                 },
                 TieRod = new TieRod
                 {
@@ -52,7 +52,7 @@ namespace SuspensionAnalysis.UnitTest.Helper
             {
                 Origin = "0,0.75,0",
                 ShouldRoundResults = false,
-                AppliedForce = "0,0,1000",
+                AppliedForce = "1000,-1000,1000",
                 ShockAbsorber = new ShockAbsorberPoint
                 {
                     FasteningPoint = "-0.005,0.645,0.180",
@@ -61,14 +61,14 @@ namespace SuspensionAnalysis.UnitTest.Helper
                 SuspensionAArmLower = new SuspensionAArmPoint
                 {
                     KnucklePoint = "-0.012,0.685,0.150",
-                    PivotPoint1 = "0.250,0.350,0.150",
-                    PivotPoint2 = "-0.100,0.350,0.130"
+                    PivotPoint1 = "-0.100,0.350,0.130",
+                    PivotPoint2 = "0.250,0.350,0.150"
                 },
                 SuspensionAArmUpper = new SuspensionAArmPoint
                 {
                     KnucklePoint = "0.012,0.660,0.410",
-                    PivotPoint1 = "0.200,0.450,0.362",
-                    PivotPoint2 = "-0.080,0.450,0.362"
+                    PivotPoint1 = "-0.080,0.450,0.362",
+                    PivotPoint2 = "0.200,0.450,0.362"
                 },
                 TieRod = new TieRodPoint
                 {
