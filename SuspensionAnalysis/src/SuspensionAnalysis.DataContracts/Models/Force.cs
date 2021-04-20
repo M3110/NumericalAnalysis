@@ -1,4 +1,6 @@
-﻿namespace SuspensionAnalysis.DataContracts.Models
+﻿using System;
+
+namespace SuspensionAnalysis.DataContracts.Models
 {
     /// <summary>
     /// It represents the force.
@@ -24,6 +26,23 @@
         /// The force at axis Z.
         /// </summary>
         public double Z { get; set; }
+
+        /// <summary>
+        /// This method rounds each value at <see cref="Force"/> to a specified number of fractional
+        /// digits, and rounds midpoint values to the nearest even number.
+        /// </summary>
+        /// <param name="decimals"></param>
+        /// <returns></returns>
+        public Force Round(int decimals)
+        {
+            return new Force
+            {
+                AbsolutValue = Math.Round(this.AbsolutValue, decimals),
+                X = Math.Round(this.X, decimals),
+                Y = Math.Round(this.Y, decimals),
+                Z = Math.Round(this.Z, decimals)
+            };
+        }
 
         /// <summary>
         /// This method creates the <see cref="Force"/> based on the absolut value and the normalized direction.

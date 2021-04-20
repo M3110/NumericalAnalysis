@@ -29,7 +29,7 @@ namespace SuspensionAnalysis.DataContracts.CalculateReactions
         /// Unit: N (Newton).
         /// </summary>
         /// <example>x,y,z</example>
-        public string ForceApplied { get; set; }
+        public string AppliedForce { get; set; }
 
         /// <summary>
         /// The shock absorber points.

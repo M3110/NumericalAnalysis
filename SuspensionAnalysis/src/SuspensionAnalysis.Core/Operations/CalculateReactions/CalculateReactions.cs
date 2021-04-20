@@ -46,19 +46,37 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             double[,] displacement = this.BuildDisplacementMatrix(suspensionSystem, Point3D.Create(request.Origin));
 
             // Step 3 - Calculates the applied efforts.
-            Vector3D forceApplied = Vector3D.Create(request.ForceApplied);
-            double[] effort = this.BuildReactionVector(forceApplied);
+            Vector3D forceApplied = Vector3D.Create(request.AppliedForce);
+            double[] effort = this.BuildEffortsVector(forceApplied);
 
-            // Step 4 - Calculates the reactions on suspension system.
-            // The equation used: 
-            //    [Displacement] * [Reactions] = [Efforts]
-            //    [Reactions] = inv([Displacement]) * [Efforts]
-            double[] result = displacement
-                .InverseMatrix()
-                .Multiply(effort);
+            double[] result;
+            try
+            {
+                // Step 4 - Calculates the reactions on suspension system.
+                // The equation used: 
+                //    [Displacement] * [Reactions] = [Efforts]
+                //    [Reactions] = inv([Displacement]) * [Efforts]
+                result = displacement
+                    .InverseMatrix()
+                    .Multiply(effort);
+            }
+            catch (DivideByZeroException ex)
+            {
+                response.SetInternalServerError(OperationErrorCode.InternalServerError,
+                    $"Occurred error while inversing displacement matrix. It happens because exists some error in suspension geometry. '{ex.Message}'.");
+
+                return Task.FromResult(response);
+            }
+            catch (Exception ex)
+            {
+                response.SetInternalServerError(OperationErrorCode.InternalServerError,
+                    $"Ocurred error while calculating result. '{ex.Message}'.");
+
+                return Task.FromResult(response);
+            }
 
             // Step 5 - Map the results to response.
-            response.Data = this.MapToResponse(suspensionSystem, result, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
+            response.Data = this.MapToResponseData(suspensionSystem, result, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
 
             // Step 6 - Check if sum of forces is equals to zero, indicanting that the structure is static.
             // This method was commented because some error ocurred and must be investigated.
@@ -68,11 +86,33 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         }
 
         /// <summary>
-        /// This method builds the reactions vector.
+        /// Asynchronously, this method validates the request sent to operation.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public override async Task<CalculateReactionsResponse> ValidateOperationAsync(CalculateReactionsRequest request)
+        {
+            var response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
+            if (response.Success == false)
+            {
+                return response;
+            }
+
+            Vector3D appliedForce = Vector3D.Create(request.AppliedForce);
+            if (appliedForce.X == 0 && appliedForce.Y == 0 && appliedForce.Z == 0)
+            {
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "The applied force must have at least one coordinate different than zero.");
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// This method builds the efforts vector.
         /// </summary>
         /// <param name="force"></param>
         /// <returns></returns>
-        public double[] BuildReactionVector(Vector3D force) => new double[] { force.X, force.Y, force.Z, 0, 0, 0 };
+        public double[] BuildEffortsVector(Vector3D force) => new double[6] { force.X, force.Y, force.Z, 0, 0, 0 };
 
         /// <summary>
         /// This method builds the matrix with normalized force directions and displacements.
@@ -115,27 +155,20 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// <param name="shouldRound"></param>
         /// <param name="decimals"></param>
         /// <returns></returns>
-        public CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int decimals)
+        public CalculateReactionsResponseData MapToResponseData(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int? decimals)
         {
-            return shouldRound == true ?
-                new CalculateReactionsResponseData
-                {
-                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1).Round(decimals),
-                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2).Round(decimals),
-                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1).Round(decimals),
-                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2).Round(decimals),
-                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection).Round(decimals),
-                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection).Round(decimals)
-                }
-                : new CalculateReactionsResponseData
-                {
-                    AArmLowerReaction1 = Force.Create(result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
-                    AArmLowerReaction2 = Force.Create(result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
-                    AArmUpperReaction1 = Force.Create(result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
-                    AArmUpperReaction2 = Force.Create(result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
-                    ShockAbsorberReaction = Force.Create(result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
-                    TieRodReaction = Force.Create(result[5], suspensionSystem.TieRod.NormalizedDirection)
-                };
+            // The code below changes the sinal of result (-result) to attest that is passed the component force and not the reactions at chassis.
+            var responseData = new CalculateReactionsResponseData
+            {
+                AArmLowerReaction1 = Force.Create(-result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
+                AArmLowerReaction2 = Force.Create(-result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
+                AArmUpperReaction1 = Force.Create(-result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
+                AArmUpperReaction2 = Force.Create(-result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
+                ShockAbsorberReaction = Force.Create(-result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
+                TieRodReaction = Force.Create(-result[5], suspensionSystem.TieRod.NormalizedDirection)
+            };
+
+            return shouldRound == false ? responseData : responseData.Round(decimals.Value);
         }
 
         /// <summary>

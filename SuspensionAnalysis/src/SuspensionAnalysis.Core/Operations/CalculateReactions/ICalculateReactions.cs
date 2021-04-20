@@ -15,7 +15,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// </summary>
         /// <param name="force"></param>
         /// <returns></returns>
-        double[] BuildReactionVector(Vector3D force);
+        double[] BuildEffortsVector(Vector3D force);
 
         /// <summary>
         /// This method builds the matrix with normalized force directions and displacements.
@@ -33,6 +33,6 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// <param name="shouldRound"></param>
         /// <param name="decimals"></param>
         /// <returns></returns>
-        CalculateReactionsResponseData MapToResponse(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int decimals);
+        CalculateReactionsResponseData MapToResponseData(SuspensionSystem suspensionSystem, double[] result, bool shouldRound, int? decimals);
     }
 }
