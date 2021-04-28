@@ -22,7 +22,7 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         public double AppliedForce2 { get; set; }
 
         /// <summary>
-        /// The poitn of fastening with steering knuckle.
+        /// The point of fastening with steering knuckle.
         /// </summary>
         public Point3D KnucklePoint { get; set; }
 
