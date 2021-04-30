@@ -27,7 +27,5 @@ namespace SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions
         /// Unit: N (Newton).
         /// </summary>
         public Force TieRodReaction { get; set; }
-
-
     }
 }
