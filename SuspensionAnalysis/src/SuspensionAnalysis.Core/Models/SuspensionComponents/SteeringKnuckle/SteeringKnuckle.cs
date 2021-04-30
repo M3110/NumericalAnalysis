@@ -1,6 +1,6 @@
 ﻿using SuspensionAnalysis.DataContracts.Models;
 
-namespace SuspensionAnalysis.Core.Models.SuspensionComponents
+namespace SuspensionAnalysis.Core.Models.SuspensionComponents.SteeringKnuckle
 {
     /// <summary>
     /// It represents the steering knuckle.
