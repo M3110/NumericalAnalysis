@@ -6,4 +6,4 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.0.0] - 2021-04-20
 ### Added
-- First version of the program.
+ - First version of the program.
