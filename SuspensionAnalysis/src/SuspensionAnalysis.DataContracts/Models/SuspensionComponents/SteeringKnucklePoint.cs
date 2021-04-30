@@ -1,25 +1,29 @@
-﻿using SuspensionAnalysis.DataContracts.Models;
-
-namespace SuspensionAnalysis.Core.Models.SuspensionComponents
+﻿namespace SuspensionAnalysis.DataContracts.Models.SuspensionComponents
 {
     /// <summary>
     /// It represents the steering knuckle.
     /// </summary>
-    public class SteeringKnuckle
+    public class SteeringKnucklePoint
     {
         /// <summary>
         /// The point of fastening with A-arm upper. 
         /// </summary>
-        public Point3D AArmUpperPoint { get; set; }
+        /// <example>x,y,z</example>
+
+        public string AArmUpperPoint { get; set; }
 
         /// <summary>
         /// The point of fastening with A-arm lower.
         /// </summary>
-        public Point3D AArmLowerPoint { get; set; }
+        /// <example>x,y,z</example>
+
+        public string AArmLowerPoint { get; set; }
 
         /// <summary>
         /// The point of fastening with tie rod.
         /// </summary>
-        public Point3D TieRodPoint { get; set; }
+        /// <example>x,y,z</example>
+
+        public string TieRodPoint { get; set; }
     }
 }
