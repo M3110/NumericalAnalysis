@@ -1,27 +1,27 @@
 ﻿using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 
-namespace SuspensionAnalysis.DataContracts.Models
+namespace SuspensionAnalysis.Core.Models
 {
     /// <summary>
     /// It contains the necessary information about each material that could be used in project.
     /// </summary>
-    public struct Bearing
+    public struct Material
     {
         /// <summary>
         /// It contains the necessary information about Steel SAE 1020.
         /// </summary>
-        public static readonly Bearing Steel1020 = new Bearing(youngModulus: 205e9, yieldStrength: 350e6, specificMass: 7850);
+        public static readonly Material Steel1020 = new Material(youngModulus: 205e9, yieldStrength: 350e6, specificMass: 7850);
 
         /// <summary>
         /// It contains the necessary information about Steel SAE 4130.
         /// </summary>
-        public static readonly Bearing Steel1045 = new Bearing(youngModulus: 200e9, yieldStrength: 450e6, specificMass: 7850);
+        public static readonly Material Steel1045 = new Material(youngModulus: 200e9, yieldStrength: 450e6, specificMass: 7850);
 
         /// <summary>
         /// It contains the necessary information about Aluminum 6061-T6.
         /// </summary>
-        public static readonly Bearing Aluminum6061T6 = new Bearing(youngModulus: 70e9, yieldStrength: 310e6, specificMass: 2710);
+        public static readonly Material Aluminum6061T6 = new Material(youngModulus: 70e9, yieldStrength: 310e6, specificMass: 2710);
 
         /// <summary>
         /// Class constructor.
@@ -29,7 +29,7 @@ namespace SuspensionAnalysis.DataContracts.Models
         /// <param name="youngModulus"></param>
         /// <param name="specificMass"></param>
         /// <param name="yieldStrength"></param>
-        private Bearing(double youngModulus, double yieldStrength, double specificMass)
+        private Material(double youngModulus, double yieldStrength, double specificMass)
         {
             this.YoungModulus = youngModulus;
             this.YieldStrength = yieldStrength;
@@ -55,17 +55,17 @@ namespace SuspensionAnalysis.DataContracts.Models
         public double SpecificMass { get; }
 
         /// <summary>
-        /// This method creates an instance of class <seealso cref="Bearing"/>.
+        /// This method creates an instance of class <seealso cref="Material"/>.
         /// </summary>
         /// <param name="materialType"></param>
         /// <returns></returns>
-        public static Bearing Create(MaterialType materialType)
+        public static Material Create(MaterialType materialType)
         {
             return materialType switch
             {
-                MaterialType.Steel1020 => Bearing.Steel1020,
-                MaterialType.Steel1045 => Bearing.Steel1045,
-                MaterialType.Aluminum6061T6 => Bearing.Aluminum6061T6,
+                MaterialType.Steel1020 => Steel1020,
+                MaterialType.Steel1045 => Steel1045,
+                MaterialType.Aluminum6061T6 => Aluminum6061T6,
 
                 _ => throw new Exception($"Invalid material: '{materialType}'.")
             };

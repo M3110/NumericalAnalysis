@@ -97,7 +97,7 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         /// <summary>
         /// The material.
         /// </summary>
-        public DataContracts.Models.Bearing Material { get; set; }
+        public Material Material { get; set; }
         
         /// <summary>
         /// The profile.
@@ -122,7 +122,7 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
                 Profile = suspensionAArm.Profile,
                 AppliedForce1 = appliedForce1,
                 AppliedForce2 = appliedForce2,
-                Material = DataContracts.Models.Bearing.Create(material)
+                Material = Material.Create(material)
             };
         }
     }
