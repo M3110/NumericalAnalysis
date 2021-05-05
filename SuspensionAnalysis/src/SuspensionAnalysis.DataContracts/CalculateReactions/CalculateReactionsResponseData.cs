@@ -9,32 +9,32 @@ namespace SuspensionAnalysis.DataContracts.CalculateReactions
     public class CalculateReactionsResponseData : OperationResponseData
     {
         /// <summary>
-        /// The reaction to suspension A-arm upper.
+        /// The reaction to suspension upper wishbone. 
         /// This component has two reactions.
         /// Unit: N (Newton).
         /// </summary>
-        public Force AArmUpperReaction1 { get; set; }
+        public Force UpperWishboneReaction1 { get; set; }
 
         /// <summary>
-        /// The reaction to suspension A-arm upper.
+        /// The reaction to suspension upper wishbone.
         /// This component has two reactions.
         /// Unit: N (Newton).
         /// </summary>
-        public Force AArmUpperReaction2 { get; set; }
+        public Force UpperWishboneReaction2 { get; set; }
 
         /// <summary>
-        /// The reaction to suspension A-arm lower.
+        /// The reaction to suspension lower wishbone.
         /// This component has two reactions.
         /// Unit: N (Newton).
         /// </summary>
-        public Force AArmLowerReaction1 { get; set; }
+        public Force LowerWishboneReaction1 { get; set; }
 
         /// <summary>
-        /// The reaction to suspension A-arm lower.
+        /// The reaction to suspension lower wishbone.
         /// This component has two reactions.
         /// Unit: N (Newton).
         /// </summary>
-        public Force AArmLowerReaction2 { get; set; }
+        public Force LowerWishboneReaction2 { get; set; }
 
         /// <summary>
         /// The reaction to shock absorber.
@@ -58,10 +58,10 @@ namespace SuspensionAnalysis.DataContracts.CalculateReactions
         {
             return new CalculateReactionsResponseData
             {
-                AArmLowerReaction1 = this.AArmLowerReaction1.Round(decimals),
-                AArmLowerReaction2 = this.AArmLowerReaction2.Round(decimals),
-                AArmUpperReaction1 = this.AArmUpperReaction1.Round(decimals),
-                AArmUpperReaction2 = this.AArmUpperReaction2.Round(decimals),
+                LowerWishboneReaction1 = this.LowerWishboneReaction1.Round(decimals),
+                LowerWishboneReaction2 = this.LowerWishboneReaction2.Round(decimals),
+                UpperWishboneReaction1 = this.UpperWishboneReaction1.Round(decimals),
+                UpperWishboneReaction2 = this.UpperWishboneReaction2.Round(decimals),
                 ShockAbsorberReaction = this.ShockAbsorberReaction.Round(decimals),
                 TieRodReaction = this.TieRodReaction.Round(decimals)
             };

@@ -8,12 +8,12 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents.SteeringKnuckle
     public class SteeringKnuckle
     {
         /// <summary>
-        /// The point of fastening with A-arm upper. 
+        /// The point of fastening with wishbone upper. 
         /// </summary>
         public Point3D AArmUpperPoint { get; set; }
 
         /// <summary>
-        /// The point of fastening with A-arm lower.
+        /// The point of fastening with wishbone lower.
         /// </summary>
         public Point3D AArmLowerPoint { get; set; }
 

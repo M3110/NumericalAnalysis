@@ -108,10 +108,10 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
         public void MapToResponseData_ValidParameters_When_ShouldRound_Is_True_Should_Return_ValidReactions(int decimals)
         {
             // Arrange
-            this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue = Math.Round(-this._reactions[0], decimals);
-            this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue = Math.Round(-this._reactions[1], decimals);
-            this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue = Math.Round(-this._reactions[2], decimals);
-            this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue = Math.Round(-this._reactions[3], decimals);
+            this._expectedResponse.Data.LowerWishboneReaction1.AbsolutValue = Math.Round(-this._reactions[0], decimals);
+            this._expectedResponse.Data.LowerWishboneReaction2.AbsolutValue = Math.Round(-this._reactions[1], decimals);
+            this._expectedResponse.Data.UpperWishboneReaction1.AbsolutValue = Math.Round(-this._reactions[2], decimals);
+            this._expectedResponse.Data.UpperWishboneReaction2.AbsolutValue = Math.Round(-this._reactions[3], decimals);
             this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue = Math.Round(-this._reactions[4], decimals);
             this._expectedResponse.Data.TieRodReaction.AbsolutValue = Math.Round(-this._reactions[5], decimals);
 
@@ -120,10 +120,10 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
 
             // Assert
             responseData.Should().NotBeNull();
-            responseData.AArmLowerReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue);
-            responseData.AArmLowerReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue);
-            responseData.AArmUpperReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue);
-            responseData.AArmUpperReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue);
+            responseData.LowerWishboneReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.LowerWishboneReaction1.AbsolutValue);
+            responseData.LowerWishboneReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.LowerWishboneReaction2.AbsolutValue);
+            responseData.UpperWishboneReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.UpperWishboneReaction1.AbsolutValue);
+            responseData.UpperWishboneReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.UpperWishboneReaction2.AbsolutValue);
             responseData.ShockAbsorberReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue);
             responseData.TieRodReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.TieRodReaction.AbsolutValue);
         }
@@ -136,10 +136,10 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
 
             // Assert
             responseData.Should().NotBeNull();
-            responseData.AArmLowerReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue);
-            responseData.AArmLowerReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue);
-            responseData.AArmUpperReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue);
-            responseData.AArmUpperReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue);
+            responseData.LowerWishboneReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.LowerWishboneReaction1.AbsolutValue);
+            responseData.LowerWishboneReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.LowerWishboneReaction2.AbsolutValue);
+            responseData.UpperWishboneReaction1.AbsolutValue.Should().Be(this._expectedResponse.Data.UpperWishboneReaction1.AbsolutValue);
+            responseData.UpperWishboneReaction2.AbsolutValue.Should().Be(this._expectedResponse.Data.UpperWishboneReaction2.AbsolutValue);
             responseData.ShockAbsorberReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue);
             responseData.TieRodReaction.AbsolutValue.Should().Be(this._expectedResponse.Data.TieRodReaction.AbsolutValue);
         }
@@ -159,10 +159,10 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.CalculateReactions
             response.Success.Should().Be(this._expectedResponse.Success);
             response.Errors.Should().BeEquivalentTo(this._expectedResponse.Errors);
             response.Data.Should().NotBeNull();
-            response.Data.AArmLowerReaction1.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmLowerReaction1.AbsolutValue, precision);
-            response.Data.AArmLowerReaction2.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmLowerReaction2.AbsolutValue, precision);
-            response.Data.AArmUpperReaction1.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmUpperReaction1.AbsolutValue, precision);
-            response.Data.AArmUpperReaction2.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.AArmUpperReaction2.AbsolutValue, precision);
+            response.Data.LowerWishboneReaction1.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.LowerWishboneReaction1.AbsolutValue, precision);
+            response.Data.LowerWishboneReaction2.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.LowerWishboneReaction2.AbsolutValue, precision);
+            response.Data.UpperWishboneReaction1.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.UpperWishboneReaction1.AbsolutValue, precision);
+            response.Data.UpperWishboneReaction2.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.UpperWishboneReaction2.AbsolutValue, precision);
             response.Data.ShockAbsorberReaction.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.ShockAbsorberReaction.AbsolutValue, precision);
             response.Data.TieRodReaction.AbsolutValue.Should().BeApproximately(this._expectedResponse.Data.TieRodReaction.AbsolutValue, precision);
         }

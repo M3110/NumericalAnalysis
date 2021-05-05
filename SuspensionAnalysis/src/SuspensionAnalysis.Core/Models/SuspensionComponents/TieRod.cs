@@ -37,7 +37,7 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         /// <summary>
         /// The material.
         /// </summary>
-        public Material Material { get; set; }
+        public DataContracts.Models.Bearing Material { get; set; }
 
         /// <summary>
         /// The profile.
@@ -59,7 +59,7 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
                 PivotPoint = Point3D.Create(tieRod.PivotPoint),
                 AppliedForce = appliedForce,
                 Profile = tieRod.Profile,
-                Material = Material.Create(material)
+                Material = DataContracts.Models.Bearing.Create(material)
             };
         }
     }

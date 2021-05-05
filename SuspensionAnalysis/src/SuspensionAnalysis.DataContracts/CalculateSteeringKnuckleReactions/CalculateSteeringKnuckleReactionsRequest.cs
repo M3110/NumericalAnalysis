@@ -13,8 +13,8 @@ namespace SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions
         /// <summary>
         /// The request content to CalculateReactions operation. 
         /// </summary>
-        public CalculateReactionsRequest CalculateReactionsRequest { get; set; } 
-        
+        public CalculateReactionsRequest CalculateReactionsRequest { get; set; }
+
         /// <summary>
         /// The 'data' content of operation CalculateReactions response.
         /// </summary>
@@ -45,5 +45,7 @@ namespace SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions
         /// The steering knuckle points. 
         /// </summary>
         public SteeringKnucklePoint SteeringKnuckle { get; set; }
+
+        public BearingType Bearing { get; set; }
     }
 }

@@ -9,13 +9,13 @@ namespace SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions
     public class CalculateSteeringKnuckleReactionsResponseData : OperationResponseData
     {
         /// <summary>
-        /// The reaction from suspension A-arm upper.
+        /// The reaction from suspension upper wishbone.
         /// Unit: N (Newton).
         /// </summary>
         public Force AArmUpperReaction { get; set; }
 
         /// <summary>
-        /// The reaction from suspension A-arm lower.
+        /// The reaction from suspension lower wishbone.
         /// Unit: N (Newton).
         /// </summary>
         public Force AArmLowerReaction { get; set; }

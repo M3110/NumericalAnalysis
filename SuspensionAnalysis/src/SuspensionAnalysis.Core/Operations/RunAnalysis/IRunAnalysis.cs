@@ -41,12 +41,12 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
         Task<TieRodAnalysisResult> GenerateTieRodResultAsync(CoreModels.TieRod<TProfile> component, bool shouldRound, int decimals = 0);
 
         /// <summary>
-        /// Asynchronously, this method generates the analysis result to suspension A-arm.
+        /// Asynchronously, this method generates the analysis result to suspension wishbone.
         /// </summary>
         /// <param name="component"></param>
         /// <param name="shouldRound"></param>
         /// <param name="decimals"></param>
         /// <returns></returns>
-        Task<SuspensionAArmAnalysisResult> GenerateSuspensionAArmResultAsync(CoreModels.SuspensionAArm<TProfile> component, bool shouldRound, int decimals = 0);
+        Task<SuspensionWishboneAnalysisResult> GenerateSuspensionAArmResultAsync(CoreModels.SuspensionWishbone<TProfile> component, bool shouldRound, int decimals = 0);
     }
 }

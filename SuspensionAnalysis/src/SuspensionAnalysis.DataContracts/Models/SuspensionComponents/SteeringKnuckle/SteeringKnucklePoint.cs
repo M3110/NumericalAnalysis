@@ -6,16 +6,16 @@
     public class SteeringKnucklePoint
     {
         /// <summary>
-        /// The point of fastening with A-arm upper. 
+        /// The point of fastening with upper wishbone. 
         /// </summary>
         /// <example>x,y,z</example>
-        public string AArmUpperPoint { get; set; }
+        public string UpperWishbonePoint { get; set; }
 
         /// <summary>
-        /// The point of fastening with A-arm lower.
+        /// The point of fastening with lower wishbone.
         /// </summary>
         /// <example>x,y,z</example>
-        public string AArmLowerPoint { get; set; }
+        public string LowerWishbonePoint { get; set; }
 
         /// <summary>
         /// The point of fastening with tie rod.
