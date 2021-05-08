@@ -8,8 +8,6 @@ using SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions;
 using SuspensionAnalysis.DataContracts.Models;
 using SuspensionAnalysis.DataContracts.Models.Enums;
 using SuspensionAnalysis.DataContracts.OperationBase;
-using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.CalculateStearingKnuckleReactions
@@ -26,21 +24,6 @@ namespace SuspensionAnalysis.Core.Operations.CalculateStearingKnuckleReactions
             this._calculateReactions = calculateReactions;
         }
 
-        public override async Task<CalculateSteeringKnuckleReactionsResponse> ValidateOperationAsync(CalculateSteeringKnuckleReactionsRequest request)
-        {
-            CalculateSteeringKnuckleReactionsResponse response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
-            if (response.Success == false)
-            {
-                return response;
-            }
-
-            if (request.CalculateReactionsRequest == null && request.CalculateReactionsResponseData == null)
-            {
-                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "The forces applied to the steering knukle or the suspension points must be passed on request");
-            }
-
-            return response;
-        }
 
         public Force CalculateTieRodReactions(Force tieRodReaction, string steeringWheelForce, SuspensionPosition suspensionPosition)
         {
@@ -122,6 +105,22 @@ namespace SuspensionAnalysis.Core.Operations.CalculateStearingKnuckleReactions
             response.Data.TieRodReaction = this.CalculateTieRodReactions(suspensionSystemEfforts.TieRodReaction, request.SteeringWheelForce, request.SuspensionPosition);
             response.Data.BearingReaction = this.CalculateBearingReaction(request);
             (response.Data.BrakeCaliperSupportReaction1, response.Data.BrakeCaliperSupportReaction2) = this.CalculateBrakeCaliperReactions(request);
+
+            return response;
+        }
+
+        public override async Task<CalculateSteeringKnuckleReactionsResponse> ValidateOperationAsync(CalculateSteeringKnuckleReactionsRequest request)
+        {
+            CalculateSteeringKnuckleReactionsResponse response = await base.ValidateOperationAsync(request).ConfigureAwait(false);
+            if (response.Success == false)
+            {
+                return response;
+            }
+
+            if (request.CalculateReactionsRequest == null && request.CalculateReactionsResponseData == null)
+            {
+                response.SetBadRequestError(OperationErrorCode.RequestValidationError, "The forces applied to the steering knukle or the suspension points must be passed on request");
+            }
 
             return response;
         }
