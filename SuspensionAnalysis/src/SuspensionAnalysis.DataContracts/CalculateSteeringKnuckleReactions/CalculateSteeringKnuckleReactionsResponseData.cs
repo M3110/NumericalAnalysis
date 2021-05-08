@@ -12,13 +12,13 @@ namespace SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions
         /// The reaction from suspension upper wishbone.
         /// Unit: N (Newton).
         /// </summary>
-        public Force AArmUpperReaction { get; set; }
+        public Force UpperWishboneReaction { get; set; }
 
         /// <summary>
         /// The reaction from suspension lower wishbone.
         /// Unit: N (Newton).
         /// </summary>
-        public Force AArmLowerReaction { get; set; }
+        public Force LowerWishboneReaction { get; set; }
 
         /// <summary>
         /// The reaction from tie rod.

@@ -1,7 +1,7 @@
 ﻿using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 
-namespace SuspensionAnalysis.DataContracts.Models.SuspensionComponents
+namespace SuspensionAnalysis.Core.Models.SuspensionComponents
 {
     /// <summary>
     /// It contains the necessary information about whatever bearing.
@@ -36,7 +36,7 @@ namespace SuspensionAnalysis.DataContracts.Models.SuspensionComponents
         {
             return bearingType switch
             {
-                BearingType.Bearing1 => Bearing.Bearing1,
+                BearingType.Bearing1 => Bearing1,
                 _ => throw new Exception($"Invalid bearing: '{bearingType}'.")
             };
         }

@@ -1,0 +1,43 @@
+{
+  "success": true,
+  "httpStatusCode": "OK",
+  "errors": [],
+  "data": {
+    "upperWishboneReaction1": {
+      "absolutValue": 4977,
+      "x": 4627,
+      "y": 1821,
+      "z": -198
+    },
+    "upperWishboneReaction2": {
+      "absolutValue": 2073,
+      "x": -900,
+      "y": 1862,
+      "z": 146
+    },
+    "lowerWishboneReaction1": {
+      "absolutValue": -4981,
+      "x": -4523,
+      "y": -1832,
+      "z": 999
+    },
+    "lowerWishboneReaction2": {
+      "absolutValue": -11888,
+      "x": 5141,
+      "y": -10612,
+      "z": 1508
+    },
+    "shockAbsorberReaction": {
+      "absolutValue": 16720,
+      "x": -3722,
+      "y": 6140,
+      "z": -15100
+    },
+    "tieRodReaction": {
+      "absolutValue": 2696,
+      "x": -624,
+      "y": 2622,
+      "z": -90
+    }
+  }
+}

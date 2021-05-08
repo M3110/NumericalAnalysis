@@ -1,0 +1,24 @@
+{
+  "shouldRoundResults": true,
+  "numberOfDecimalsToRound": 0,
+  "origin": " 4092.50,665.00,46.4",
+  "appliedForce": "0,0,10585",
+  "shockAbsorber": {
+    "pivotPoint": "4143.80,295.00,616.08",
+    "fasteningPoint": "4087.19,515.89,272.55"
+  },
+  "upperWishbone": {
+    "wishboneOuterBallJoint": "4110.04,520.56,412.57",
+    "wishboneFrontPivot": "3874.85,295.00,538.10",
+    "wishboneRearPivot": "4290.00,295.00,450.39"
+  },
+  "lowerWishbone": {
+    "wishboneOuterBallJoint": " 4082.43,577.00,255.98",
+    "wishboneFrontPivot": "3874.85,295.00,342.22",
+    "wishboneRearPivot": "4290.00,295.00,342.22"
+  },
+  "tieRod": {
+    "pivotPoint": "4019.41,295.00,415.34",
+    "fasteningPoint": "4039.52,559.89,335.45"
+  }
+}

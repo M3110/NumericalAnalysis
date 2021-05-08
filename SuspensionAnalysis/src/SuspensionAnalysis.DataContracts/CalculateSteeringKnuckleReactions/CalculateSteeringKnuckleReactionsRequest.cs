@@ -21,19 +21,29 @@ namespace SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions
         public CalculateReactionsResponseData CalculateReactionsResponseData { get; set; }
 
         /// <summary>
-        /// The inertia torque is torque due to brake caliper inertia when coming into contact with the brake disc. 
+        /// The inertial force is the force due to brake caliper inertia when coming into contact with the brake disc. 
         /// </summary>
-        public string InertiaTorque { get; set; }
+        public string InertialForce { get; set; }
 
         /// <summary>
-        /// The engine's torque. 
+        /// The coordinate of inertial force.
         /// </summary>
-        public string EngineTorque { get; set; }
+        public string InertialForceCoordinate { get; set; }
 
         /// <summary>
         /// It represents the force that the driver uses when moving the steering wheel. 
         /// </summary>
         public string SteeringWheelForce { get; set; }
+
+        /// <summary>
+        /// The torque applied at bearing.
+        /// </summary>
+        public double BearingTorque { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public BearingType BearingType { get; set; }
 
         /// <summary>
         /// The steering knuckle position.
@@ -45,7 +55,5 @@ namespace SuspensionAnalysis.DataContracts.CalculateSteeringKnuckleReactions
         /// The steering knuckle points. 
         /// </summary>
         public SteeringKnucklePoint SteeringKnuckle { get; set; }
-
-        public BearingType Bearing { get; set; }
     }
 }
