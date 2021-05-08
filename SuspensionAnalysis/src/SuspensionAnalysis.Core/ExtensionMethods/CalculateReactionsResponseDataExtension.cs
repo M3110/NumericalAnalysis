@@ -16,8 +16,8 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         public static double CalculateForceXSum(this CalculateReactionsResponseData responseData, double appliedForce)
         {
             return
-                responseData.AArmLowerReaction1.X + responseData.AArmLowerReaction2.X
-                + responseData.AArmUpperReaction1.X + responseData.AArmUpperReaction2.X
+                responseData.LowerWishboneReaction1.X + responseData.LowerWishboneReaction2.X
+                + responseData.UpperWishboneReaction1.X + responseData.UpperWishboneReaction2.X
                 + responseData.ShockAbsorberReaction.X - appliedForce;
         }
 
@@ -30,8 +30,8 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         public static double CalculateForceYSum(this CalculateReactionsResponseData responseData, double appliedForce)
         {
             return
-                responseData.AArmLowerReaction1.Y + responseData.AArmLowerReaction2.Y
-                + responseData.AArmUpperReaction1.Y + responseData.AArmUpperReaction2.Y
+                responseData.LowerWishboneReaction1.Y + responseData.LowerWishboneReaction2.Y
+                + responseData.UpperWishboneReaction1.Y + responseData.UpperWishboneReaction2.Y
                 + responseData.ShockAbsorberReaction.Y - appliedForce;
         }
 
@@ -44,8 +44,8 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         public static double CalculateForceZSum(this CalculateReactionsResponseData responseData, double appliedForce)
         {
             return
-                responseData.AArmLowerReaction1.Z + responseData.AArmLowerReaction2.Z
-                + responseData.AArmUpperReaction1.Z + responseData.AArmUpperReaction2.Z
+                responseData.LowerWishboneReaction1.Z + responseData.LowerWishboneReaction2.Z
+                + responseData.UpperWishboneReaction1.Z + responseData.UpperWishboneReaction2.Z
                 + responseData.ShockAbsorberReaction.Z - appliedForce;
         }
     }

@@ -20,7 +20,7 @@ namespace SuspensionAnalysis.DataContracts.RunAnalysis
         /// The safety factor.
         /// </summary>
         public double SafetyFactor
-            => (new List<double> { this.SuspensionAArmUpperResult.SafetyFactor, this.SuspensionAArmLowerResult.SafetyFactor, this.TieRod.SafetyFactor }).Min();
+            => (new List<double> { this.UpperWishboneResult.SafetyFactor, this.LowerWishboneResult.SafetyFactor, this.TieRod.SafetyFactor }).Min();
 
         /// <summary>
         /// The force reactions at shock absorber.
@@ -28,14 +28,14 @@ namespace SuspensionAnalysis.DataContracts.RunAnalysis
         public Force ShockAbsorber { get; set; }
 
         /// <summary>
-        /// The analysis result to suspension A-arm upper.
+        /// The analysis result to suspension upper wishbone.
         /// </summary>
-        public SuspensionAArmAnalysisResult SuspensionAArmUpperResult { get; set; }
+        public SuspensionWishboneAnalysisResult UpperWishboneResult { get; set; }
 
         /// <summary>
-        /// The analysis result to suspension A-arm lower.
+        /// The analysis result to suspension lower wishbone.
         /// </summary>
-        public SuspensionAArmAnalysisResult SuspensionAArmLowerResult { get; set; }
+        public SuspensionWishboneAnalysisResult LowerWishboneResult { get; set; }
 
         /// <summary>
         /// The analysis result to tie rod.

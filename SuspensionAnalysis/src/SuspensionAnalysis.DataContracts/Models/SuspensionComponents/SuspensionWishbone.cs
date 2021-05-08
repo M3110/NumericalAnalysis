@@ -3,10 +3,10 @@
 namespace SuspensionAnalysis.DataContracts.Models.SuspensionComponents
 {
     /// <summary>
-    /// It represents the suspension A-arm.
+    /// It represents the suspension wishbone.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class SuspensionAArm<TProfile> : SuspensionAArmPoint
+    public class SuspensionWishbone<TProfile> : SuspensionWishbonePoint
         where TProfile : Profile
     {
         /// <summary>

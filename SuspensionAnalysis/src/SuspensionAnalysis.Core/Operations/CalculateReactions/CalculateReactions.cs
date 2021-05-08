@@ -122,17 +122,17 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
         /// <returns></returns>
         public double[,] BuildDisplacementMatrix(SuspensionSystem suspensionSystem, Point3D origin)
         {
-            Vector3D u1 = suspensionSystem.SuspensionAArmLower.NormalizedDirection1;
-            Vector3D u2 = suspensionSystem.SuspensionAArmLower.NormalizedDirection2;
-            Vector3D u3 = suspensionSystem.SuspensionAArmUpper.NormalizedDirection1;
-            Vector3D u4 = suspensionSystem.SuspensionAArmUpper.NormalizedDirection2;
+            Vector3D u1 = suspensionSystem.LowerWishbone.NormalizedDirection1;
+            Vector3D u2 = suspensionSystem.LowerWishbone.NormalizedDirection2;
+            Vector3D u3 = suspensionSystem.UpperWishbone.NormalizedDirection1;
+            Vector3D u4 = suspensionSystem.UpperWishbone.NormalizedDirection2;
             Vector3D u5 = suspensionSystem.ShockAbsorber.NormalizedDirection;
             Vector3D u6 = suspensionSystem.TieRod.NormalizedDirection;
 
-            Vector3D r1 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmLower.PivotPoint1);
-            Vector3D r2 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmLower.PivotPoint2);
-            Vector3D r3 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmUpper.PivotPoint1);
-            Vector3D r4 = Vector3D.Create(origin, suspensionSystem.SuspensionAArmUpper.PivotPoint2);
+            Vector3D r1 = Vector3D.Create(origin, suspensionSystem.LowerWishbone.WishboneFrontPivot);
+            Vector3D r2 = Vector3D.Create(origin, suspensionSystem.LowerWishbone.WishboneRearPivot);
+            Vector3D r3 = Vector3D.Create(origin, suspensionSystem.UpperWishbone.WishboneFrontPivot);
+            Vector3D r4 = Vector3D.Create(origin, suspensionSystem.UpperWishbone.WishboneRearPivot);
             Vector3D r5 = Vector3D.Create(origin, suspensionSystem.ShockAbsorber.PivotPoint);
             Vector3D r6 = Vector3D.Create(origin, suspensionSystem.TieRod.PivotPoint);
 
@@ -160,10 +160,10 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             // The code below changes the sinal of result (-result) to attest that is passed the component force and not the reactions at chassis.
             var responseData = new CalculateReactionsResponseData
             {
-                AArmLowerReaction1 = Force.Create(-result[0], suspensionSystem.SuspensionAArmLower.NormalizedDirection1),
-                AArmLowerReaction2 = Force.Create(-result[1], suspensionSystem.SuspensionAArmLower.NormalizedDirection2),
-                AArmUpperReaction1 = Force.Create(-result[2], suspensionSystem.SuspensionAArmUpper.NormalizedDirection1),
-                AArmUpperReaction2 = Force.Create(-result[3], suspensionSystem.SuspensionAArmUpper.NormalizedDirection2),
+                LowerWishboneReaction1 = Force.Create(-result[0], suspensionSystem.LowerWishbone.NormalizedDirection1),
+                LowerWishboneReaction2 = Force.Create(-result[1], suspensionSystem.LowerWishbone.NormalizedDirection2),
+                UpperWishboneReaction1 = Force.Create(-result[2], suspensionSystem.UpperWishbone.NormalizedDirection1),
+                UpperWishboneReaction2 = Force.Create(-result[3], suspensionSystem.UpperWishbone.NormalizedDirection2),
                 ShockAbsorberReaction = Force.Create(-result[4], suspensionSystem.ShockAbsorber.NormalizedDirection),
                 TieRodReaction = Force.Create(-result[5], suspensionSystem.TieRod.NormalizedDirection)
             };

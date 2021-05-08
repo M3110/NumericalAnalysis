@@ -10,6 +10,7 @@ using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
 using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
+using SuspensionAnalysis.Core.Operations.CalculateStearingKnuckleReactions;
 using SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile;
 using SuspensionAnalysis.Core.Operations.RunAnalysis.RectangularProfile;
 
@@ -42,6 +43,8 @@ namespace SuspensionAnalysis
             services.AddScoped<ICalculateReactions, CalculateReactions>();
             services.AddScoped<IRunCircularProfileAnalysis, RunCircularProfileAnalysis>();
             services.AddScoped<IRunRectangularProfileAnalysis, RunRectangularProfileAnalysis>();
+            services.AddScoped<ICalculateSteeringKnuckleReactions, CalculateSteeringKnuckleReactions>();
+            
 
             services
                 .AddControllers()

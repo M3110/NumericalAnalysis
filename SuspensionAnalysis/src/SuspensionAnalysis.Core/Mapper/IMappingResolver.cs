@@ -18,7 +18,7 @@ namespace SuspensionAnalysis.Core.Mapper
         SuspensionSystem MapFrom(CalculateReactionsRequest request);
 
         /// <summary>
-        /// This method craetes a <see cref="SuspensionAArm{TProfile}"/> based on <see cref="RunAnalysisRequest{TProfile}"/> and <see cref="CalculateReactionsResponseData"/>.
+        /// This method craetes a <see cref="SuspensionWishbone{TProfile}"/> based on <see cref="RunAnalysisRequest{TProfile}"/> and <see cref="CalculateReactionsResponseData"/>.
         /// </summary>
         /// <typeparam name="TProfile"></typeparam>
         /// <param name="runAnalysisRequest"></param>

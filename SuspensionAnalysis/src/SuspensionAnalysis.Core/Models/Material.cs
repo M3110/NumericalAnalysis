@@ -1,7 +1,7 @@
 ﻿using SuspensionAnalysis.DataContracts.Models.Enums;
 using System;
 
-namespace SuspensionAnalysis.DataContracts.Models
+namespace SuspensionAnalysis.Core.Models
 {
     /// <summary>
     /// It contains the necessary information about each material that could be used in project.
@@ -63,9 +63,9 @@ namespace SuspensionAnalysis.DataContracts.Models
         {
             return materialType switch
             {
-                MaterialType.Steel1020 => Material.Steel1020,
-                MaterialType.Steel1045 => Material.Steel1045,
-                MaterialType.Aluminum6061T6 => Material.Aluminum6061T6,
+                MaterialType.Steel1020 => Steel1020,
+                MaterialType.Steel1045 => Steel1045,
+                MaterialType.Aluminum6061T6 => Aluminum6061T6,
 
                 _ => throw new Exception($"Invalid material: '{materialType}'.")
             };

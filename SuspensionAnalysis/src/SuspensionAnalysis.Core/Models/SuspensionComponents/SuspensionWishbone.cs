@@ -7,81 +7,81 @@ using DataContract = SuspensionAnalysis.DataContracts.Models.SuspensionComponent
 namespace SuspensionAnalysis.Core.Models.SuspensionComponents
 {
     /// <summary>
-    /// It represents the suspension A-arm.
+    /// It represents the suspension wishbone.
     /// </summary>
-    public class SuspensionAArm
+    public class SuspensionWishbone
     {
         /// <summary>
-        /// The absolut applied force to one segment of suspension A-arm.
+        /// The absolut applied force to one segment of suspension wishbone.
         /// </summary>
         public double AppliedForce1 { get; set; }
 
         /// <summary>
-        /// The absolut applied force to another segment of suspension A-arm.
+        /// The absolut applied force to another segment of suspension wishbone.
         /// </summary>
         public double AppliedForce2 { get; set; }
 
         /// <summary>
-        /// The poitn of fastening with steering knuckle.
+        /// The point of fastening with steering knuckle.
         /// </summary>
-        public Point3D KnucklePoint { get; set; }
+        public Point3D WishboneOuterBallJoint { get; set; }
 
         /// <summary>
         /// The pivot point.
         /// This geometry has two pivot point.
         /// </summary>
-        public Point3D PivotPoint1 { get; set; }
+        public Point3D WishboneFrontPivot { get; set; }
 
         /// <summary>
         /// The pivot point.
         /// This geometry has two pivot point.
         /// </summary>
-        public Point3D PivotPoint2 { get; set; }
+        public Point3D WishboneRearPivot { get; set; }
 
         /// <summary>
-        /// The vector that represents the direction of suspension A-arm to one segment of suspension A-arm.
+        /// The vector that represents the direction of suspension wishbone to one segment of suspension wishbone.
         /// </summary>
-        public Vector3D VectorDirection1 => Vector3D.Create(this.PivotPoint1, this.KnucklePoint);
+        public Vector3D VectorDirection1 => Vector3D.Create(this.WishboneFrontPivot, this.WishboneOuterBallJoint);
         
         /// <summary>
-        /// The vector that represents the direction of suspension A-arm to another segment of suspension A-arm.
+        /// The vector that represents the direction of suspension wishbone to another segment of suspension wishbone.
         /// </summary>
-        public Vector3D VectorDirection2 => Vector3D.Create(this.PivotPoint2, this.KnucklePoint);
+        public Vector3D VectorDirection2 => Vector3D.Create(this.WishboneRearPivot, this.WishboneOuterBallJoint);
 
         /// <summary>
-        /// The normalized vector that represents the direction of suspension A-arm to one segment of suspension A-arm.
+        /// The normalized vector that represents the direction of suspension wishbone to one segment of suspension wishbone.
         /// </summary>
         public Vector3D NormalizedDirection1 => this.VectorDirection1.Normalize();
         
         /// <summary>
-        /// The normalized vector that represents the direction of suspension A-arm to anoher segment of suspension A-arm.
+        /// The normalized vector that represents the direction of suspension wishbone to anoher segment of suspension wishbone.
         /// </summary>
         public Vector3D NormalizedDirection2 => this.VectorDirection2.Normalize();
 
         /// <summary>
-        /// The length to one segment of suspension A-arm.
+        /// The length to one segment of suspension wishbone.
         /// </summary>
         public double Length1 => this.VectorDirection1.Length;
 
         /// <summary>
-        /// The length to another segment of suspension A-arm.
+        /// The length to another segment of suspension wishbone.
         /// </summary>
         public double Length2 => this.VectorDirection2.Length;
 
         /// <summary>
-        /// This method creates a <see cref="SuspensionAArm"/> based on <see cref="DataContract.SuspensionAArmPoint"/>.
+        /// This method creates a <see cref="SuspensionWishbone"/> based on <see cref="DataContract.SuspensionWishbonePoint"/>.
         /// </summary>
         /// <param name="suspensionAArm"></param>
         /// <param name="appliedForce1"></param>
         /// <param name="appliedForce2"></param>
         /// <returns></returns>
-        public static SuspensionAArm Create(DataContract.SuspensionAArmPoint suspensionAArm, double appliedForce1 = 0, double appliedForce2 = 0)
+        public static SuspensionWishbone Create(DataContract.SuspensionWishbonePoint suspensionAArm, double appliedForce1 = 0, double appliedForce2 = 0)
         {
-            return new SuspensionAArm
+            return new SuspensionWishbone
             {
-                KnucklePoint = Point3D.Create(suspensionAArm.KnucklePoint),
-                PivotPoint1 = Point3D.Create(suspensionAArm.PivotPoint1),
-                PivotPoint2 = Point3D.Create(suspensionAArm.PivotPoint2),
+                WishboneOuterBallJoint = Point3D.Create(suspensionAArm.WishboneOuterBallJoint),
+                WishboneFrontPivot = Point3D.Create(suspensionAArm.WishboneFrontPivot),
+                WishboneRearPivot = Point3D.Create(suspensionAArm.WishboneRearPivot),
                 AppliedForce1 = appliedForce1,
                 AppliedForce2 = appliedForce2
             };
@@ -89,9 +89,9 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
     }
 
     /// <summary>
-    /// It represents the suspension A-arm.
+    /// It represents the suspension wishbone.
     /// </summary>
-    public class SuspensionAArm<TProfile> : SuspensionAArm
+    public class SuspensionWishbone<TProfile> : SuspensionWishbone
         where TProfile : Profile
     {
         /// <summary>
@@ -105,20 +105,20 @@ namespace SuspensionAnalysis.Core.Models.SuspensionComponents
         public TProfile Profile { get; set; }
 
         /// <summary>
-        /// This method creates a <see cref="SuspensionAArm{TProfile}"/> based on <see cref="DataContract.SuspensionAArm{TProfile}"/>.
+        /// This method creates a <see cref="SuspensionWishbone{TProfile}"/> based on <see cref="DataContract.SuspensionWishbone{TProfile}"/>.
         /// </summary>
         /// <param name="suspensionAArm"></param>
         /// <param name="material"></param>
         /// <param name="appliedForce1"></param>
         /// <param name="appliedForce2"></param>
         /// <returns></returns>
-        public static SuspensionAArm<TProfile> Create(DataContract.SuspensionAArm<TProfile> suspensionAArm, MaterialType material, double appliedForce1 = 0, double appliedForce2 = 0)
+        public static SuspensionWishbone<TProfile> Create(DataContract.SuspensionWishbone<TProfile> suspensionAArm, MaterialType material, double appliedForce1 = 0, double appliedForce2 = 0)
         {
-            return new SuspensionAArm<TProfile>
+            return new SuspensionWishbone<TProfile>
             {
-                KnucklePoint = Point3D.Create(suspensionAArm.KnucklePoint),
-                PivotPoint1 = Point3D.Create(suspensionAArm.PivotPoint1),
-                PivotPoint2 = Point3D.Create(suspensionAArm.PivotPoint2),
+                WishboneOuterBallJoint = Point3D.Create(suspensionAArm.WishboneOuterBallJoint),
+                WishboneFrontPivot = Point3D.Create(suspensionAArm.WishboneFrontPivot),
+                WishboneRearPivot = Point3D.Create(suspensionAArm.WishboneRearPivot),
                 Profile = suspensionAArm.Profile,
                 AppliedForce1 = appliedForce1,
                 AppliedForce2 = appliedForce2,

@@ -63,8 +63,8 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
                 AppliedForce = request.ForceApplied,
                 Origin = request.Origin,
                 ShockAbsorber = ShockAbsorberPoint.Create(request.ShockAbsorber),
-                SuspensionAArmLower = SuspensionAArmPoint.Create(request.SuspensionAArmLower),
-                SuspensionAArmUpper = SuspensionAArmPoint.Create(request.SuspensionAArmUpper),
+                LowerWishbone = SuspensionWishbonePoint.Create(request.LowerWishbone),
+                UpperWishbone = SuspensionWishbonePoint.Create(request.UpperWishbone),
                 TieRod = TieRodPoint.Create(request.TieRod)
             };
         }
@@ -125,16 +125,16 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
         }
 
         /// <summary>
-        /// Asynchronously, this method generates the analysis result to suspension A-arm.
+        /// Asynchronously, this method generates the analysis result to suspension wishbone.
         /// </summary>
         /// <param name="component"></param>
         /// <param name="shouldRound"></param>
         /// <param name="decimals"></param>
         /// <returns></returns>
-        public virtual Task<SuspensionAArmAnalysisResult> GenerateSuspensionAArmResultAsync(CoreModels.SuspensionAArm<TProfile> component, bool shouldRound, int decimals = 0)
+        public virtual Task<SuspensionWishboneAnalysisResult> GenerateSuspensionAArmResultAsync(CoreModels.SuspensionWishbone<TProfile> component, bool shouldRound, int decimals = 0)
         {
             if (component == null)
-                throw new ArgumentNullException(nameof(component), "The object suspension A-arm cannot be null to calculate the results.");
+                throw new ArgumentNullException(nameof(component), "The object suspension wishbone cannot be null to calculate the results.");
 
             // Step 1 - Calculates the geometric properties.
             double area = this._geometricProperty.CalculateArea(component.Profile);
@@ -147,7 +147,7 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
                 this._mechanicsOfMaterials.CalculateNormalStress(component.AppliedForce2, area));
 
             // Step 3 - Builds the analysis result.
-            var result = new SuspensionAArmAnalysisResult()
+            var result = new SuspensionWishboneAnalysisResult()
             {
                 AppliedForce1 = component.AppliedForce1,
                 AppliedForce2 = component.AppliedForce2,
@@ -160,7 +160,7 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
             if (shouldRound == false)
                 return Task.FromResult(result);
 
-            return Task.FromResult(new SuspensionAArmAnalysisResult
+            return Task.FromResult(new SuspensionWishboneAnalysisResult
             {
                 AppliedForce1 = Math.Round(result.AppliedForce1, decimals),
                 AppliedForce2 = Math.Round(result.AppliedForce2, decimals),
@@ -207,12 +207,12 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
 
             tasks.Add(Task.Run(async () =>
             {
-                response.Data.SuspensionAArmLowerResult = await this.GenerateSuspensionAArmResultAsync(suspensionSystem.SuspensionAArmLower, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
+                response.Data.LowerWishboneResult = await this.GenerateSuspensionAArmResultAsync(suspensionSystem.LowerWishbone, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
             }));
 
             tasks.Add(Task.Run(async () =>
             {
-                response.Data.SuspensionAArmUpperResult = await this.GenerateSuspensionAArmResultAsync(suspensionSystem.SuspensionAArmUpper, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
+                response.Data.UpperWishboneResult = await this.GenerateSuspensionAArmResultAsync(suspensionSystem.UpperWishbone, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
             }));
 
             tasks.Add(Task.Run(async () =>

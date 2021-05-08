@@ -8,6 +8,25 @@ namespace SuspensionAnalysis.DataContracts.Models
     public class Force
     {
         /// <summary>
+        /// Basic constructor.
+        /// </summary>
+        public Force() { }
+
+        /// <summary>
+        /// Class constructor.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="z"></param>
+        public Force(double x, double y, double z)
+        {
+            this.AbsolutValue = Math.Sqrt(Math.Pow(x, 2) + Math.Pow(y, 2) + Math.Pow(z, 2));
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+        }
+
+        /// <summary>
         /// the absolut value to force.
         /// </summary>
         public double AbsolutValue { get; set; }
@@ -26,6 +45,21 @@ namespace SuspensionAnalysis.DataContracts.Models
         /// The force at axis Z.
         /// </summary>
         public double Z { get; set; }
+
+        /// <summary>
+        /// This method sum two forces.
+        /// </summary>
+        /// <param name="force"></param>
+        /// <returns></returns>
+        public Force Sum(Force force)
+        {
+            return new Force
+            (
+                this.X + force.X,
+                this.Y + force.Y,
+                this.Z + force.Z
+            );
+        }
 
         /// <summary>
         /// This method rounds each value at <see cref="Force"/> to a specified number of fractional
@@ -58,6 +92,24 @@ namespace SuspensionAnalysis.DataContracts.Models
                 X = absolutValue * normalizedDirection.X,
                 Y = absolutValue * normalizedDirection.Y,
                 Z = absolutValue * normalizedDirection.Z
+            };
+        }
+
+        /// <summary>
+        /// This method creates the <see cref="Force"/> based on a string.
+        /// </summary>
+        /// <param name="force"></param>
+        /// <returns></returns>
+        public static Force Create(string force)
+        {
+            var vector3D = Vector3D.Create(force);
+
+            return new Force
+            {
+                AbsolutValue = vector3D.Length,
+                X = vector3D.X,
+                Y = vector3D.Y,
+                Z = vector3D.Z
             };
         }
     }
