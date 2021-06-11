@@ -1,5 +1,6 @@
 ﻿using SuspensionAnalysis.DataContracts.OperationBase;
 using System;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.Operations.Base
@@ -48,6 +49,9 @@ namespace SuspensionAnalysis.Core.Operations.Base
         /// <returns></returns>
         public async Task<TResponse> ProcessAsync(TRequest request)
         {
+            // Sets the current culture like invariant.
+            CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
             var response = new TResponse();
 
             try

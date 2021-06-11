@@ -9,9 +9,12 @@ using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.Rectang
 using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
 using SuspensionAnalysis.Core.Mapper;
+using SuspensionAnalysis.Core.NumericalMethods.DifferentialEquation.Newmark;
+using SuspensionAnalysis.Core.NumericalMethods.Newmark;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
-using SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile;
-using SuspensionAnalysis.Core.Operations.RunAnalysis.RectangularProfile;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.Dynamic.HalfCar;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.Static.CircularProfile;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.Static.RectangularProfile;
 
 namespace SuspensionAnalysis
 {
@@ -40,8 +43,12 @@ namespace SuspensionAnalysis
 
             // Register operations.
             services.AddScoped<ICalculateReactions, CalculateReactions>();
-            services.AddScoped<IRunCircularProfileAnalysis, RunCircularProfileAnalysis>();
-            services.AddScoped<IRunRectangularProfileAnalysis, RunRectangularProfileAnalysis>();
+            services.AddScoped<IRunCircularProfileStaticAnalysis, RunCircularProfileStaticAnalysis>();
+            services.AddScoped<IRunRectangularProfileStaticAnalysis, RunRectangularProfileStaticAnalysis>();
+            services.AddScoped<IRunHalfCarDynamicAnalysis, RunHalfCarDynamicAnalysis>();
+
+            // Register numerical methods.
+            services.AddScoped<INewmarkMethod, NewmarkMethod>();
 
             services
                 .AddControllers()

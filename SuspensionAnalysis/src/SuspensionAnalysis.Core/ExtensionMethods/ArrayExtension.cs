@@ -17,9 +17,7 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         {
             double vectorNorm = vector.CalculateNorm();
 
-            return vector
-                .Select(item => item / vectorNorm)
-                .ToArray();
+            return vector.Select(item => item / vectorNorm).ToArray();
         }
 
         /// <summary>
@@ -29,9 +27,7 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         /// <returns></returns>
         public static double CalculateNorm(this double[] vector)
         {
-            double result = vector.Sum(v => Math.Pow(v, 2));
-
-            return Math.Sqrt(result);
+            return Math.Sqrt(vector.Sum(v => Math.Pow(v, 2)));
         }
 
         /// <summary>
@@ -126,6 +122,51 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
                 }
 
                 result[i] = sum;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// This method multiplicates a number and a vector.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="number"></param>
+        /// <returns>A new vector with the result of multiplication between a number and a vector.</returns>
+        public static double[] Multiply(this double[] vector, double number)
+        {
+            return vector.Select(item => item * number).ToArray();
+        }
+
+        /// <summary>
+        /// This method sums vectors.
+        /// </summary>
+        /// <param name="mainVector"></param>
+        /// <param name="vectors"></param>
+        /// <returns>A new array with the result of sum between vectors.</returns>
+        public static double[] Sum(this double[] mainVector, params double[][] vectors) => MathOperation(mainVector, (v1, v2) => v1 + v2, vectors);
+
+        /// <summary>
+        /// This method sums vectors.
+        /// </summary>
+        /// <param name="mainVector"></param>
+        /// <param name="vectors"></param>
+        /// <returns>A new array with the result of sum between vectors.</returns>
+        public static double[] Subtract(this double[] mainVector, params double[][] vectors) => MathOperation(mainVector, (v1, v2) => v1 - v2, vectors);
+
+        /// <summary>
+        /// This method do a mathematic operation.
+        /// </summary>
+        /// <param name="mainVector"></param>
+        /// <param name="vectors"></param>
+        /// <returns>A new array with the result of a mathematic operation.</returns>
+        private static double[] MathOperation(this double[] mainVector, Func<double, double, double> func, params double[][] vectors)
+        {
+            double[] result = new double[mainVector.Length];
+
+            foreach (double[] vector in vectors)
+            {
+                result = mainVector.Zip(vector, func).ToArray();
             }
 
             return result;

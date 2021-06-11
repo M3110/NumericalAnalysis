@@ -46,7 +46,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             double[,] displacement = this.BuildDisplacementMatrix(suspensionSystem, Point3D.Create(request.Origin));
 
             // Step 3 - Calculates the applied efforts.
-            Vector3D forceApplied = Vector3D.Create(request.AppliedForce);
+            var forceApplied = Vector3D.Create(request.AppliedForce);
             double[] effort = this.BuildEffortsVector(forceApplied);
 
             double[] result;
@@ -69,8 +69,7 @@ namespace SuspensionAnalysis.Core.Operations.CalculateReactions
             }
             catch (Exception ex)
             {
-                response.SetInternalServerError(OperationErrorCode.InternalServerError,
-                    $"Ocurred error while calculating result. '{ex.Message}'.");
+                response.SetInternalServerError(OperationErrorCode.InternalServerError, $"Ocurred error while calculating result. '{ex.Message}'.");
 
                 return Task.FromResult(response);
             }

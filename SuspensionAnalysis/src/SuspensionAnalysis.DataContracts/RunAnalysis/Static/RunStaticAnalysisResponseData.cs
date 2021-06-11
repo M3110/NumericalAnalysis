@@ -9,7 +9,7 @@ namespace SuspensionAnalysis.DataContracts.RunAnalysis
     /// <summary>
     /// It represents the 'data' content of RunAnalysis operation response.
     /// </summary>
-    public class RunAnalysisResponseData : OperationResponseData
+    public class RunStaticAnalysisResponseData : OperationResponseData
     {
         /// <summary>
         /// True, if analysis failed. False, otherwise.

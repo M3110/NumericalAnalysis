@@ -3,7 +3,7 @@ using SuspensionAnalysis.Core.ConstitutiveEquations.MechanicsOfMaterials.Circula
 using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
-using SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.Static.CircularProfile;
 using SuspensionAnalysis.DataContracts.CalculateReactions;
 using SuspensionAnalysis.DataContracts.Models;
 using SuspensionAnalysis.DataContracts.RunAnalysis;
@@ -15,8 +15,8 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.RunAnalysis.CircularProfil
 {
     public class RunCircularProfileAnalysisTest
     {
-        private readonly RunCircularProfileAnalysis _operation;
-        private readonly RunAnalysisRequest<DataContract.CircularProfile> _requestStub;
+        private readonly RunCircularProfileStaticAnalysis _operation;
+        private readonly RunStaticAnalysisRequest<DataContract.CircularProfile> _requestStub;
 
         private readonly Mock<ICalculateReactions> _calculateReactionsMock;
         private readonly Mock<ICircularProfileMechanicsOfMaterials> _mechanicsOfMaterialsMock;
@@ -57,7 +57,7 @@ namespace SuspensionAnalysis.UnitTest.Core.Operations.RunAnalysis.CircularProfil
 
             this._geometricPropertyMock = new Mock<ICircularProfileGeometricProperty>();
 
-            this._operation = new RunCircularProfileAnalysis(
+            this._operation = new RunCircularProfileStaticAnalysis(
                 this._calculateReactionsMock.Object, 
                 this._mechanicsOfMaterialsMock.Object, 
                 this._geometricPropertyMock.Object,

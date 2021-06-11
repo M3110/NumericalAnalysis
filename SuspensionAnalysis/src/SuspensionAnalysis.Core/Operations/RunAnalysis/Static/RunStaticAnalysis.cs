@@ -17,13 +17,13 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using CoreModels = SuspensionAnalysis.Core.Models.SuspensionComponents;
 
-namespace SuspensionAnalysis.Core.Operations.RunAnalysis
+namespace SuspensionAnalysis.Core.Operations.RunAnalysis.Static
 {
     /// <summary>
     /// It is responsible to run the analysis to suspension system.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public abstract class RunAnalysis<TProfile> : OperationBase<RunAnalysisRequest<TProfile>, RunAnalysisResponse, RunAnalysisResponseData>, IRunAnalysis<TProfile>
+    public abstract class RunStaticAnalysis<TProfile> : OperationBase<RunStaticAnalysisRequest<TProfile>, RunStaticAnalysisResponse, RunStaticAnalysisResponseData>, IRunStaticAnalysis<TProfile>
         where TProfile : Profile
     {
         protected readonly ICalculateReactions _calculateReactions;
@@ -38,24 +38,24 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
         /// <param name="mechanicsOfMaterials"></param>
         /// <param name="geometricProperty"></param>
         /// <param name="mappingResolver"></param>
-        public RunAnalysis(
+        public RunStaticAnalysis(
             ICalculateReactions calculateReactions,
             IMechanicsOfMaterials<TProfile> mechanicsOfMaterials,
             IGeometricProperty<TProfile> geometricProperty,
             IMappingResolver mappingResolver)
         {
-            this._calculateReactions = calculateReactions;
-            this._mechanicsOfMaterials = mechanicsOfMaterials;
-            this._geometricProperty = geometricProperty;
-            this._mappingResolver = mappingResolver;
+            _calculateReactions = calculateReactions;
+            _mechanicsOfMaterials = mechanicsOfMaterials;
+            _geometricProperty = geometricProperty;
+            _mappingResolver = mappingResolver;
         }
 
         /// <summary>
-        /// This method builds <see cref="CalculateReactionsRequest"/> based on <see cref="RunAnalysisRequest{TProfile}"/>.
+        /// This method builds <see cref="CalculateReactionsRequest"/> based on <see cref="RunStaticAnalysisRequest{TProfile}"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public CalculateReactionsRequest BuildCalculateReactionsRequest(RunAnalysisRequest<TProfile> request)
+        public CalculateReactionsRequest BuildCalculateReactionsRequest(RunStaticAnalysisRequest<TProfile> request)
         {
             return new CalculateReactionsRequest
             {
@@ -96,18 +96,18 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
                 throw new ArgumentNullException(nameof(component), "The object tie rod cannot be null to calculate the results.");
 
             // Step 1 - Calculates the geometric properties.
-            double area = this._geometricProperty.CalculateArea(component.Profile);
-            double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
+            double area = _geometricProperty.CalculateArea(component.Profile);
+            double momentOfInertia = _geometricProperty.CalculateMomentOfInertia(component.Profile);
 
             // Step 2 - Calculates the equivalent stress.
             // For that case, just is considered the normal stress because the applied force is at same axis of geometry.
-            double equivalentStress = this._mechanicsOfMaterials.CalculateNormalStress(component.AppliedForce, area);
+            double equivalentStress = _mechanicsOfMaterials.CalculateNormalStress(component.AppliedForce, area);
 
             // Step 3 - Builds the analysis result.
             var result = new TieRodAnalysisResult()
             {
                 AppliedForce = component.AppliedForce,
-                CriticalBucklingForce = this._mechanicsOfMaterials.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length),
+                CriticalBucklingForce = _mechanicsOfMaterials.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length),
                 EquivalentStress = equivalentStress / 1e6, // It is necessary to convert Pa to MPa.
                 StressSafetyFactor = Math.Abs(component.Material.YieldStrength / equivalentStress)
             };
@@ -137,22 +137,22 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
                 throw new ArgumentNullException(nameof(component), "The object suspension A-arm cannot be null to calculate the results.");
 
             // Step 1 - Calculates the geometric properties.
-            double area = this._geometricProperty.CalculateArea(component.Profile);
-            double momentOfInertia = this._geometricProperty.CalculateMomentOfInertia(component.Profile);
+            double area = _geometricProperty.CalculateArea(component.Profile);
+            double momentOfInertia = _geometricProperty.CalculateMomentOfInertia(component.Profile);
 
             // Step 2 - Calculates the equivalent stress.
             // For that case, just is considered the normal stress because the applied force is at same axis of geometry.
             double equivalentStress = Math.Max(
-                this._mechanicsOfMaterials.CalculateNormalStress(component.AppliedForce1, area),
-                this._mechanicsOfMaterials.CalculateNormalStress(component.AppliedForce2, area));
+                _mechanicsOfMaterials.CalculateNormalStress(component.AppliedForce1, area),
+                _mechanicsOfMaterials.CalculateNormalStress(component.AppliedForce2, area));
 
             // Step 3 - Builds the analysis result.
             var result = new SuspensionAArmAnalysisResult()
             {
                 AppliedForce1 = component.AppliedForce1,
                 AppliedForce2 = component.AppliedForce2,
-                CriticalBucklingForce1 = this._mechanicsOfMaterials.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length1),
-                CriticalBucklingForce2 = this._mechanicsOfMaterials.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length2),
+                CriticalBucklingForce1 = _mechanicsOfMaterials.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length1),
+                CriticalBucklingForce2 = _mechanicsOfMaterials.CalculateCriticalBucklingForce(component.Material.YoungModulus, momentOfInertia, component.Length2),
                 EquivalentStress = equivalentStress / 1e6, // It is necessary to convert Pa to MPa.
                 StressSafetyFactor = Math.Abs(component.Material.YieldStrength / equivalentStress)
             };
@@ -176,13 +176,13 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        protected override async Task<RunAnalysisResponse> ProcessOperationAsync(RunAnalysisRequest<TProfile> request)
+        protected override async Task<RunStaticAnalysisResponse> ProcessOperationAsync(RunStaticAnalysisRequest<TProfile> request)
         {
-            var response = new RunAnalysisResponse();
+            var response = new RunStaticAnalysisResponse();
             response.SetSuccessOk();
 
             // Step 1 - Calculates the reactions at suspension system.
-            CalculateReactionsResponse calculateReactionsResponse = await this._calculateReactions.ProcessAsync(this.BuildCalculateReactionsRequest(request)).ConfigureAwait(false);
+            CalculateReactionsResponse calculateReactionsResponse = await _calculateReactions.ProcessAsync(BuildCalculateReactionsRequest(request)).ConfigureAwait(false);
             if (calculateReactionsResponse.Success == false)
             {
                 response.SetInternalServerError(OperationErrorCode.InternalServerError, "Occurred error while calculating the reactions to suspension system.");
@@ -193,31 +193,31 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis
 
             // Step 2 - Builds the suspension system based on CalculateReaction operation response and request.
             // Here is built the main information to be used at analysis.
-            SuspensionSystem<TProfile> suspensionSystem = this._mappingResolver.MapFrom(request, calculateReactionsResponse.Data);
+            SuspensionSystem<TProfile> suspensionSystem = _mappingResolver.MapFrom(request, calculateReactionsResponse.Data);
 
             // Step 3 - Generate the result and maps the response.
-            response.Data = new RunAnalysisResponseData();
+            response.Data = new RunStaticAnalysisResponseData();
 
             var tasks = new List<Task>();
 
             tasks.Add(Task.Run(async () =>
             {
-                response.Data.ShockAbsorber = await this.GenerateShockAbsorberResultAsync(calculateReactionsResponse.Data.ShockAbsorberReaction, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
+                response.Data.ShockAbsorber = await GenerateShockAbsorberResultAsync(calculateReactionsResponse.Data.ShockAbsorberReaction, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
             }));
 
             tasks.Add(Task.Run(async () =>
             {
-                response.Data.SuspensionAArmLowerResult = await this.GenerateSuspensionAArmResultAsync(suspensionSystem.SuspensionAArmLower, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
+                response.Data.SuspensionAArmLowerResult = await GenerateSuspensionAArmResultAsync(suspensionSystem.SuspensionAArmLower, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
             }));
 
             tasks.Add(Task.Run(async () =>
             {
-                response.Data.SuspensionAArmUpperResult = await this.GenerateSuspensionAArmResultAsync(suspensionSystem.SuspensionAArmUpper, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
+                response.Data.SuspensionAArmUpperResult = await GenerateSuspensionAArmResultAsync(suspensionSystem.SuspensionAArmUpper, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault()).ConfigureAwait(false);
             }));
 
             tasks.Add(Task.Run(async () =>
             {
-                response.Data.TieRod = await this.GenerateTieRodResultAsync(suspensionSystem.TieRod, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
+                response.Data.TieRod = await GenerateTieRodResultAsync(suspensionSystem.TieRod, request.ShouldRoundResults, request.NumberOfDecimalsToRound.GetValueOrDefault());
             }));
 
             await Task.WhenAll(tasks);

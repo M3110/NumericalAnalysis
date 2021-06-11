@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SuspensionAnalysis.Application.Extensions;
-using SuspensionAnalysis.Core.Operations.RunAnalysis.CircularProfile;
-using SuspensionAnalysis.Core.Operations.RunAnalysis.RectangularProfile;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.Static.CircularProfile;
+using SuspensionAnalysis.Core.Operations.RunAnalysis.Static.RectangularProfile;
 using SuspensionAnalysis.DataContracts.Models.Profiles;
 using SuspensionAnalysis.DataContracts.RunAnalysis;
 using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Application.Controllers
 {
-    [Route("api/v1/analysis")]
-    public class AnalysisController : Controller
+    [Route("api/v1/static-analysis")]
+    public class StaticAnalysisController : Controller
     {
         /// <summary>
         /// This operation run the analysis considering that all geometry uses a cicular beam profile.
@@ -27,11 +27,11 @@ namespace SuspensionAnalysis.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("circular-profile/run")]
-        public async Task<ActionResult<RunAnalysisResponse>> RunAnalysis(
-            [FromServices] IRunCircularProfileAnalysis operation,
-            [FromBody] RunAnalysisRequest<CircularProfile> request)
+        public async Task<ActionResult<RunStaticAnalysisResponse>> RunAnalysis(
+            [FromServices] IRunCircularProfileStaticAnalysis operation,
+            [FromBody] RunStaticAnalysisRequest<CircularProfile> request)
         {
-            RunAnalysisResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            RunStaticAnalysisResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
 
@@ -50,11 +50,11 @@ namespace SuspensionAnalysis.Application.Controllers
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesResponseType(StatusCodes.Status501NotImplemented)]
         [HttpPost("rectangular-profile/run")]
-        public async Task<ActionResult<RunAnalysisResponse>> RunAnalysis(
-            [FromServices] IRunRectangularProfileAnalysis operation,
-            [FromQuery] RunAnalysisRequest<RectangularProfile> request)
+        public async Task<ActionResult<RunStaticAnalysisResponse>> RunAnalysis(
+            [FromServices] IRunRectangularProfileStaticAnalysis operation,
+            [FromQuery] RunStaticAnalysisRequest<RectangularProfile> request)
         {
-            RunAnalysisResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
+            RunStaticAnalysisResponse response = await operation.ProcessAsync(request).ConfigureAwait(false);
             return response.BuildHttpResponse();
         }
     }
