@@ -5,5 +5,5 @@ namespace SuspensionAnalysis.DataContracts.RunAnalysis
     /// <summary>
     /// It represents the response content of RunAnalysis operation.
     /// </summary>
-    public class RunAnalysisResponse : OperationResponseBase<RunAnalysisResponseData> { }
+    public class RunStaticAnalysisResponse : OperationResponseBase<RunStaticAnalysisResponseData> { }
 }

@@ -11,7 +11,7 @@ namespace SuspensionAnalysis.DataContracts.RunAnalysis
     /// It represents the request content of RunAnalysis operation.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public class RunAnalysisRequest<TProfile> : OperationRequestBase
+    public class RunStaticAnalysisRequest<TProfile> : OperationRequestBase
         where TProfile : Profile
     {
         /// <summary>

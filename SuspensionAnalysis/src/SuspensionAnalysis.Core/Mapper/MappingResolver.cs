@@ -32,13 +32,13 @@ namespace SuspensionAnalysis.Core.Mapper
         }
 
         /// <summary>
-        /// This method craetes a <see cref="SuspensionAArm{TProfile}"/> based on <see cref="RunAnalysisRequest{TProfile}"/> and <see cref="CalculateReactionsResponseData"/>.
+        /// This method craetes a <see cref="SuspensionAArm{TProfile}"/> based on <see cref="RunStaticAnalysisRequest{TProfile}"/> and <see cref="CalculateReactionsResponseData"/>.
         /// </summary>
         /// <typeparam name="TProfile"></typeparam>
         /// <param name="runAnalysisRequest"></param>
         /// <param name="calculateReactionsResponseData"></param>
         /// <returns></returns>
-        public SuspensionSystem<TProfile> MapFrom<TProfile>(RunAnalysisRequest<TProfile> runAnalysisRequest, CalculateReactionsResponseData calculateReactionsResponseData)
+        public SuspensionSystem<TProfile> MapFrom<TProfile>(RunStaticAnalysisRequest<TProfile> runAnalysisRequest, CalculateReactionsResponseData calculateReactionsResponseData)
             where TProfile : Profile
         {
             if (runAnalysisRequest == null)

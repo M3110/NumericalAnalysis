@@ -15,5 +15,7 @@ namespace SuspensionAnalysis.Core.Models
             double.MaxValue, 
             double.MinValue 
         };
+
+        public static double GravityAcceleration = 9.81;
     }
 }

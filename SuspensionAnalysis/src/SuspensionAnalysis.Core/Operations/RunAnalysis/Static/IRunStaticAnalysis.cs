@@ -7,21 +7,21 @@ using SuspensionAnalysis.DataContracts.RunAnalysis;
 using System.Threading.Tasks;
 using CoreModels = SuspensionAnalysis.Core.Models.SuspensionComponents;
 
-namespace SuspensionAnalysis.Core.Operations.RunAnalysis
+namespace SuspensionAnalysis.Core.Operations.RunAnalysis.Static
 {
     /// <summary>
     /// It is responsible to run the analysis to suspension system.
     /// </summary>
     /// <typeparam name="TProfile"></typeparam>
-    public interface IRunAnalysis<TProfile> : IOperationBase<RunAnalysisRequest<TProfile>, RunAnalysisResponse, RunAnalysisResponseData> 
+    public interface IRunStaticAnalysis<TProfile> : IOperationBase<RunStaticAnalysisRequest<TProfile>, RunStaticAnalysisResponse, RunStaticAnalysisResponseData>
         where TProfile : Profile
     {
         /// <summary>
-        /// This method builds <see cref="CalculateReactionsRequest"/> based on <see cref="RunAnalysisRequest{TProfile}"/>.
+        /// This method builds <see cref="CalculateReactionsRequest"/> based on <see cref="RunStaticAnalysisRequest{TProfile}"/>.
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        CalculateReactionsRequest BuildCalculateReactionsRequest(RunAnalysisRequest<TProfile> request);
+        CalculateReactionsRequest BuildCalculateReactionsRequest(RunStaticAnalysisRequest<TProfile> request);
 
         /// <summary>
         /// Asynchronously, this method generates the analysis result to shock absorber.

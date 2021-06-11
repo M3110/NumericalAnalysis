@@ -10,9 +10,9 @@ namespace SuspensionAnalysis.UnitTest.Helper.DataContracts
     /// </summary>
     public static class RunAnalysisHelper
     {
-        public static RunAnalysisRequest<CircularProfile> CreateCircularProfileRequest()
+        public static RunStaticAnalysisRequest<CircularProfile> CreateCircularProfileRequest()
         {
-            return new RunAnalysisRequest<CircularProfile>
+            return new RunStaticAnalysisRequest<CircularProfile>
             {
                 Origin = "0,0.75,0",
                 NumberOfDecimalsToRound = 2,
@@ -59,9 +59,9 @@ namespace SuspensionAnalysis.UnitTest.Helper.DataContracts
             };
         }
 
-        public static RunAnalysisRequest<RectangularProfile> CreateRectangularProfileRequest()
+        public static RunStaticAnalysisRequest<RectangularProfile> CreateRectangularProfileRequest()
         {
-            return new RunAnalysisRequest<RectangularProfile>
+            return new RunStaticAnalysisRequest<RectangularProfile>
             {
                 Origin = "0,0,0",
                 NumberOfDecimalsToRound = 2,

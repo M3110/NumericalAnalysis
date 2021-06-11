@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace SuspensionAnalysis.Core.ExtensionMethods
 {
@@ -17,9 +19,7 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         {
             double vectorNorm = vector.CalculateNorm();
 
-            return vector
-                .Select(item => item / vectorNorm)
-                .ToArray();
+            return vector.Select(item => item / vectorNorm).ToArray();
         }
 
         /// <summary>
@@ -28,17 +28,13 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         /// <param name="vector"></param>
         /// <returns></returns>
         public static double CalculateNorm(this double[] vector)
-        {
-            double result = vector.Sum(v => Math.Pow(v, 2));
-
-            return Math.Sqrt(result);
-        }
+            => Math.Sqrt(vector.Sum(v => Math.Pow(v, 2)));
 
         /// <summary>
         /// This method inverses a matrix using the Gauss-Jordan method.
         /// </summary>
         /// <param name="matrix"></param>
-        /// <returns>The inversed matrix using the Gauss-Jordan method.</returns>
+        /// <returns></returns>
         public static double[,] InverseMatrix(this double[,] matrix)
         {
             double[,] matrixCopy = matrix.Clone() as double[,];
@@ -105,27 +101,110 @@ namespace SuspensionAnalysis.Core.ExtensionMethods
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="vector"></param>
-        /// <returns>A new vector with the result of multiplication between a matrix and a vector.</returns>
+        /// <returns></returns>
         public static double[] Multiply(this double[,] matrix, double[] vector)
         {
-            if (matrix.GetLength(1) != vector.Length)
+            int rows = matrix.GetLength(0);
+            int columns = matrix.GetLength(1);
+
+            if (columns != vector.Length)
                 throw new ArgumentOutOfRangeException("Matrix and vector", "The matrix row size must be equals to vector size.");
 
-            int rows1 = matrix.GetLength(0);
-            int columns1 = matrix.GetLength(1);
+            double[] result = new double[rows];
 
-            double[] result = new double[rows1];
-
-            for (int i = 0; i < rows1; i++)
+            for (int i = 0; i < rows; i++)
             {
                 double sum = 0;
 
-                for (int j = 0; j < columns1; j++)
+                for (int j = 0; j < columns; j++)
                 {
                     sum += matrix[i, j] * vector[j];
                 }
 
                 result[i] = sum;
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// This method multiplicates a number and a vector.
+        /// </summary>
+        /// <param name="vector"></param>
+        /// <param name="number"></param>
+        /// <returns></returns>
+        public static double[] Multiply(this double[] vector, double number)
+            => vector.Select(item => item * number).ToArray();
+
+        /// <summary>
+        /// This method sums two vectors.
+        /// </summary>
+        /// <param name="vector1"></param>
+        /// <param name="vector2"></param>
+        /// <returns></returns>
+        public static double[] Sum(this double[] vector1, double[] vector2)
+            => vector1.MathOperation((v1, v2) => v1 + v2, vector2);
+
+        /// <summary>
+        /// This method subtracts two vectors.
+        /// </summary>
+        /// <param name="vector1"></param>
+        /// <param name="vector2"></param>
+        /// <returns></returns>
+        public static double[] Subtract(this double[] vector1, double[] vector2)
+            => vector1.MathOperation((v1, v2) => v1 - v2, vector2);
+
+        /// <summary>
+        /// This method do a mathematic operation for two vectors.
+        /// </summary>
+        /// <param name="vector1"></param>
+        /// <param name="vector2"></param>
+        /// <returns></returns>
+        public static double[] MathOperation(this double[] vector1, Func<double, double, double> func, double[] vector2)
+        {
+            if (vector1.Length != vector2.Length)
+                throw new ArgumentOutOfRangeException("Vectors", "The vectors must have the same size.");
+
+            return vector1.Zip(vector2, func).ToArray();
+        }
+
+        /// <summary>
+        /// This method sums two vectors.
+        /// </summary>
+        /// <param name="vector1"></param>
+        /// <param name="vector2"></param>
+        /// <param name="vector3"></param>
+        /// <returns></returns>
+        public static double[] Sum(this double[] vector1, double[] vector2, double[] vector3)
+        {
+            if (vector1.Length != vector2.Length || vector1.Length != vector3.Length || vector2.Length != vector3.Length)
+                throw new ArgumentOutOfRangeException("Vectors", "The vectors must have the same size.");
+
+            double[] result = new double[vector1.Length];
+            for (int i = 0; i < vector1.Length; i++)
+            {
+                result[i] = vector1[i] + vector2[i] + vector3[i];
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// This method subtracts three vectors.
+        /// </summary>
+        /// <param name="vector1"></param>
+        /// <param name="vector2"></param>
+        /// <param name="vector3"></param>
+        /// <returns></returns>
+        public static double[] Subtract(this double[] vector1, double[] vector2, double[] vector3)
+        {
+            if (vector1.Length != vector2.Length || vector1.Length != vector3.Length || vector2.Length != vector3.Length)
+                throw new ArgumentOutOfRangeException("Vectors", "The vectors must have the same size.");
+
+            double[] result = new double[vector1.Length];
+            for (int i = 0; i < vector1.Length; i++)
+            {
+                result[i] = vector1[i] - vector2[i] - vector3[i];
             }
 
             return result;
