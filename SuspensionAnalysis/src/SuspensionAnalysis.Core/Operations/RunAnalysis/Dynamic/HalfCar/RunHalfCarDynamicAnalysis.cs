@@ -2,6 +2,7 @@
 using SuspensionAnalysis.Core.Models;
 using SuspensionAnalysis.Core.Models.DynamicAnalysis;
 using SuspensionAnalysis.Core.Models.NumericalMethod;
+using SuspensionAnalysis.Core.Models.NumericalMethod.Newmark;
 using SuspensionAnalysis.Core.NumericalMethods.DifferentialEquation.Newmark;
 using SuspensionAnalysis.Core.Operations.Base;
 using SuspensionAnalysis.DataContracts.RunAnalysis.Dynamic.HalfCar;
@@ -212,16 +213,14 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis.Dynamic.HalfCar
             };
         }
 
-        public NumericalMethodInput BuildNumericalMethodInput(DynamicModel dynamicModel, uint numberOfBoundaryConditions, double timeStep)
+        public NewmarkMethodInput BuildNumericalMethodInput(DynamicModel dynamicModel, uint numberOfBoundaryConditions, double timeStep)
         {
-            return new NumericalMethodInput
+            return new NewmarkMethodInput
             {
                 Mass = dynamicModel.Mass,
                 Damping = dynamicModel.Damping,
                 Stiffness = dynamicModel.Stiffness,
-                EquivalentForce = dynamicModel.Force.Sum(
-                    dynamicModel.BasicExcitationDamping.Multiply(dynamicModel.BasicExcitationVelocitity),
-                    dynamicModel.BasicExcitationStifness.Multiply(dynamicModel.BasicExcitationDisplacement)),
+                
                 NumberOfBoundaryConditions = numberOfBoundaryConditions,
                 TimeStep = timeStep
             };
@@ -232,6 +231,7 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis.Dynamic.HalfCar
             var response = new RunHalfCarDynamicAnalysisResponse();
 
             DynamicModel dynamicModel = await this.BuildDynamicModelAsync(request).ConfigureAwait(false);
+            NewmarkMethodInput numericalMethodInput = this.BuildNumericalMethodInput(dynamicModel, this._numberOfBoundaryConditions, request.TimeStep);
 
             var previousResult = new NumericalMethodResult();
 
@@ -241,11 +241,10 @@ namespace SuspensionAnalysis.Core.Operations.RunAnalysis.Dynamic.HalfCar
             {
                 while (time <= request.FinalTime)
                 {
-                    var basicExcitationVectors = this.BuildBasicExcitationDisplacementAndVelocityVectors(request.Velocity, request.RearDistance + request.FrontDistante, request.ObstacleLength, request.ObstacleHeight, request.ObstacleDistance, time);
-                    dynamicModel.BasicExcitationDisplacement = basicExcitationVectors.Displacement;
-                    dynamicModel.BasicExcitationVelocitity = basicExcitationVectors.Velocity;
-
-                    NumericalMethodInput numericalMethodInput = this.BuildNumericalMethodInput(dynamicModel, this._numberOfBoundaryConditions, request.TimeStep);
+                    var basicExcitation = this.BuildBasicExcitationDisplacementAndVelocityVectors(request.Velocity, request.RearDistance + request.FrontDistante, request.ObstacleLength, request.ObstacleHeight, request.ObstacleDistance, time);
+                    numericalMethodInput.EquivalentForce = dynamicModel.Force.Sum(
+                        dynamicModel.BasicExcitationDamping.Multiply(basicExcitation.Velocity),
+                        dynamicModel.BasicExcitationStifness.Multiply(basicExcitation.Displacement));
 
                     NumericalMethodResult result = await this._numericalMethod.CalculateResult(numericalMethodInput, previousResult, time).ConfigureAwait(false);
 

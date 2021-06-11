@@ -10,7 +10,7 @@ using SuspensionAnalysis.Core.GeometricProperties.CircularProfile;
 using SuspensionAnalysis.Core.GeometricProperties.RectangularProfile;
 using SuspensionAnalysis.Core.Mapper;
 using SuspensionAnalysis.Core.NumericalMethods.DifferentialEquation.Newmark;
-using SuspensionAnalysis.Core.NumericalMethods.Newmark;
+using SuspensionAnalysis.Core.NumericalMethods.DifferentialEquation.NewmarkBeta;
 using SuspensionAnalysis.Core.Operations.CalculateReactions;
 using SuspensionAnalysis.Core.Operations.RunAnalysis.Dynamic.HalfCar;
 using SuspensionAnalysis.Core.Operations.RunAnalysis.Static.CircularProfile;
@@ -49,6 +49,7 @@ namespace SuspensionAnalysis
 
             // Register numerical methods.
             services.AddScoped<INewmarkMethod, NewmarkMethod>();
+            services.AddScoped<INewmarkBetaMethod, NewmarkBetaMethod>();
 
             services
                 .AddControllers()
